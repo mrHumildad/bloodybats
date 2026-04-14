@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ConventCard from './ConventCard';
 import { convents } from '../world/convents';
+import { useGame } from '../context/GameContext';
 
 const ConventSelector = () => {
   const [currentConventIndex, setCurrentConventIndex] = useState(0);
   const navigate = useNavigate();
+  const { setGameState } = useGame();
 
   const handlePrev = () => {
     setCurrentConventIndex(prevIndex => 
@@ -19,10 +21,11 @@ const ConventSelector = () => {
     );
   };
 
-  const handleConfirm = () => {
-    const selectedConventId = convents[currentConventIndex].id;
-    navigate(`/game/${selectedConventId}`);
-  };
+const handleConfirm = () => {
+    const selectedConvent = convents[currentConventIndex].id;
+    setGameState({ selectedConvent });
+    navigate(`/game`);
+};
 
   const currentConvent = convents[currentConventIndex];
 

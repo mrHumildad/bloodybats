@@ -1,29 +1,30 @@
 
 // Función para generar un atributo aleatorio basado en dados d4-d12
-const randonDie = () => {
+const randomnDie = () => {
   // Elegir aleatoriamente un dado entre d4 y d12
   const diceTypes = [4, 6, 8, 10, 12];
   const randomIndex = Math.floor(Math.random() * diceTypes.length);
   return diceTypes[randomIndex];
 };
-
+import {names} from '../world/name.js';
 // Función para crear un jugador con atributos aleatorios
-const createPlayer = (id, role, isReserve = false) => {
+const createPlayer = (id, convent_id, role, isReserve = false) => {
   return {
-    id,
-    name: `${role} ${id}${isReserve ? ' (Reserva)' : ''}`,
+    id: id + '_' + convent_id,
+    name: 'placeholder',
     role,
+    age: Math.floor(Math.random() * 20) + 18, // Edad entre 18 y 37
     isReserve,
     attributes: {
-      Cuerpo: randonDie(),
-      Mente: randonDie(),
-      Corazón: randonDie(),
-      Emanación: randonDie(),
-      Percepción: randonDie(),
-      Esencia: randonDie(),
-      Astucia: randonDie(),
-      Potencia: randonDie(),
-      Fortaleza: randonDie()
+      Cuerpo: randomnDie(),
+      Mente: randomnDie(),
+      Corazón: randomnDie(),
+      Emanación: randomnDie(),
+      Percepción: randomnDie(),
+      Esencia: randomnDie(),
+      Astucia: randomnDie(),
+      Potencia: randomnDie(),
+      Fortaleza: randomnDie()
     }
   };
 };
