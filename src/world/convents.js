@@ -3,6 +3,7 @@ export const convents = [
       {
         "id": 1,
         "name": "Orden del Impacto Traumático",
+        "short": "OIT",
         "colors": { "primary": "#660000", "secondary": "#1a0000" },
         "description": "Creen que el cráneo del rival es el único receptáculo digno para la bola sagrada. Sus misas terminan en conmociones cerebrales.",
         "stat_focus": "Cuerpo",
@@ -293,6 +294,7 @@ export const convents = [
       {
         "id": 2,
         "name": "Sínodo de la Parábola Ebria",
+        "short": "SPE",
         "colors": { "primary": "#4b0082", "secondary": "#ffd700" },
         "description": "Calculan trayectorias mediante visiones producidas por alcohol destilado en bates viejos. Si ves tres bolas, batea la del medio.",
         "stat_focus": "Mente",
@@ -583,6 +585,7 @@ export const convents = [
       {
         "id": 3,
         "name": "Búnker del Home Perpetuo",
+        "short": "BHP",
         "colors": { "primary": "#2f4f4f", "secondary": "#708090" },
         "description": "Fanáticos de la defensa que se han cosido el guante a la mano. Consideran que dejar pasar a alguien es pecado capital.",
         "stat_focus": "Cuerpo",
@@ -873,6 +876,7 @@ export const convents = [
       {
         "id": 4,
         "name": "Hijas de la Costura Muda",
+        "short": "HCM",
         "colors": { "primary": "#f5f5dc", "secondary": "#8b4513" },
         "description": "Monjas que se cosen los labios para no distraer a la Diosa. Su estadio es tan silencioso que oyes crujir los huesos del bateador.",
         "stat_focus": "Corazón",
@@ -1163,6 +1167,7 @@ export const convents = [
       {
         "id": 5,
         "name": "Gremio del Carbono y Astillas",
+        "short": "GCA",
         "colors": { "primary": "#000000", "secondary": "#ff4500" },
         "description": "Extraen madera de árboles regados con orina de perdedor. Sus bates arden al contacto con el aire.",
         "stat_focus": "Cuerpo",
@@ -1453,6 +1458,7 @@ export const convents = [
       {
         "id": 6,
         "name": "Cónclave del Vuelo Alcohólico",
+        "short": "CVA",
         "colors": { "primary": "#87ceeb", "secondary": "#ffffff" },
         "description": "Creen que el cielo es el estadio de la Diosa. Si la bola no sale del estadio, es que no tienes suficiente fe (o vodka).",
         "stat_focus": "Corazón",
@@ -1743,6 +1749,7 @@ export const convents = [
       {
         "id": 7,
         "name": "Círculo del Despojo y la Rabia",
+        "short": "CDR",
         "colors": { "primary": "#556b2f", "secondary": "#000000" },
         "description": "Viven en las alcantarillas del estadio principal. Juegan con bates hechos de fémures y pelotas envueltas en piel de rata.",
         "stat_focus": "Corazón",
@@ -2033,6 +2040,7 @@ export const convents = [
       {
         "id": 8,
         "name": "Ministerio del Marfil y Oro",
+        "short": "MMO",
         "colors": { "primary": "#fff5ee", "secondary": "#daa520" },
         "description": "La nobleza del diamante. Sus bates son obras de arte y sus pelotas están hechas con el cuero de los mejores jugadores muertos.",
         "stat_focus": "Mente",

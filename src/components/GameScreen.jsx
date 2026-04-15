@@ -1,59 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { convents } from '../world/convents';
 import { useGame } from '../context/GameContext';
 import Header from './Header';
+import Home from './tabs/Home';
+import Overview from './tabs/Overview';
+import Team from './tabs/Team';
+import Friendly from './tabs/Friendly';
+import PlayerInfo from './tabs/PlayerInfo.jsx';
+
+
 const GameScreen = () => {
   const { gameState } = useGame();
+  const [activeTab, setActiveTab] = useState('home');
+  const [ selectedPlayer, setSelectedPlayer] = useState(null);
+  const [friendlyOpponent, setFriendlyOpponent] = useState(null);
+  console.log(convents);
   console.log('GameState in GameScreen:', gameState);
-  const selectedConvent = convents.find(convent => convent.id === gameState.selectedConvent);
-  if (!selectedConvent) {
-    return (
-      <div className="game-screen">
-        <h1>No Convent Selected</h1>
-        <p>Please select a convent to continue.</p>
-      </div>
-    );
-    }
+  const myConvent = convents.find(convent => convent.id === gameState.selectedConvent);
+  console.log('My Convent:', myConvent);
+  
+  useEffect(() => {
+    if (!myConvent) return;
+    const otherConvents = convents.filter(convent => convent.id !== myConvent.id);
+    const randomIndex = Math.floor(Math.random() * otherConvents.length);
+    setFriendlyOpponent(otherConvents[randomIndex]);
+  }, [myConvent]);
    return (
-    <div className="game-screen" style={{ 
-      backgroundColor: selectedConvent.colors.primary,
-      color: selectedConvent.colors.secondary,
-      minHeight: '100vh',
-      padding: '20px'
-    }}>
-      <Header title={selectedConvent.name} />
-      <div className="convent-details">
-        <h2>About {selectedConvent.name}</h2>
-        <p>{selectedConvent.description}</p>
-         
-        <div className="convent-stats">
-          <div className="stat-group">
-            <h3>Stats</h3>
-            <p><strong>Stat Focus:</strong> {selectedConvent.stat_focus}</p>
-            <p><strong>Data Flow:</strong> {selectedConvent.data_flow}</p>
-            <p><strong>Nature:</strong> {selectedConvent.nature}</p>
-          </div>
-          
-          <div className="stat-group">
-            <h3>Traits & Rules</h3>
-            <p><strong>Special Trait:</strong> {selectedConvent.special_trait}</p>
-            <p><strong>Arena Rule:</strong> {selectedConvent.arena_rule}</p>
-          </div>
-          
-          <div className="stat-group">
-            <h3>Wine Stats</h3>
-            <p><strong>Label:</strong> {selectedConvent.wine_stats.label}</p>
-            <p><strong>Quantity:</strong> {selectedConvent.wine_stats.quantity_liters} liters</p>
-            <p><strong>Quality:</strong> {selectedConvent.wine_stats.quality}</p>
-          </div>
-          
-          <div className="stat-group">
-            <h3>Game Mechanics</h3>
-            <p><strong>Hooligan Die:</strong> {selectedConvent.hooligan_die}</p>
-            <p><strong>Fanaticism Level:</strong> {selectedConvent.fanaticism.level} (Frenzy Die: {selectedConvent.fanaticism.frenzy_die})</p>
-          </div>
-        </div>
-      </div>
+    <div className="game-screen" >
+      <Header title={myConvent.name} />
+      { activeTab === 'home' &&   <Home setActiveTab={setActiveTab}/> }
+      { activeTab === 'overview' && <Overview convent={myConvent}/> }
+      { activeTab === 'team' && <Team convent={myConvent} setActiveTab={setActiveTab} setSelectedPlayer={setSelectedPlayer} player={selectedPlayer}/> }
+      { activeTab === 'friendly' && <Friendly myConvent={myConvent} setActiveTab={setActiveTab} opponent={friendlyOpponent}/> }
+      { activeTab === 'playerInfo' && <PlayerInfo setActiveTab={setActiveTab} selectedPlayer={selectedPlayer}/> }
+      { activeTab !== 'home' && activeTab !== 'playerInfo' && <button className="back-button" onClick={() => setActiveTab('home')}>Back</button> }
+      { activeTab === 'playerInfo' && <button className="back-button" onClick={() => setActiveTab('team')}>Back</button> }
     </div>
   );
 };
