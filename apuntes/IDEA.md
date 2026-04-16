@@ -20,13 +20,13 @@ los atributos son representados por dados de 4 caras, 6 caras, 8 caras, 10 caras
 | :--- | :--- |
 | **Cuerpo** | Capacidad física, motor biológico y resistencia al impacto. |
 | **Mente** | Procesamiento táctico, cálculo de trayectorias y frialdad. |
-| **Corazón** | Conexión espiritual con la Diosa, moral y fe bajo presión. |
+| **Corazon** | Conexión espiritual con la Diosa, moral y fe bajo presión. |
 
 ### B. Eje de los MODOS (El Flujo de Datos)
 | Atributo | Definición |
 | :--- | :--- |
-| **Emanación** | Salida de información (proyectar la bola, golpear, empujar). |
-| **Percepción** | Entrada de información (leer el lanzamiento, ver huecos). |
+| **Emanacion** | Salida de información (proyectar la bola, golpear, empujar). |
+| **Percepcion** | Entrada de información (leer el lanzamiento, ver huecos). |
 | **Esencia** | Estado interno del sistema (integridad, aura, presencia). |
 
 ### C. Eje de las PRAXIS (La Naturaleza)
@@ -41,29 +41,29 @@ los atributos son representados por dados de 4 caras, 6 caras, 8 caras, 10 caras
 ## 3. ROLES Y ACCIONES (SISTEMA 4-COMBO)
 Cada clase posee un Dado de Especialidad (aumenta el tamaño del dado un nivel) y 4 acciones predefinidas que combinan Reino + Modo, a las que el jugador añade una Praxis para lanzar el tercer dado.
 
-1. Lanzador (Paladín) - Especialista en Emanación
-   - Sentencia: Cuerpo + Emanación.
-   - Parábola: Mente + Emanación.
-   - Presencia: Corazón + Esencia.
-   - Revelación: Mente + Percepción.
+1. Lanzador (Paladín) - Especialista en Emanacion
+   - Sentencia: Cuerpo + Emanacion.
+   - Parábola: Mente + Emanacion.
+   - Presencia: Corazon + Esencia.
+   - Revelación: Mente + Percepcion.
 
 2. Catcher (Inquisidor) - Especialista en Fortaleza
    - Bloqueo: Cuerpo + Esencia.
-   - Encuadre: Mente + Percepción.
-   - Disparo: Cuerpo + Emanación.
-   - Comunión: Corazón + Esencia.
+   - Encuadre: Mente + Percepcion.
+   - Disparo: Cuerpo + Emanacion.
+   - Comunión: Corazon + Esencia.
 
 3. Bateador (Cruzado) - Especialista en Potencia
-   - Impacto: Cuerpo + Emanación.
-   - Lectura: Mente + Percepción.
-   - Resistencia: Corazón + Esencia.
+   - Impacto: Cuerpo + Emanacion.
+   - Lectura: Mente + Percepcion.
+   - Resistencia: Corazon + Esencia.
    - Carga: Cuerpo + Esencia.
 
-4. Defensa (Centinela) - Especialista en Percepción
-   - Interceptar: Cuerpo + Percepción.
-   - Filtrado: Mente + Percepción.
-   - Retorno: Cuerpo + Emanación.
-   - Anclaje: Corazón + Esencia.
+4. Defensa (Centinela) - Especialista en Percepcion
+   - Interceptar: Cuerpo + Percepcion.
+   - Filtrado: Mente + Percepcion.
+   - Retorno: Cuerpo + Emanacion.
+   - Anclaje: Corazon + Esencia.
 
 ---
 
@@ -71,19 +71,19 @@ Cada clase posee un Dado de Especialidad (aumenta el tamaño del dado un nivel) 
 
 ### Paso 1: Generación de la Señal (Lanzador)
 El lanzador elige una acción y genera un **Umbral de Ruido (UR)**.
-* *Ejemplo Fastball:* `Cuerpo + Emanación + Potencia`.
+* *Ejemplo Fastball:* `Cuerpo + Emanacion + Potencia`.
 * *Resultado:* 18 (Este es el número que el bateador debe superar).
 
 ### Paso 2: Respuesta del Sistema (Bateador)
 El bateador elige su acción y tira sus dados.
-* *Ejemplo Swing Poder:* `Cuerpo + Percepción + Potencia`.
+* *Ejemplo Swing Poder:* `Cuerpo + Percepcion + Potencia`.
 
 ### Paso 3: Margen de Éxito (ME)
 Se calcula: `Suma Bateador - UR = ME`.
 
 | Margen (ME) | Resultado Técnico | Efecto |
 | :--- | :--- | :--- |
-| **< 0** | Strike / Fallo | Degradación de Esencia/Corazón. |
+| **< 0** | Strike / Fallo | Degradación de Esencia/Corazon. |
 | **0 - 2** | Contacto Débil | Rodado (Groundball). El defensa tiene bono de fildeo. |
 | **3 - 5** | Contacto Sólido | Hit sencillo a los jardines. |
 | **6 - 9** | Impacto de Gracia | Extra Base (Doble o Triple). |

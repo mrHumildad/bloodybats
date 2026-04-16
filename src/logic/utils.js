@@ -18,9 +18,9 @@ const createPlayer = (id, convent_id, role, isReserve = false) => {
     attributes: {
       Cuerpo: randomnDie(),
       Mente: randomnDie(),
-      Corazón: randomnDie(),
-      Emanación: randomnDie(),
-      Percepción: randomnDie(),
+      Corazon: randomnDie(),
+      Emanacion: randomnDie(),
+      Percepcion: randomnDie(),
       Esencia: randomnDie(),
       Astucia: randomnDie(),
       Potencia: randomnDie(),
