@@ -2,7 +2,8 @@ import React from 'react';
 import { playerStars } from '../../logic/ui_utils';
 import { charTranslator } from '../../logic/dice_utils';
 
-const Die = ({ faces, value, attribute, style = 'fill' }) => {
+const Die = ({ faces, value=faces, attribute, style = 'fill' }) => {
+  console.log(`Rendering Die: faces=${faces}, value=${value}, attribute=${attribute}, style=${style}`);
   const char = charTranslator(faces, value, style === 'fill');
   return (
     <div className={`die ${attribute.toLowerCase()}`}>
@@ -22,6 +23,7 @@ const Atrributecard = ({ attribute, value }) => {
 };
 
 const PlayerInfo = ( {setSelectedPlayer, selectedPlayer}) => {
+  console.log(selectedPlayer)
   const attributesCards = selectedPlayer ? Object.entries(selectedPlayer.attributes).map(([attr, val]) => (
     <Atrributecard key={attr} attribute={attr} value={val} />
   )) : null;
@@ -33,8 +35,23 @@ const PlayerInfo = ( {setSelectedPlayer, selectedPlayer}) => {
            <p>{selectedPlayer.role}</p>
            <p>Age: {selectedPlayer.age}</p>
            <p>{playerStars(selectedPlayer)}</p>
-           <div className="attributes-container">
-             {attributesCards}
+           <div className="attributes-container"> 
+            <div className="attribute-row">
+             <Atrributecard attribute="cuerpo" value={selectedPlayer.attributes.Cuerpo} />
+              <Atrributecard attribute="Mente" value={selectedPlayer.attributes.Mente} />
+              <Atrributecard attribute="Corazon" value={selectedPlayer.attributes.Corazon} />
+            </div>
+            <div className="attribute-row">
+              <Atrributecard attribute="Emanacion" value={selectedPlayer.attributes.Emanacion} />
+              <Atrributecard attribute="Percepcion" value={selectedPlayer.attributes.Percepcion} />
+              <Atrributecard attribute="Esencia" value={selectedPlayer.attributes.Esencia} />
+            </div>
+            <div className="attribute-row">
+              <Atrributecard attribute="Astucia" value={selectedPlayer.attributes.Astucia} />
+              <Atrributecard attribute="Potencia" value={selectedPlayer.attributes.Potencia} />
+              <Atrributecard attribute="Fortaleza" value={selectedPlayer.attributes.Fortaleza} />
+            </div>
+             
            </div>
          </div>
        ) : (

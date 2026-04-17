@@ -2,7 +2,7 @@ import React from "react";
 
 const Field = () => {
   return (
-    <div className="w-full h-full flex items-center justify-center bg-[#0b0f1a]">
+    <div className="field-container">
       <svg viewBox="0 0 100 100" className="w-full max-w-md h-auto">
 
         {/* Outfield grass (TRUE wedge from home plate) */}
