@@ -51,7 +51,35 @@ body {
 .fortaleza {
   color: var(--Fortaleza);
 }
+.role-lanzador {
+  background-color: #bfdbfe;
+  color: #1e40af;
+}
 
+.role-bateador {
+  background-color: #fecdaa;
+  color: #9a3412;
+}
+
+.role-receptor {
+  background-color: #eecbfa;
+  color: #5b21b6;
+}
+
+.role-guardia-base {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.role-jardinero {
+  background-color: #fef08a;
+  color: #854d0e;
+}
+
+.role-reserva {
+  background-color: #f3f3f3;
+  color: #1f1f1f;
+}
 @font-face {
       font-family: 'DpolyFourSider';
       src: url('/assets/dice_fonts/DpolyFourSider-GM6P.ttf') format('truetype');
