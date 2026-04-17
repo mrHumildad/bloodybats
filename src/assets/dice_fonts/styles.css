@@ -1,285 +1,227 @@
+/*
+ * Standalone dice font demo — not imported in the main app.
+ * Kept for reference / standalone testing of dice fonts.
+ * Styled to match the medieval theocratic baseball aesthetic.
+ */
+
+/* Minimal page reset for the demo only */
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    margin: 0;
-    background-color: #f0f0f0;
-    padding: 20px 0;
+  margin: 0;
+  padding: 20px;
+  background-color: #1a1814;
+  color: #e8e3d5;
+  font-family: 'Cinzel', Georgia, serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
 .container {
-    text-align: center;
-    max-width: 1200px;
-    width: 100%;
-    padding: 0 20px;
-    margin: 0 auto;
-    box-sizing: border-box;
+  text-align: center;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 20px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .dice-container {
-    margin: 20px 0;
+  margin: 30px 0;
 }
 
 .dice {
-    font-size: 96px;
-    margin: 0 auto;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  font-size: 96px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Stone/metallic background */
+  background: linear-gradient(
+    135deg,
+    #2d241b 0%,
+    #1a1814 50%,
+    #2d241b 100%
+  );
+  padding: 30px 40px;
+  border: 4px solid #6b5344;
+  border-radius: 8px;
+  box-shadow: 
+    inset 0 0 40px rgba(0,0,0,0.5),
+    0 10px 30px rgba(0,0,0,0.6),
+    0 0 60px rgba(184, 134, 11, 0.1);
+  /* Cross-shaped sacred geometry hint */
+  outline: 3px solid rgba(184, 134, 11, 0.15);
+  outline-offset: -8px;
 }
 
 .controls {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
+  padding: 12px 24px;
+  font-size: 16px;
+  background: #2d241b;
+  color: #e8e3d5;
+  border: 2px solid #6b5344;
+  border-radius: 0;
+  cursor: pointer;
+  margin-left: 10px;
+  font-family: 'Cinzel', Georgia, serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
 }
 
 button:hover {
-    background-color: #45a049;
+  background: #8b0000;
+  border-color: #9b111e;
+  box-shadow: inset 0 0 15px rgba(139,0,0,0.3);
 }
 
 select {
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 0;
+  background: #2d241b;
+  color: #e8e3d5;
+  border: 1px solid #6b5344;
 }
 
+/* Roll log — monastery ledger style */
 .roll-log {
-    margin-top: 30px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    display: none;
+  margin-top: 30px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  display: none;
 }
 
 .roll-log.has-rolls {
-    display: block;
+  display: block;
 }
 
 .log-container {
-    max-height: 400px;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    background-color: white;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 2px solid #6b5344;
+  padding: 20px;
+  background: #25231a;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
 }
 
 .log-entry {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #4a4540;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .log-entry:last-child {
-    border-bottom: none;
-}
-
-.dice-inputs {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 10px;
-}
-
-input[type="number"] {
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    width: 60px;
-}
-
-.dice-results {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    margin: 20px 0;
-}
-
-.total-result {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin: 10px 0;
+  border-bottom: none;
 }
 
 .log-dice-container {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .log-dice {
-    font-size: 36px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  font-size: 36px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0 0 5px rgba(184,134,11,0.3));
 }
 
-.log-entry-time {
-    font-size: 0.9em;
-    color: #666;
-    margin-left: 10px;
-    white-space: nowrap;
+.total-result {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #b8860b;
 }
 
-.log-total {
-    margin-left: 10px;
-    font-weight: bold;
-}
-
-@keyframes explode {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(2);
-        opacity: 0;
-    }
-}
-
-@keyframes spark {
-    0% {
-        transform: scale(0) rotate(0deg);
-        opacity: 1;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        transform: scale(1.5) rotate(180deg);
-        opacity: 0;
-    }
-}
-
-.firework {
-    position: fixed;
-    pointer-events: none;
-    z-index: 1000;
-}
-
-.firework::before {
-    content: '✦';
-    position: absolute;
-    animation: spark 0.5s ease-out forwards;
-    color: gold;
-    font-size: 20px;
-    transform-origin: center;
-    left: -10px;
-    top: -10px;
-}
-
-.dice.natural-20 {
-    animation: explode 0.5s ease-out;
-    color: gold;
-    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-}
-
+/* Highlight for natural 20 — torchlit glow */
+.dice.natural-20,
 .log-dice.natural-20 {
-    color: gold;
-    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+  color: #b8860b;
+  text-shadow: 0 0 20px rgba(184, 134, 11, 0.7);
+  animation: torch-flicker 1.5s ease-out;
 }
 
+@keyframes torch-flicker {
+  0%   { transform: scale(1); filter: brightness(1) saturate(1); }
+  20%  { transform: scale(1.05); filter: brightness(1.3) saturate(1.3); }
+  40%  { transform: scale(1.1); filter: brightness(1.5) saturate(1.6); }
+  60%  { transform: scale(1.05); filter: brightness(1.3) saturate(1.3); }
+  80%  { transform: scale(1.02); filter: brightness(1.1) saturate(1.1); }
+  100% { transform: scale(1); filter: brightness(1) saturate(1); }
+}
+
+/* Dice font faces — already defined in main.css, kept here for standalone use */
 @font-face {
-    font-family: 'DpolyFourSider';
-    src: url('fonts/DpolyFourSider-GM6P.ttf') format('truetype');
+  font-family: 'DpolyFourSider';
+  src: url('/assets/dice_fonts/DpolyFourSider-GM6P.ttf') format('truetype');
 }
-
 @font-face {
-    font-family: 'DpolySixSider';
-    src: url('fonts/DpolySixSider-jqRO.ttf') format('truetype');
+  font-family: 'DpolySixSider';
+  src: url('/assets/dice_fonts/DpolySixSider-jqRO.ttf') format('truetype');
 }
-
 @font-face {
-    font-family: 'DpolyEightSider';
-    src: url('fonts/DpolyEightSider-JvWo.ttf') format('truetype');
+  font-family: 'DpolyEightSider';
+  src: url('/assets/dice_fonts/DpolyEightSider-JvWo.ttf') format('truetype');
 }
-
 @font-face {
-    font-family: 'DpolyTenSider';
-    src: url('fonts/DpolyTenSider-z1Jw.ttf') format('truetype');
+  font-family: 'DpolyTenSider';
+  src: url('/assets/dice_fonts/DpolyTenSider-z1Jw.ttf') format('truetype');
 }
-
 @font-face {
-    font-family: 'DpolyTwelveSider';
-    src: url('fonts/DpolyTwelveSider-5KWZ.ttf') format('truetype');
+  font-family: 'DpolyTwelveSider';
+  src: url('/assets/dice_fonts/DpolyTwelveSider-5KWZ.ttf') format('truetype');
 }
-
 @font-face {
-    font-family: 'DpolyTwentySider';
-    src: url('fonts/DpolyTwentySider-62jq.ttf') format('truetype');
+  font-family: 'DpolyTwentySider';
+  src: url('/assets/dice_fonts/DpolyTwentySider-62jq.ttf') format('truetype');
 }
 
-/* Add classes for each die type */
-.dice[data-type="d4"], .log-dice[data-type="d4"] {
-    font-family: 'DpolyFourSider', sans-serif;
-}
+/* Dice classes mapping */
+.dice[data-type="d4"], .log-dice[data-type="d4"] { font-family: 'DpolyFourSider', sans-serif; }
+.dice[data-type="d6"], .log-dice[data-type="d6"] { font-family: 'DpolySixSider', sans-serif; }
+.dice[data-type="d8"], .log-dice[data-type="d8"] { font-family: 'DpolyEightSider', sans-serif; }
+.dice[data-type="d10"], .log-dice[data-type="d10"] { font-family: 'DpolyTenSider', sans-serif; }
+.dice[data-type="d12"], .log-dice[data-type="d12"] { font-family: 'DpolyTwelveSider', sans-serif; }
+.dice[data-type="d20"], .log-dice[data-type="d20"] { font-family: 'DpolyTwentySider', sans-serif; }
 
-.dice[data-type="d6"], .log-dice[data-type="d6"] {
-    font-family: 'DpolySixSider', sans-serif;
-}
-
-.dice[data-type="d8"], .log-dice[data-type="d8"] {
-    font-family: 'DpolyEightSider', sans-serif;
-}
-
-.dice[data-type="d10"], .log-dice[data-type="d10"] {
-    font-family: 'DpolyTenSider', sans-serif;
-}
-
-.dice[data-type="d12"], .log-dice[data-type="d12"] {
-    font-family: 'DpolyTwelveSider', sans-serif;
-}
-
-.dice[data-type="d20"], .log-dice[data-type="d20"] {
-    font-family: 'DpolyTwentySider', sans-serif;
-}
-
+/* Roll animation classes */
 @keyframes roll-rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
-
 @keyframes roll-flip {
-    0% { transform: rotateX(0deg); }
-    100% { transform: rotateX(720deg); }
+  0% { transform: rotateX(0deg); }
+  100% { transform: rotateX(720deg); }
 }
-
 @keyframes roll-bounce {
-    0% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(180deg); }
-    100% { transform: translateY(0) rotate(360deg); }
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(180deg); }
+  100% { transform: translateY(0) rotate(360deg); }
 }
-
 @keyframes roll-shake {
-    0%, 100% { transform: translateX(0) rotate(0deg); }
-    25% { transform: translateX(-10px) rotate(-30deg); }
-    75% { transform: translateX(10px) rotate(30deg); }
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-10px) rotate(-30deg); }
+  75% { transform: translateX(10px) rotate(30deg); }
 }
-
 @keyframes roll-spin-bounce {
-    0% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.2) rotate(180deg); }
-    100% { transform: scale(1) rotate(360deg); }
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.2) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
 }
 
 .log-entry > div {
-    gap: 20px;
-} 
+  gap: 20px;
+}

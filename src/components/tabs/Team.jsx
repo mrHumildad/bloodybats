@@ -1,41 +1,46 @@
 import React from 'react';
 import { playerStars } from '../../logic/ui_utils';
-const Team = ({ convent, setActiveTab, setSelectedPlayer, selectedPlayer }) => {
+import { getRoleColorClass } from '../../logic/utils';
+import { useLanguage } from '../../context/LanguageContext';
+import { getTranslation, translateRole } from '../../translations';
+
+const Team = ({ convent, setActiveTab, setSelectedPlayer }) => {
+  const { language } = useLanguage();
+
   if (!convent || !convent.team) {
     return (
       <div className="team-tab tab">
-        <p>No team data available</p>
+        <p>{getTranslation('noTeamData', language)}</p>
       </div>
     );
   }
+
   const handlePlayerClick = (event) => {
     const playerName = event.currentTarget.querySelector('td').textContent;
     const player = convent.team.find(p => p.name === playerName);
     setSelectedPlayer(player);
     setActiveTab('playerInfo');
-  }
+  };
+
   return (
     <div className="team-tab tab">
       <h2>{convent.name} Team</h2>
       <table className="team-table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Role</th>
-            <th>Age</th>
-            <th>Reserve</th>
-            <th>Stars</th>
+            <th>{getTranslation('name', language)}</th>
+            <th>{getTranslation('role', language)}</th>
+            <th>{getTranslation('age', language)}</th>
+            <th>{getTranslation('stars', language)}</th>
           </tr>
         </thead>
         <tbody>
           {convent.team.map(player => (
             <tr key={player.id} onClick={handlePlayerClick}>
               <td>{player.name}</td>
-              <td>{player.role}</td>
+              <td className={getRoleColorClass(player.role)}>{translateRole(player.role, language).slice(0, 3)}</td>
               <td>{player.age}</td>
-              <td>{player.isReserve ? 'Yes' : 'No'}</td>
               <td>{playerStars(player)}</td>
-              
             </tr>
           ))}
         </tbody>

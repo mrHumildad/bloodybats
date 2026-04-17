@@ -1,16 +1,19 @@
 import React from 'react';
+import { useLanguage } from '../../context/LanguageContext';
+import { getTranslation } from '../../translations';
 
 const tabs = [
-  //{ id: 'home', label: 'Home' },
-  { id: 'overview', label: 'Overview' },
-  { id: 'team', label: 'Team' },
-  { id: 'friendly' , label: 'Friendly' },
+  { id: 'overview', labelKey: 'overview' },
+  { id: 'team', labelKey: 'team' },
+  { id: 'friendly', labelKey: 'friendly' },
 ];
 
-const Home = ({setActiveTab}) => {
+const Home = ({ setActiveTab }) => {
+  const { language } = useLanguage();
+
   const tabButtons = tabs.map(tab => (
     <button key={tab.id} className="tab-button" onClick={() => setActiveTab(tab.id)}>
-      {tab.label}
+      {getTranslation(tab.labelKey, language)}
     </button>
   ));
   return (

@@ -1,74 +1,73 @@
 
-// Función para generar un atributo aleatorio basado en dados d4-d12
-const randomnDie = () => {
-  // Elegir aleatoriamente un dado entre d4 y d12
-  const diceTypes = [4, 6, 8, 10, 12];
-  const randomIndex = Math.floor(Math.random() * diceTypes.length);
-  return diceTypes[randomIndex];
+// Function to generate a random die size (d4-d12)
+const randomDie = () => {
+  // Randomly choose a die from d4 to d12
+  const dieTypes = [4, 6, 8, 10, 12];
+  const randomIndex = Math.floor(Math.random() * dieTypes.length);
+  return dieTypes[randomIndex];
 };
-import {names} from '../world/name.js';
-// Función para crear un jugador con atributos aleatorios
-const createPlayer = (id, convent_id, role, isReserve = false) => {
+// Function to create a player with random attributes
+const createPlayer = (id, conventId, role, isReserve = false) => {
   return {
-    id: id + '_' + convent_id,
+    id: `${id}_${conventId}`,
     name: 'placeholder',
     role,
-    age: Math.floor(Math.random() * 20) + 18, // Edad entre 18 y 37
+    age: Math.floor(Math.random() * 20) + 18, // Age between 18 and 37
     isReserve,
     attributes: {
-      Cuerpo: randomnDie(),
-      Mente: randomnDie(),
-      Corazon: randomnDie(),
-      Emanacion: randomnDie(),
-      Percepcion: randomnDie(),
-      Esencia: randomnDie(),
-      Astucia: randomnDie(),
-      Potencia: randomnDie(),
-      Fortaleza: randomnDie()
+      body: randomDie(),
+      mind: randomDie(),
+      heart: randomDie(),
+      emanation: randomDie(),
+      perception: randomDie(),
+      essence: randomDie(),
+      cunning: randomDie(),
+      power: randomDie(),
+      fortitude: randomDie()
     }
   };
-};
+}
 
-export const createRandomTeam = (convent_id) => {
+export const createRandomTeam = (conventId) => {
   const players = [];
   let playerId = 1;
-  
-  // 1 Lanzador
-  players.push(createPlayer(playerId++, convent_id, 'Lanzador'));
-  
-  // 5 Bateadores
+
+  // 1 Pitcher
+  players.push(createPlayer(playerId++, conventId, 'pitcher'));
+
+  // 5 Batters
   for (let i = 0; i < 5; i++) {
-    players.push(createPlayer(playerId++, convent_id, 'Bateador'));
+    players.push(createPlayer(playerId++, conventId, 'batter'));
   }
-  
-  // 1 Receptor
-  players.push(createPlayer(playerId++, convent_id, 'Receptor'));
-  
-  // 2 Guardias de Base
+
+  // 1 Catcher
+  players.push(createPlayer(playerId++, conventId, 'catcher'));
+
+  // 2 Base Guards
   for (let i = 0; i < 2; i++) {
-    players.push(createPlayer(playerId++, convent_id, 'Guardia de Base'));
+    players.push(createPlayer(playerId++, conventId, 'baseGuard'));
   }
-  
-  // 1 Jardinero
-  players.push(createPlayer(playerId++, convent_id, 'Jardinero'));
-  
-  // 5 Reservas
+
+  // 1 Fielder
+  players.push(createPlayer(playerId++, conventId, 'fielder'));
+
+  // 5 Reserves
   for (let i = 0; i < 5; i++) {
-    players.push(createPlayer(playerId++, convent_id, 'Reserva', true));
+    players.push(createPlayer(playerId++, conventId, 'reserve', true));
   }
-  
+
   return players;
 };
 
-// Función para obtener la clase CSS basada en el rol
+// Function to get CSS class based on role
 export const getRoleColorClass = (role) => {
   switch (role) {
-    case 'Lanzador': return 'role-lanzador';
-    case 'Bateador': return 'role-bateador';
-    case 'Receptor': return 'role-receptor';
-    case 'Guardia de Base': return 'role-guardia-base';
-    case 'Jardinero': return 'role-jardinero';
-    case 'Reserva': return 'role-reserva';
-    default: return 'role-reserva';
+    case 'pitcher': return 'role-pitcher';
+    case 'batter': return 'role-batter';
+    case 'catcher': return 'role-catcher';
+    case 'baseGuard': return 'role-base-guard';
+    case 'fielder': return 'role-fielder';
+    case 'reserve': return 'role-reserve';
+    default: return 'role-reserve';
   }
 };

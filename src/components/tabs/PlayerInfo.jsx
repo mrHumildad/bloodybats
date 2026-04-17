@@ -1,8 +1,11 @@
 import React from 'react';
 import { playerStars } from '../../logic/ui_utils';
+import { getRoleColorClass } from '../../logic/utils';
 import { charTranslator } from '../../logic/dice_utils';
+import { useLanguage } from '../../context/LanguageContext';
+import { getTranslation, translateRole, translateAttribute } from '../../translations';
 
-const Die = ({ faces, value=faces, attribute, style = 'fill' }) => {
+const Die = ({ faces, value = faces, attribute, style = 'fill' }) => {
   console.log(`Rendering Die: faces=${faces}, value=${value}, attribute=${attribute}, style=${style}`);
   const char = charTranslator(faces, value, style === 'fill');
   return (
@@ -13,52 +16,52 @@ const Die = ({ faces, value=faces, attribute, style = 'fill' }) => {
   );
 };
 
-const Atrributecard = ({ attribute, value }) => {
+const AttributeCard = ({ attribute, value }) => {
+  const { language } = useLanguage();
+  const attributeName = translateAttribute(attribute, language);
   return (
     <div className="attribute-card">
-      <p>{attribute.toUpperCase().slice(0, 3)}</p>
+      <p>{attributeName.toUpperCase().slice(0, 3)}</p>
       <Die faces={value} value={value} attribute={attribute} style="fill" />
     </div>
   );
 };
 
-const PlayerInfo = ( {setSelectedPlayer, selectedPlayer}) => {
-  console.log(selectedPlayer)
-  const attributesCards = selectedPlayer ? Object.entries(selectedPlayer.attributes).map(([attr, val]) => (
-    <Atrributecard key={attr} attribute={attr} value={val} />
-  )) : null;
+const PlayerInfo = ({ selectedPlayer }) => {
+  const { language } = useLanguage();
+  console.log(selectedPlayer);
+
   return (
-     <div>
-       {selectedPlayer ? (
-         <div>
-           <h2>{selectedPlayer.name}</h2>
-           <p>{selectedPlayer.role}</p>
-           <p>Age: {selectedPlayer.age}</p>
-           <p>{playerStars(selectedPlayer)}</p>
-           <div className="attributes-container"> 
+    <div>
+      {selectedPlayer ? (
+        <div>
+          <h2>{selectedPlayer.name}</h2>
+          <p className={getRoleColorClass(selectedPlayer.role)}>{translateRole(selectedPlayer.role, language)}</p>
+          <p>{getTranslation('age', language)}: {selectedPlayer.age}</p>
+          <p>{playerStars(selectedPlayer)}</p>
+          <div className="attributes-container">
             <div className="attribute-row">
-             <Atrributecard attribute="cuerpo" value={selectedPlayer.attributes.Cuerpo} />
-              <Atrributecard attribute="Mente" value={selectedPlayer.attributes.Mente} />
-              <Atrributecard attribute="Corazon" value={selectedPlayer.attributes.Corazon} />
+              <AttributeCard attribute="body" value={selectedPlayer.attributes.body} />
+              <AttributeCard attribute="mind" value={selectedPlayer.attributes.mind} />
+              <AttributeCard attribute="heart" value={selectedPlayer.attributes.heart} />
             </div>
             <div className="attribute-row">
-              <Atrributecard attribute="Emanacion" value={selectedPlayer.attributes.Emanacion} />
-              <Atrributecard attribute="Percepcion" value={selectedPlayer.attributes.Percepcion} />
-              <Atrributecard attribute="Esencia" value={selectedPlayer.attributes.Esencia} />
+              <AttributeCard attribute="emanation" value={selectedPlayer.attributes.emanation} />
+              <AttributeCard attribute="perception" value={selectedPlayer.attributes.perception} />
+              <AttributeCard attribute="essence" value={selectedPlayer.attributes.essence} />
             </div>
             <div className="attribute-row">
-              <Atrributecard attribute="Astucia" value={selectedPlayer.attributes.Astucia} />
-              <Atrributecard attribute="Potencia" value={selectedPlayer.attributes.Potencia} />
-              <Atrributecard attribute="Fortaleza" value={selectedPlayer.attributes.Fortaleza} />
+              <AttributeCard attribute="cunning" value={selectedPlayer.attributes.cunning} />
+              <AttributeCard attribute="power" value={selectedPlayer.attributes.power} />
+              <AttributeCard attribute="fortitude" value={selectedPlayer.attributes.fortitude} />
             </div>
-             
-           </div>
-         </div>
-       ) : (
-         <p>No player selected</p>
-       )}
-     </div>
+          </div>
+        </div>
+      ) : (
+        <p>{getTranslation('noPlayerSelected', language)}</p>
+      )}
+    </div>
   );
-}
+};
 
 export default PlayerInfo;

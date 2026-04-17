@@ -1,151 +1,458 @@
 
+:root {
+  /* Medieval color palette */
+  --bg-parchment: #1a1814;
+  --bg-wood: #2d241b;
+  --bg-leather: #25231a;
+  --bg-ink: #1a1a1a;
+  
+  --text-parchment: #e8e3d5;
+  --text-ink: #0a0a0a;
+  --text-blood: #8b0000;
+  --text-gold: #b8860b;
+  
+  --border-iron: #4a4540;
+  --border-copper: #6b5344;
+  --border-steel: #5a554f;
+  
+  --accent-crimson: #8b0000;
+  --accent-gold: #b8860b;
+  --accent-ruby: #9b111e;
+  
+  --card-bg: #25231a;
+  --card-bg-dim: #1e1c16;
+  
+  --code-bg: #1a1a1a;
+  
+  --text-h: #e8e3d5;
+  --text: #d4cfc5;
+  --text-muted: #9a958c;
+  
+  --accent: var(--accent-gold);
+  --accent-bg: rgba(184, 134, 11, 0.1);
+  --border: var(--border-iron);
+  
+  /* Typography stack */
+  --font-heading: 'Cinzel', 'MedievalSharp', 'Rye', 'UnifrakturMaguntia', 'IM Fell English', Georgia, serif;
+  --font-body: 'IM Fell English', Georgia, serif;
+  --font-display: 'Pirata One', 'MedievalSharp', 'Cinzel', cursive;
+  --mono: 'Courier New', Courier, monospace;
+  
+  /* Torchlight gradient stops */
+  --torch-core: rgba(255, 200, 100, 0.15);
+  --torch-glow: rgba(139, 0, 0, 0.2);
+  --torch-outer: rgba(26, 24, 20, 0.8);
+}
+
+/* Attribute colors — retained as ritual highlights */
+#root > * {
+  --body: #ba7118;
+  --mind: #251dc2;
+  --heart: #b82e0b;
+  --emanation: #379689;
+  --perception: #5d22af;
+  --essence: #0a5d0a;
+  --cunning: #b716b7;
+  --power: #4a150c;
+  --fortitude: #181963;
+}
+
+/* Global parchment texture and torchlit atmosphere */
 body {
+  margin: 0;
+  background-color: var(--bg-parchment);
+  color: var(--text-parchment);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: 
+    /* Parchment grain using CSS noise pattern */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.02) 2px,
+      rgba(0,0,0,0.02) 4px
+    ),
+    /* Torchlit radial gradient from top-left */
+    radial-gradient(
+      ellipse 120% 80% at 15% 10%,
+      var(--torch-core) 0%,
+      var(--torch-glow) 30%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 100% 60% at 85% 90%,
+      rgba(139,0,0,0.1) 0%,
+      transparent 60%
+    ),
+    var(--bg-parchment);
+  background-attachment: fixed;
+  background-blend-mode: multiply, multiply, screen, screen, normal;
+}
+
+/* Vignette edge darkening — aged page feel */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(10, 10, 10, 0.6) 100%
+  );
+  z-index: 9999;
+}
+
+/* Base typography */
+#root > * {
   margin: 0;
 }
 
-#root > * {
-  margin: 0%;
-  --Cuerpo: #ba7118;
-  --Mente: #251dc2;
-  --Corazon: #b82e0b;
-  --Emanacion: #379689;
-  --Percepcion: #5d22af;
-  --Esencia: #0a5d0a;
-  --Astucia: #b716b7;
-  --Potencia: #4a150c;
-  --Fortaleza: #181963;
+#root {
+  width: 1126px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  border-inline: 1px solid var(--border-iron);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  background: transparent;
 }
 
-.cuerpo {
-  color: var(--Cuerpo);
+/* Typography hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-h);
+  letter-spacing: 0.08em;
+  text-shadow: 
+    0 1px 2px rgba(0,0,0,0.7),
+    0 0 15px rgba(184, 134, 11, 0.2);
+  margin: 0;
 }
 
-.mente {
-  color: var(--Mente);
+/* H1 — Main page titles, dramatic */
+h1 {
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 40px 0;
+  position: relative;
+  display: inline-block;
+  /* Subtle gold border bottom like a sealed document */
+  border-bottom: 2px solid var(--accent-gold);
+  padding-bottom: 12px;
 }
 
-.corazon {
-  color: var(--Corazon);
+/* H2 — Section headers */
+h2 {
+  font-size: 28px;
+  line-height: 118%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+  border-bottom: 1px solid var(--border-iron);
+  padding-bottom: 8px;
+  display: inline-block;
 }
 
-.emanacion {
-  color: var(--Emanacion);
+/* H3 — Subsection headers */
+h3 {
+  font-size: 18px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 0 0 12px;
 }
 
-.percepcion {
-  color: var(--Percepcion);
+/* Body text */
+p {
+  margin: 0;
+  line-height: 1.7;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
 }
 
-.esencia {
-  color: var(--Esencia);
+/* Mono for dice and technical readouts */
+code, .counter, .dice, .die, .log-dice {
+  font-family: var(--mono);
 }
 
-.astucia {
-  color: var(--Astucia);
+code, .counter {
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+  font-size: 15px;
+  line-height: 135%;
 }
 
-.potencia {
-  color: var(--Potencia);
+code {
+  padding: 4px 8px;
+  background: var(--code-bg);
+  border: 1px solid var(--border-iron);
 }
 
-.fortaleza {
-  color: var(--Fortaleza);
-}
-.role-lanzador {
-  background-color: #bfdbfe;
-  color: #1e40af;
-}
-
-.role-bateador {
-  background-color: #fecdaa;
-  color: #9a3412;
-}
-
-.role-receptor {
-  background-color: #eecbfa;
-  color: #5b21b6;
-}
-
-.role-guardia-base {
-  background-color: #d1fae5;
-  color: #065f46;
-}
-
-.role-jardinero {
-  background-color: #fef08a;
-  color: #854d0e;
-}
-
-.role-reserva {
-  background-color: #f3f3f3;
-  color: #1f1f1f;
-}
-@font-face {
-      font-family: 'DpolyFourSider';
-      src: url('/assets/dice_fonts/DpolyFourSider-GM6P.ttf') format('truetype');
- }
- 
-  @font-face {
-      font-family: 'DpolySixSider';
-      src: url('/assets/dice_fonts/DpolySixSider-jqRO.ttf') format('truetype');
- }
- 
-  @font-face {
-      font-family: 'DpolyEightSider';
-      src: url('/assets/dice_fonts/DpolyEightSider-JvWo.ttf') format('truetype');
- }
- 
-  @font-face {
-      font-family: 'DpolyTenSider';
-      src: url('/assets/dice_fonts/DpolyTenSider-z1Jw.ttf') format('truetype');
- }
- 
-  @font-face {
-      font-family: 'DpolyTwelveSider';
-      src: url('/assets/dice_fonts/DpolyTwelveSider-5KWZ.ttf') format('truetype');
- }
- 
-  @font-face {
-      font-family: 'DpolyTwentySider';
-      src: url('/assets/dice_fonts/DpolyTwentySider-62jq.ttf') format('truetype');
- }
-
-/* Add classes for each die type */
-.d4 {
-    font-family: 'DpolyFourSider', sans-serif;
-}
-
-.d6 {
-    font-family: 'DpolySixSider', sans-serif;
-}
-
-.d8 {
-    font-family: 'DpolyEightSider', sans-serif;
-}
-.d10 {
-    font-family: 'DpolyTenSider', sans-serif;
-}
-.d12 {
-    font-family: 'DpolyTwelveSider', sans-serif;
-}
-.d20 {
-    font-family: 'DpolyTwentySider', sans-serif;
-}
+/* Dice fonts — already defined above; enhance */
+/* Dice classes — stone/metallic with sacred geometry borders */
+.d4 { font-family: 'DpolyFourSider', sans-serif; }
+.d6 { font-family: 'DpolySixSider', sans-serif; }
+.d8 { font-family: 'DpolyEightSider', sans-serif; }
+.d10 { font-family: 'DpolyTenSider', sans-serif; }
+.d12 { font-family: 'DpolyTwelveSider', sans-serif; }
+.d20 { font-family: 'DpolyTwentySider', sans-serif; }
 
 .die {
-    font-size: 5em;
-    position: relative;;
+  font-size: 5em;
+  position: relative;
+  display: inline-block;
+  text-shadow: 
+    0 0 8px rgba(184, 134, 11, 0.4),
+    1px 1px 0 #000;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
 }
 
 .die-char {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 
+    0 0 10px rgba(184, 134, 11, 0.5),
+    2px 2px 0 rgba(0,0,0,0.8);
+}
+
+/* D20 glow — torchlit effect for critical moments */
+.d20 {
+  filter: drop-shadow(0 0 8px rgba(184, 134, 11, 0.3));
+}
+
+.d20.natural-20 {
+  color: var(--accent-gold);
+  text-shadow: 
+    0 0 20px rgba(184, 134, 11, 0.8),
+    0 0 40px rgba(184, 134, 11, 0.4);
+  animation: torch-flicker 1.5s ease-out;
+}
+
+@keyframes torch-flicker {
+  0%   { transform: scale(1); filter: brightness(1) saturate(1) drop-shadow(0 0 8px rgba(184, 134, 11, 0.3)); }
+  20%  { transform: scale(1.1); filter: brightness(1.4) saturate(1.5) drop-shadow(0 0 20px rgba(184, 134, 11, 0.6)); }
+  40%  { transform: scale(1.05); filter: brightness(1.2) saturate(1.3) drop-shadow(0 0 15px rgba(184, 134, 11, 0.5)); }
+  60%  { transform: scale(1.08); filter: brightness(1.3) saturate(1.4) drop-shadow(0 0 18px rgba(184, 134, 11, 0.55)); }
+  80%  { transform: scale(1.04); filter: brightness(1.15) saturate(1.25) drop-shadow(0 0 12px rgba(184, 134, 11, 0.45)); }
+  100% { transform: scale(1); filter: brightness(1) saturate(1) drop-shadow(0 0 8px rgba(184, 134, 11, 0.3)); }
+}
+
+.die-char {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .back {
-  z-index: -1;  
+  z-index: -1;
   color: white;
+  opacity: 0.3;
+  text-shadow: none;
+}
+
+.dice {
+  font-size: 5em;
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Attribute color utility classes */
+.body { color: var(--body); }
+.mind { color: var(--mind); }
+.heart { color: var(--heart); }
+.emanation { color: var(--emanation); }
+.perception { color: var(--perception); }
+.essence { color: var(--essence); }
+.cunning { color: var(--cunning); }
+.power { color: var(--power); }
+.fortitude { color: var(--fortitude); }
+
+/* Role badge styles — medieval ink palette */
+.role-pitcher {
+  border: 1px solid #5b8c9a;
+  color: #5b8c9a;
+  background: rgba(91, 140, 154, 0.12);
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+}
+
+.role-batter {
+  border: 1px solid #a0522d;
+  color: #a0522d;
+  background: rgba(160, 82, 45, 0.12);
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+}
+
+.role-catcher {
+  border: 1px solid #8b5a2b;
+  color: #8b5a2b;
+  background: rgba(139, 90, 43, 0.12);
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+}
+
+.role-base-guard {
+  border: 1px solid #556b2f;
+  color: #556b2f;
+  background: rgba(85, 107, 47, 0.12);
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+}
+
+.role-fielder {
+  border: 1px solid #b8860b;
+  color: #b8860b;
+  background: rgba(184, 134, 11, 0.12);
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+}
+
+.role-reserve {
+  border: 1px solid #696969;
+  color: #bdc3c7;
+  background: rgba(105, 105, 105, 0.15);
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+}
+
+.role-batter {
+  background-color: rgba(184, 46, 11, 0.15);
+  color: var(--heart);
+  border: 1px solid var(--heart);
+  padding: 2px 6px;
+  font-size: 0.9em;
+}
+
+.role-catcher {
+  background-color: rgba(55, 150, 137, 0.15);
+  color: var(--emanation);
+  border: 1px solid var(--emanation);
+  padding: 2px 6px;
+  font-size: 0.9em;
+}
+
+.role-base-guard {
+  background-color: rgba(91, 34, 175, 0.15);
+  color: var(--perception);
+  border: 1px solid var(--perception);
+  padding: 2px 6px;
+  font-size: 0.9em;
+}
+
+.role-fielder {
+  background-color: rgba(10, 93, 10, 0.15);
+  color: var(--essence);
+  border: 1px solid var(--essence);
+  padding: 2px 6px;
+  font-size: 0.9em;
+}
+
+.role-reserve {
+  background-color: rgba(183, 23, 183, 0.15);
+  color: var(--cunning);
+  border: 1px solid var(--cunning);
+  padding: 2px 6px;
+  font-size: 0.9em;
+}
+
+/* Scrollbar — parchment scroll style */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-leather);
+  border-left: 1px solid var(--border-copper);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-copper);
+  border: 2px solid var(--bg-leather);
+  border-radius: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.1) 2px,
+    rgba(0,0,0,0.1) 4px
+  );
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-steel);
+}
+
+/* Selection highlight */
+::selection {
+  background: var(--accent-crimson);
+  color: var(--text-parchment);
+}
+
+/* Dice font faces */
+@font-face {
+  font-family: 'DpolyFourSider';
+  src: url('/assets/dice_fonts/DpolyFourSider-GM6P.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DpolySixSider';
+  src: url('/assets/dice_fonts/DpolySixSider-jqRO.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DpolyEightSider';
+  src: url('/assets/dice_fonts/DpolyEightSider-JvWo.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DpolyTenSider';
+  src: url('/assets/dice_fonts/DpolyTenSider-z1Jw.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DpolyTwelveSider';
+  src: url('/assets/dice_fonts/DpolyTwelveSider-5KWZ.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DpolyTwentySider';
+  src: url('/assets/dice_fonts/DpolyTwentySider-62jq.ttf') format('truetype');
 }

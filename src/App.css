@@ -1,396 +1,107 @@
-/* Convent Card Styles */
-.convent-card {
-    border: 2px solid var(--border);
-    border-radius: 0px;
-    overflow: hidden;
-    background-color: var(--card-bg);
-    margin: 0;
- }
+/* ===========================================
+   Bloody Bats — Medieval Theocratic Baseball
+   Complete stylesheet (deduplicated, unified)
+   =========================================== */
 
-  .convent-card.selected {
-    border-color: var(--accent);
-    background-color: rgba(121, 85, 72, 0.05);
- }
-
-.convent-header {
-    padding: 16px;
-    text-align: center;
- }
-
-.convent-header h2 {
-    margin: 0 0 8px 0;
-    font-size: 1.5rem;
-    color: var(--text-h);
- }
-
-.convent-colors {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
- }
-
-.color-primary, .color-secondary {
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
- }
-
-.convent-body {
-    padding: 16px;
- }
-
-.convent-description {
-    margin: 0 0 16px 0;
-    color: var(--text);
-    line-height: 1.5;
- }
-
-.convent-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
-    margin: 0 0 16px 0;
- }
-
-.stat-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
- }
-
-.stat-label {
-    font-weight: 500;
-    color: var(--text-muted);
- }
-
-.stat-value {
-    font-weight: 600;
-    color: var(--text);
- }
-
-.convent-arena-rule {
-    margin: 0 0 16px 0;
- }
-
-.convent-arena-rule h3 {
-    margin: 0 0 8px 0;
-    color: var(--text-h);
-    font-size: 1.1rem;
- }
-
-.convent-arena-rule p {
-    margin: 0;
-    color: var(--text);
-    font-style: italic;
- }
-
-.convent-footer {
-     padding: 12px 16px;
-     text-align: center;
-     border-top: 1px solid var(--border);
-   }
-
-/* Navigation Styles */
-.convent-navigation {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 32px 0;
-    gap: 16px;
-}
-
-.nav-button,
-.confirm-button {
-    background-color: var(--accent-bg);
-    color: var(--accent);
-    border: 2px solid var(--accent);
-    border-radius: 0px;
-    padding: 12px 24px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: var(--heading);
-    position: relative;
-    overflow: hidden;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    font-size: 16px;
-    background-image: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.05) 55%, transparent 55%);
-    background-size: 10px 10px;
-}
-
-.nav-button:hover:not(:disabled),
-.confirm-button:hover:not(:disabled) {
-    background-color: var(--accent);
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    background-image: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.1) 55%, transparent 55%);
-}
-
-.nav-button:disabled,
-.confirm-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-/* Add medieval decorative elements to the confirm button */
-.confirm-button::before {
-    content: "⚔";
-    margin-right: 10px;
-    font-size: 1.4em;
-    vertical-align: middle;
-}
-
-.confirm-button::after {
-    content: "⚔";
-    margin-left: 10px;
-    font-size: 1.4em;
-    vertical-align: middle;
-}
-
-/* Add a subtle aged paper texture effect */
-.confirm-button {
-    border-image: repeating-linear-gradient(
-        45deg,
-        var(--accent),
-        var(--accent) 1px,
-        transparent 1px,
-        transparent 3px
-    );
-    border-image-slice: 1;
-}
-
-.nav-button,
-.confirm-button {
-    background-color: var(--accent-bg);
-    color: var(--accent);
-    border: 2px solid var(--accent);
-    border-radius: 0px;
-    padding: 12px 24px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: var(--heading);
-    position: relative;
-    overflow: hidden;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    font-size: 16px;
-    background-image: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.05) 55%, transparent 55%);
-    background-size: 10px 10px;
-}
-
-.nav-button:hover:not(:disabled),
-.confirm-button:hover:not(:disabled) {
-    background-color: var(--accent);
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    background-image: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.1) 55%, transparent 55%);
-}
-
-.nav-button:disabled,
-.confirm-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-/* Add medieval decorative elements to the confirm button */
-.confirm-button::before {
-    content: "⚔";
-    margin-right: 10px;
-    font-size: 1.4em;
-    vertical-align: middle;
-}
-
-.confirm-button::after {
-    content: "⚔";
-    margin-left: 10px;
-    font-size: 1.4em;
-    vertical-align: middle;
-}
-
-/* Add a subtle aged paper texture effect */
-.confirm-button {
-    border-image: repeating-linear-gradient(
-        45deg,
-        var(--accent),
-        var(--accent) 1px,
-        transparent 1px,
-        transparent 3px
-    );
-    border-image-slice: 1;
-}
-
-.nav-button:disabled,
-.confirm-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-/* Add a subtle decorative element to the confirm button */
-.confirm-button::before {
-    content: "⚔";
-    margin-right: 8px;
-    font-size: 1.2em;
-}
-
-.confirm-button::after {
-    content: "⚔";
-    margin-left: 8px;
-    font-size: 1.2em;
-}
-
-.nav-button:disabled,
-.confirm-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-/* Add a subtle decorative element to the confirm button */
-.confirm-button::before {
-    content: "⚔";
-    margin-right: 8px;
-    font-size: 1.2em;
-}
-
-.confirm-button::after {
-    content: "⚔";
-    margin-left: 8px;
-    font-size: 1.2em;
-}
-
-.nav-button:disabled,
-.confirm-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-/* Add a subtle decorative element to the confirm button */
-.confirm-button::before {
-    content: "⚔";
-    margin-right: 8px;
-    font-size: 1.2em;
-}
-
-.confirm-button::after {
-    content: "⚔";
-    margin-left: 8px;
-    font-size: 1.2em;
-}
-
-.nav-button:disabled,
-.confirm-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-/* Add a subtle decorative element to the confirm button */
-.confirm-button::before {
-    content: "⚔";
-    margin-right: 8px;
-    font-size: 1.2em;
-}
-
-.confirm-button::after {
-    content: "⚔";
-    margin-left: 8px;
-    font-size: 1.2em;
-}
-
-.nav-button:hover:not(:disabled),
-.confirm-button:hover:not(:disabled) {
-    background-color: var(--accent);
-    color: white;
-}
-
-.nav-button:disabled,
-.confirm-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.convent-display {
-    flex: 1;
-    max-width: 400px;
-}
-
-@media (max-width: 768px) {
-    .convent-navigation {
-        flex-direction: column;
-    }
-    
-    .nav-button,
-    .confirm-button {
-        width: 100%;
-        max-width: 200px;
-    }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .convent-card {
-       margin: 8px;
-    }
-
-    .convent-header h2 {
-       font-size: 1.25rem;
-    }
-}
-
-/* Decorative elements */
-.ticks {
-   position: relative;
-   width: 100%;
-
-   &::before,
-   &::after {
-     content: '';
-     position: absolute;
-     top: -4.5px;
-     border: 5px solid transparent;
-   }
-
-   &::before {
-     left: 0;
-     border-left-color: var(--border);
-   }
-
-   &::after {
-     right: 0;
-     border-right-color: var(--border);
-   }
-}
-
-/* Base layout - keeping minimal necessary styles from original */
+/* ---------- Base Layout ---------- */
 #root {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
-  border-inline: 1px solid var(--border);
+  border-inline: 1px solid var(--border-iron);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
 }
 
-/* Main Menu Styles */
+/* ---------- Typography (global) ---------- */
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-h);
+  letter-spacing: 0.08em;
+  text-shadow: 
+    0 1px 2px rgba(0,0,0,0.7),
+    0 0 15px rgba(184, 134, 11, 0.2);
+  margin: 0;
+}
+
+/* H1 — Main page titles, dramatic — with seal flourish */
+h1 {
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 40px 0;
+  position: relative;
+  display: inline-block;
+  border-bottom: 2px solid var(--accent-gold);
+  padding-bottom: 14px;
+}
+
+/* Decorative seal flourish under h1 (× at corners) */
+h1::before,
+h1::after {
+  content: '†';
+  position: absolute;
+  bottom: -10px;
+  font-size: 1.2rem;
+  color: var(--accent-gold);
+  opacity: 0.7;
+}
+
+h1::before {
+  left: -20px;
+}
+
+h1::after {
+  right: -20px;
+}
+
+/* H2 — Section headers */
+h2 {
+  font-size: 28px;
+  line-height: 118%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+  border-bottom: 1px solid var(--border-iron);
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+/* H3 — Subsection headers */
+h3 {
+  font-size: 18px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 0 0 12px;
+}
+
+/* Body text */
+p {
+  margin: 0;
+  line-height: 1.7;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+}
+
+code, .counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+  border: 1px solid var(--border-iron);
+}
+
+/* ---------- Main Menu ---------- */
 .main-menu {
   flex: 1;
   display: flex;
@@ -404,82 +115,97 @@
 .main-menu h1 {
   font-size: 48px;
   margin-bottom: 40px;
-  letter-spacing: -1.44px;
-  font-family: var(--heading);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
   color: var(--text-h);
+  text-shadow: 
+    2px 2px 4px rgba(0,0,0,0.7),
+    0 0 20px rgba(184, 134, 11, 0.3);
+  border-bottom: 2px solid var(--accent-gold);
+  padding-bottom: 16px;
 }
 
 .main-menu button {
-  background-color: var(--accent-bg);
-  color: var(--accent);
-  border: 2px solid var(--accent);
-  border-radius: 0px;
+  background: var(--bg-leather);
+  color: var(--text-parchment);
+  border: 2px solid var(--border-copper);
   padding: 12px 24px;
   margin: 10px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: var(--heading);
+  font-family: var(--font-heading);
   position: relative;
   overflow: hidden;
   letter-spacing: 1px;
   text-transform: uppercase;
   font-size: 16px;
-  background-image: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.05) 55%, transparent 55%);
-  background-size: 10px 10px;
   width: 200px;
   min-height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(184, 134, 11, 0.05) 10px,
+      rgba(184, 134, 11, 0.05) 12px
+    );
+  box-shadow: 
+    inset 0 0 20px rgba(0,0,0,0.3),
+    0 4px 8px rgba(0,0,0,0.4);
+  border-radius: 0;
 }
 
-.main-menu button:hover:not(:disabled) {
-  background-color: var(--accent);
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  background-image: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.1) 55%, transparent 55%);
-}
-
-.main-menu button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Add medieval decorative elements to buttons */
 .main-menu button::before {
-  content: "⚔";
-  margin-right: 8px;
+  content: '⚔';
+  margin-right: 10px;
   font-size: 1.2em;
-  vertical-align: middle;
+  opacity: 0.8;
 }
 
 .main-menu button::after {
-  content: "⚔";
-  margin-left: 8px;
+  content: '⚔';
+  margin-left: 10px;
   font-size: 1.2em;
-  vertical-align: middle;
+  opacity: 0.8;
 }
 
-/* Add a subtle aged paper texture effect */
-.main-menu button {
-  border-image: repeating-linear-gradient(
+.main-menu button:hover:not(:disabled) {
+  background: var(--accent-crimson);
+  color: var(--text-parchment);
+  border-color: var(--accent-ruby);
+  transform: translateY(-3px);
+  box-shadow: 
+    inset 0 0 30px rgba(139, 0, 0, 0.3),
+    0 8px 16px rgba(0,0,0,0.5),
+    0 0 20px rgba(184, 134, 11, 0.2);
+  background-image: repeating-linear-gradient(
     45deg,
-    var(--accent),
-    var(--accent) 1px,
-    transparent 1px,
-    transparent 3px
+    transparent,
+    transparent 10px,
+    rgba(255,255,255,0.08) 10px,
+    rgba(255,255,255,0.08) 12px
   );
-  border-image-slice: 1;
+}
+
+.main-menu button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  filter: grayscale(80%);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
 }
 
 @media (max-width: 768px) {
   .main-menu h1 {
     font-size: 32px;
     margin-bottom: 20px;
+    letter-spacing: 0.1em;
+    border-bottom-width: 1px;
+    padding-bottom: 8px;
   }
   
   .main-menu button {
@@ -489,131 +215,833 @@
     padding: 10px 20px;
     font-size: 14px;
   }
+  
+.convent-selector h1 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-shadow: 
+    2px 2px 4px rgba(0,0,0,0.7),
+    0 0 15px rgba(184, 134, 11, 0.25);
+  position: relative;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  border-bottom: 2px solid var(--accent-gold);
+  padding-bottom: 12px;
+}
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* ---------- Convent Selector ---------- */
+.convent-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  min-height: 100vh;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
+.convent-selector h1 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-shadow: 
+    2px 2px 4px rgba(0,0,0,0.7),
+    0 0 15px rgba(184, 134, 11, 0.25);
+  position: relative;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  border-bottom: 2px solid var(--accent-gold);
+  padding-bottom: 12px;
+}
+
+.convent-selector h1::before,
+.convent-selector h1::after {
+  content: '❧';
+  position: static;
+  bottom: auto;
+  left: auto;
+  right: auto;
+  margin: 0 15px;
+  color: var(--accent-gold);
+  opacity: 0.7;
+}
+
+.convent-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+  gap: 24px;
+  width: 100%;
+}
+
+.nav-button {
+  background: var(--bg-leather);
+  color: var(--text-parchment);
+  border: 2px solid var(--border-copper);
+  padding: 12px 28px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-heading);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 18px;
+  min-width: 80px;
+  background-image: 
+    linear-gradient(
+      45deg,
+      transparent 45%,
+      rgba(184, 134, 11, 0.05) 45%,
+      rgba(184, 134, 11, 0.05) 55%,
+      transparent 55%
+    );
+  background-size: 8px 8px;
+  box-shadow: 
+    inset 0 0 15px rgba(0,0,0,0.3),
+    0 3px 6px rgba(0,0,0,0.4);
+}
+
+.nav-button:hover:not(:disabled) {
+  background: var(--accent-gold);
+  color: var(--bg-parchment);
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+  box-shadow: 
+    inset 0 0 25px rgba(184, 134, 11, 0.3),
+    0 6px 12px rgba(0,0,0,0.5),
+    0 0 15px rgba(184, 134, 11, 0.3);
+}
+
+.nav-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  filter: grayscale(70%);
+}
+
+.nav-button.prev-button::before,
+.nav-button.next-button::before {
+  content: '†';
+  font-size: 1.4em;
+  opacity: 0.7;
+}
+
+.convent-display {
+  flex: 1;
+  max-width: 450px;
+}
+
+.confirm-section {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.confirm-button {
+  background: var(--bg-leather);
+  color: var(--text-parchment);
+  border: 3px solid var(--accent-crimson);
+  padding: 16px 48px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  font-family: var(--font-heading);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 18px;
+  background-image: 
+    repeating-linear-gradient(
+      135deg,
+      transparent 0px,
+      transparent 10px,
+      rgba(139, 0, 0, 0.08) 10px,
+      rgba(139, 0, 0, 0.08) 12px
+    ),
+    radial-gradient(
+      ellipse at 30% 30%,
+      rgba(255,200,100,0.05) 0%,
+      transparent 50%
+    );
+  box-shadow: 
+    inset 0 0 20px rgba(0,0,0,0.4),
+    0 4px 10px rgba(0,0,0,0.5);
+  border-radius: 0;
+}
+
+.confirm-button::before {
+  content: '⚔';
+  margin-right: 12px;
+  font-size: 1.3em;
+  vertical-align: middle;
+  opacity: 0.9;
+}
+
+.confirm-button::after {
+  content: '⚔';
+  margin-left: 12px;
+  font-size: 1.3em;
+  vertical-align: middle;
+  opacity: 0.9;
+}
+
+.confirm-button:hover:not(:disabled) {
+  background: var(--accent-crimson);
+  color: var(--text-parchment);
+  border-color: var(--accent-ruby);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    inset 0 0 30px rgba(139, 0, 0, 0.4),
+    0 8px 20px rgba(0,0,0,0.6),
+    0 0 25px rgba(184, 134, 11, 0.15);
+}
+
+.confirm-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  filter: grayscale(60%);
+}
+
+@media (max-width: 768px) {
+  .convent-navigation {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .nav-button,
+  .confirm-button {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .convent-display {
+    max-width: 100%;
   }
 }
 
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-
-p {
+/* ---------- Convent Card ---------- */
+.convent-card {
+  border: 2px solid var(--border-iron);
+  border-radius: 0;
+  overflow: hidden;
+  background-color: var(--card-bg);
   margin: 0;
+  transition: all 0.3s ease;
+  box-shadow: 
+    inset 0 0 40px rgba(0,0,0,0.3),
+    0 6px 20px rgba(0,0,0,0.5);
+  position: relative;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
+/* Inner texture overlay */
+.convent-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(255,255,255,0.01) 3px,
+      rgba(255,255,255,0.01) 6px
+    );
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.convent-card.selected {
+  border-color: var(--accent-gold);
+  background-color: rgba(184, 134, 11, 0.06);
+  box-shadow: 
+    inset 0 0 50px rgba(184, 134, 11, 0.08),
+    0 8px 30px rgba(0,0,0,0.6),
+    0 0 30px rgba(184, 134, 11, 0.1);
+}
+
+.convent-header {
+  padding: 16px;
+  text-align: center;
+  border-bottom: 2px solid var(--border-iron);
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.15) 0%,
+    transparent 100%
+  );
+}
+
+.convent-header h2 {
+  margin: 0 0 12px 0;
+  font-size: 1.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--accent-gold);
+  padding-bottom: 6px;
+  display: inline-block;
+}
+
+.convent-colors {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.color-primary,
+.color-secondary {
+  width: 28px;
+  height: 28px;
+  border-radius: 0;
+  border: 2px solid var(--border-iron);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+}
+
+.convent-body {
+  padding: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.convent-description {
+  margin: 0 0 16px 0;
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.convent-card .convent-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin: 0 0 16px 0;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(74, 69, 64, 0.3);
+  background: rgba(0,0,0,0.1);
+  font-size: 0.95rem;
+}
+
+.stat-label {
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.convent-arena-rule {
+  margin: 0 0 16px 0;
+  padding: 12px;
+  border: 1px solid var(--border-iron);
+  background: rgba(0,0,0,0.15);
+  position: relative;
+}
+
+/* Corner flourishes on arena rule */
+.convent-arena-rule::before,
+.convent-arena-rule::after {
+  content: '†';
+  position: absolute;
+  top: -8px;
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  opacity: 0.6;
+}
+
+.convent-arena-rule::before {
+  left: 8px;
+}
+
+.convent-arena-rule::after {
+  right: 8px;
+}
+
+.convent-arena-rule h3 {
+  margin: 0 0 8px 0;
   color: var(--text-h);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+.convent-arena-rule p {
+  margin: 0;
+  color: var(--text);
+  font-style: italic;
+  opacity: 0.9;
 }
 
-/* Role-based color classes */
-.role-lanzador {
-  background-color: #bfdbfe;
-  color: #1e40af;
+.convent-footer {
+  padding: 12px 16px;
+  text-align: center;
+  border-top: 1px solid var(--border-iron);
+  background: rgba(0,0,0,0.2);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-.role-bateador {
-  background-color: #fecdaa;
-  color: #9a3412;
+/* ---------- Ticks Decorator ---------- */
+.ticks {
+  position: relative;
+  width: 100%;
 }
 
-.role-receptor {
-  background-color: #eecbfa;
-  color: #5b21b6;
+.ticks::before,
+.ticks::after {
+  content: '';
+  position: absolute;
+  top: -4.5px;
+  border: 5px solid transparent;
 }
 
-.role-guardia-base {
-  background-color: #d1fae5;
-  color: #065f46;
+.ticks::before {
+  left: 0;
+  border-left-color: var(--border-copper);
 }
 
-.role-jardinero {
-  background-color: #fef08a;
-  color: #854d0e;
+.ticks::after {
+  right: 0;
+  border-right-color: var(--border-copper);
 }
 
-.role-reserva {
-  background-color: #f3f3f3;
-  color: #1f1f1f;
-}
-
-/* GameScreen Styles */
+/* ---------- Convent Details (GameScreen) ---------- */
 .convent-details {
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: var(--card-bg);
+  border: 2px solid var(--border-iron);
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
 }
 
-.convent-stats {
+.convent-details .convent-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  gap: 16px;
   margin-top: 20px;
 }
 
 .stat-group {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0,0,0,0.25);
   padding: 15px;
-  border-radius: 6px;
+  border: 1px solid var(--border-iron);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
 }
 
 .stat-group h3 {
   color: var(--text-h);
   margin-top: 0;
   margin-bottom: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding-bottom: 5px;
+  border-bottom: 1px solid var(--border-iron);
+  padding-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
 }
 
 .stat-group p {
   margin: 8px 0;
   line-height: 1.6;
+  color: var(--text);
 }
 
+/* Attribute grouping */
 .attributes-container {
   display: flex;
   width: 100%;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .attribute-row {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 12px;
+  padding: 4px 8px;
+  background: rgba(0,0,0,0.15);
+  transition: background 0.2s ease, border-left-color 0.2s ease;
+  width: 100%;
 }
+
+.attribute-row:hover {
+  background: rgba(0,0,0,0.2);
+  border-left-color: var(--accent-gold);
+}
+
+/* Attribute color highlights on rows */
+.attribute-row .body { border-left-color: var(--body); }
+.attribute-row .mind { border-left-color: var(--mind); }
+.attribute-row .heart { border-left-color: var(--heart); }
+.attribute-row .emanation { border-left-color: var(--emanation); }
+.attribute-row .perception { border-left-color: var(--perception); }
+.attribute-row .essence { border-left-color: var(--essence); }
+.attribute-row .cunning { border-left-color: var(--cunning); }
+.attribute-row .power { border-left-color: var(--power); }
+.attribute-row .fortitude { border-left-color: var(--fortitude); }
+
+/* ---------- Back Button ---------- */
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-leather);
+  color: var(--text-parchment);
+  border: 2px solid var(--border-iron);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-heading);
+  font-size: 0; /* Hide text */
+  z-index: 1000;
+  border-radius: 0;
+  background-image: 
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.03) 0%,
+      transparent 100%
+    );
+  box-shadow: 
+    inset 0 0 10px rgba(0,0,0,0.3),
+    0 4px 8px rgba(0,0,0,0.4);
+}
+
+.back-button::before {
+  content: '‡';
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.back-button:hover {
+  background: var(--accent-crimson);
+  border-color: var(--accent-ruby);
+  color: var(--text-parchment);
+  transform: translateX(-3px);
+  box-shadow: 
+    inset 0 0 15px rgba(139,0,0,0.3),
+    0 6px 12px rgba(0,0,0,0.5);
+}
+
+.back-button:active {
+  transform: translateX(-1px);
+  box-shadow: 
+    inset 0 0 8px rgba(139,0,0,0.4),
+    0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Mobile back button adjustments */
+@media (max-width: 768px) {
+  .back-button {
+    top: 12px;
+    left: 12px;
+    width: 44px;
+    height: 44px;
+  }
+  
+  .back-button::before {
+    font-size: 1.6rem;
+  }
+}
+
+.back-button:hover {
+  background: var(--border-copper);
+  color: var(--bg-parchment);
+  border-color: var(--border-copper);
+  transform: translateY(-1px);
+}
+
+/* ---------- Dice Styles (enhanced) ---------- */
+.dice-container {
+  margin: 30px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.dice {
+  font-size: 6em;
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  /* Stone/metallic texture */
+  background: radial-gradient(
+    ellipse at 30% 30%,
+    rgba(255,255,255,0.1) 0%,
+    transparent 50%
+  ),
+  linear-gradient(
+    135deg,
+    var(--bg-leather) 0%,
+    #1a1814 50%,
+    var(--bg-leather) 100%
+  );
+  padding: 20px 30px;
+  border: 3px solid var(--border-copper);
+  border-radius: 8px;
+  box-shadow: 
+    inset 0 0 30px rgba(0,0,0,0.5),
+    0 8px 20px rgba(0,0,0,0.6),
+    0 0 40px rgba(184, 134, 11, 0.1);
+  /* Sacred geometry cross border decoration */
+  outline: 2px solid transparent;
+  outline-offset: -6px;
+}
+
+.dice::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  border: 1px solid rgba(184, 134, 11, 0.2);
+  pointer-events: none;
+}
+
+.dice:hover {
+  box-shadow: 
+    inset 0 0 40px rgba(0,0,0,0.6),
+    0 12px 30px rgba(0,0,0,0.7),
+    0 0 60px rgba(184, 134, 11, 0.2);
+}
+
+/* Dice glow on nat20 — torch flicker instead of bright */
+.dice.natural-20 {
+  animation: torch-flicker 1s ease-out;
+  color: var(--accent-gold);
+  text-shadow: 
+    0 0 20px rgba(184, 134, 11, 0.6),
+    0 0 40px rgba(184, 134, 11, 0.3);
+}
+
+/* ---------- Game Screen Layout ---------- */
+.game-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Game header — slightly smaller than main page titles */
+.game-screen h1 {
+  font-size: 36px;
+  margin: 0 0 20px;
+  border-bottom: 1px solid var(--accent-gold);
+  padding-bottom: 8px;
+  letter-spacing: 0.1em;
+}
+
+/* ---------- Tab Navigation (Home) ---------- */
+.tab-button {
+  background: var(--bg-leather);
+  color: var(--text-parchment);
+  border: 2px solid var(--border-copper);
+  padding: 10px 24px;
+  margin: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+  background-image: 
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.03) 0%,
+      transparent 100%
+    );
+  box-shadow: 
+    inset 0 0 12px rgba(0,0,0,0.3),
+    0 3px 6px rgba(0,0,0,0.4);
+}
+
+.tab-button:hover {
+  background: var(--accent-crimson);
+  border-color: var(--accent-ruby);
+  color: var(--text-parchment);
+  transform: translateY(-1px);
+  box-shadow: 
+    inset 0 0 20px rgba(139,0,0,0.3),
+    0 5px 10px rgba(0,0,0,0.5);
+}
+
+.tab-button:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+}
+
+/* ---------- Team Tab ---------- */
+.team-tab.tab {
+  background: var(--card-bg);
+  border: 2px solid var(--border-iron);
+  padding: 20px;
+  margin: 20px;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+}
+
+.team-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  border: 1px solid var(--border-iron);
+}
+
+.team-table thead {
+  background: rgba(0,0,0,0.25);
+}
+
+.team-table th,
+.team-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-iron);
+}
+
+.team-table th {
+  color: var(--text-h);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  border-bottom: 2px solid var(--accent-gold);
+}
+
+.team-table tbody tr {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.team-table tbody tr:hover {
+  background: rgba(184, 134, 11, 0.08);
+  color: var(--accent-gold);
+}
+
+.team-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* ---------- Attribute Card (PlayerInfo) ---------- */
+.attribute-card {
+  background: var(--card-bg);
+  border: 2px solid var(--border-iron);
+  padding: 12px;
+  text-align: center;
+  min-width: 70px;
+  box-shadow: 
+    inset 0 0 15px rgba(0,0,0,0.3),
+    0 4px 8px rgba(0,0,0,0.4);
+  transition: all 0.2s ease;
+}
+
+.attribute-card p {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin: 0 0 8px 0;
+}
+
+.attribute-card .die {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.attribute-card .die .d4,
+.attribute-card .die .d6,
+.attribute-card .die .d8,
+.attribute-card .die .d10,
+.attribute-card .die .d12,
+.attribute-card .die .d20 {
+  /* Ensure dice fonts apply within attribute cards */
+}
+
+/* ---------- Field Container ---------- */
+.field-container {
+  background: var(--card-bg);
+  border: 2px solid var(--border-iron);
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 500px;
+  box-shadow: inset 0 0 25px rgba(0,0,0,0.3);
+}
+
+/* SVG styling — make field elements fit medieval theme */
+.field-container svg path,
+.field-container svg circle,
+.field-container svg line,
+.field-container svg rect {
+  stroke: rgba(255,255,255,0.6);
+  stroke-width: 0.8;
+}
+
+/* Darken the grass infield to fit aesthetic */
+.field-container path[fill="#2e7d32"] {
+  fill: rgba(46, 125, 50, 0.5);
+}
+
+.field-container path[fill="#c68642"] {
+  fill: rgba(198, 134, 66, 0.4);
+}
+
+.field-container circle[fill="#a0522d"] {
+  fill: rgba(160, 82, 45, 0.5);
+}
+
+/* ---------- Additional Decorative Borders ---------- */
+.annotated-section {
+  position: relative;
+  border: 1px solid var(--border-iron);
+  padding: 16px;
+  margin: 20px 0;
+}
+
+.annotated-section::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  background: var(--bg-parchment);
+  padding: 0 8px;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ---------- End of App.css ---------- */
