@@ -20,10 +20,10 @@ const GameAnimations = ({ phase, outcome, bases, events }) => {
           <div
             key={idx}
             className="runner-highlight"
-            style={{
-              left: idx === 0 ? '68%' : idx === 1 ? '48%' : '32%',
-              top: idx === 0 ? '52%' : idx === 1 ? '28%' : '52%',
-            }}
+          style={{
+            left: idx === 0 ? '74.6154%' : idx === 1 ? '50%' : '25.3846%',
+            top: idx === 0 ? '50%' : idx === 1 ? '25.3846%' : '50%',
+          }}
           />
         )
       ))}

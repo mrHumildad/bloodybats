@@ -1033,10 +1033,11 @@ code, .counter {
 .field-container {
   background: var(--card-bg);
   border: 2px solid var(--border-iron);
-  padding: 20px;
-  margin: 20px 0;
+  padding: 0;
+  margin: 0;
   width: 100%;
   box-shadow: inset 0 0 25px rgba(0,0,0,0.3);
+  box-sizing: border-box;
 }
 
 /* SVG styling — make field elements fit medieval theme */
@@ -1142,6 +1143,260 @@ code, .counter {
   transition: transform 0.2s ease;
 }
 
+/* Player hover tooltip */
+.player-hover-tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: var(--card-bg);
+  border: 2px solid var(--border-iron);
+  padding: 8px 12px;
+  min-width: 130px;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.5);
+  border-radius: 4px;
+  z-index: 60;
+  pointer-events: none;
+  transform: translate(-50%, -120%);
+  text-align: center;
+}
+
+.player-hover-tooltip h4 {
+  margin: 0 0 4px 0;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Batting Queue - next batters waiting (left of home plate) */
+.batting-queue {
+  position: absolute;
+  left: 1%;
+  top: 76.6154%;
+  transform: translateY(-50%);
+  width: auto;
+  min-width: 10vw;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-iron);
+  border-radius: 4px;
+  padding: 0.5vw 0.67vw;
+  z-index: 35;
+}
+
+.batting-queue .queue-label,
+.punishment-pit .pit-label {
+  font-family: var(--font-heading);
+  font-size: 0.8vw;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 0.33vw;
+}
+
+.batting-queue .queue-players {
+  display: flex;
+  flex-direction: row-reverse; /* right-to-left ordering */
+  gap: 0.5vw;
+  justify-content: flex-end;
+}
+
+.batting-queue .queue-player {
+  width: 3vw;
+  height: 3vw;
+  border: 2px solid var(--border-iron);
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.batting-queue .queue-player.out-player {
+  background: rgba(139, 0, 0, 0.3);
+  border-color: #8b0000;
+  opacity: 0.7;
+  filter: grayscale(40%);
+}
+
+.batting-queue .queue-player.queue-out {
+  background: rgba(139, 0, 0, 0.3);
+  border-color: #8b0000;
+}
+
+.batting-queue .queue-player.queue-out .out-x {
+  color: #8b0000;
+  font-size: 1.5vw;
+  font-weight: bold;
+}
+
+.batting-queue .queue-player.queue-onbase {
+  background: rgba(0, 128, 0, 0.3);
+  border-color: #008000;
+}
+
+.batting-queue .queue-player.queue-onbase .base-number {
+  color: #008000;
+  font-size: 1.5vw;
+  font-weight: bold;
+}
+
+.batting-queue .queue-player:hover:not(.out-player) {
+  border-color: var(--accent-gold);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.batting-queue .queue-player .player-badge {
+  width: 100%;
+  height: auto;
+  max-width: 3vw;
+}
+
+/* Empty slot in queue */
+.batting-queue .queue-slot-empty {
+  border: 2px dashed var(--border-iron);
+  background: rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.batting-queue .queue-slot-empty .slot-number {
+  font-family: var(--font-heading);
+  font-size: 0.6vw;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* Punishment Pit - out counter (right of home plate) */
+.punishment-pit {
+  position: absolute;
+  right: 2%;
+  top: 76.6154%;
+  transform: translateY(-50%);
+  width: 6.67vw;
+  background: rgba(60, 0, 0, 0.4);
+  border: 1px solid #8b0000;
+  border-radius: 4px;
+  padding: 0.5vw 0.33vw;
+  z-index: 35;
+}
+
+.punishment-pit .pit-players {
+  display: flex;
+  flex-direction: column;
+  gap: 0.33vw;
+  align-items: center;
+  min-height: 3.33vw;
+}
+
+.punishment-pit .pit-player {
+  width: 2.67vw;
+  height: 2.67vw;
+  border: 2px solid #8b0000;
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pitDrop 0.4s ease-out;
+}
+
+.punishment-pit .pit-player .player-badge {
+  width: 100%;
+  height: auto;
+  max-width: 2.67vw;
+}
+
+@keyframes pitDrop {
+  0% {
+    transform: translateY(-2.5vw) rotate(10deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) rotate(0);
+    opacity: 1;
+  }
+}
+
+
+.player-hover-tooltip .role-info {
+  margin: 0 0 6px 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.player-hover-tooltip .meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.player-hover-tooltip .stars {
+  margin: 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+}
+
+/* ---------- Batting Bench ---------- */
+.batting-bench {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 12px 0;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-iron);
+  border-radius: 6px;
+}
+
+.batting-bench h4 {
+  margin: 0 0 8px 0;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.bench-players {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.bench-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 8px;
+  min-width: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.bench-player .initials {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.bench-player .number {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
 /* ---------- Game Animations ---------- */
 .game-animations {
   position: absolute;
@@ -1162,11 +1417,11 @@ code, .counter {
   border-radius: 50%;
   box-shadow: 0 2px 5px rgba(0,0,0,0.6), inset 0 -2px 3px rgba(0,0,0,0.3), inset 2px 2px 3px rgba(255,255,255,0.8);
   transform: translate(-50%, -50%);
-  opacity: 0;
-  /* Start at pitcher's mound (50, 50) */
-  top: 50%;
-  left: 50%;
-}
+   opacity: 0;
+   /* Start at pitcher's mound (transformed) */
+   top: 50%;
+   left: 50%;
+ }
 
 .ball.pitch_windup {
   opacity: 0;
@@ -1198,7 +1453,7 @@ code, .counter {
   }
   100% {
     opacity: 1;
-    top: 68%;
+    top: 74.6154%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.7);
   }
@@ -1207,7 +1462,7 @@ code, .counter {
 @keyframes contactFlash {
   0% {
     opacity: 1;
-    top: 68%;
+    top: 74.6154%;
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
     background: #fff;
@@ -1221,7 +1476,7 @@ code, .counter {
   }
   100% {
     opacity: 0;
-    top: 68%;
+    top: 74.6154%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.1);
     background: #ff4500;
@@ -1231,20 +1486,20 @@ code, .counter {
 @keyframes hitFlyOut {
   0% {
     opacity: 1;
-    top: 68%;
+    top: 74.6154%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.8);
   }
   40% {
     opacity: 1;
-    top: 35%;
+    top: 31.5385%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.4);
   }
   100% {
     opacity: 0;
-    top: 10%;
-    left: 55%;
+    top: 0.7692%;
+    left: 56.1538%;
     transform: translate(-50%, -50%) scale(0.15);
   }
 }
@@ -1289,7 +1544,7 @@ code, .counter {
 /* Contact flash effect at home plate */
 .contact-flash {
   position: absolute;
-  top: 68%;
+  top: 74.6154%;
   left: 50%;
   width: 70px;
   height: 70px;
@@ -1319,7 +1574,7 @@ code, .counter {
 /* Outcome popup */
 .outcome-popup {
   position: absolute;
-  top: 18%;
+  top: 21%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.5);
   padding: 10px 22px;
@@ -1400,7 +1655,7 @@ code, .counter {
 /* Score pulse */
 .score-pulse {
   position: absolute;
-  top: 6%;
+  top: 6.23%;
   right: 12%;
   font-family: var(--font-heading);
   font-size: 2.2rem;
@@ -1577,7 +1832,7 @@ code, .counter {
   }
   100% {
     opacity: 1;
-    top: 68%;
+    top: 74.6154%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
@@ -1586,7 +1841,7 @@ code, .counter {
 @keyframes contactFlash {
   0% {
     opacity: 1;
-    top: 68%;
+    top: 74.6154%;
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
     background: #fff;
@@ -1599,7 +1854,7 @@ code, .counter {
   }
   100% {
     opacity: 0;
-    top: 68%;
+    top: 74.6154%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.5);
     background: #ff4500;
@@ -1609,19 +1864,19 @@ code, .counter {
 @keyframes hitFlyOut {
   0% {
     opacity: 1;
-    top: 68%;
+    top: 74.6154%;
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
   }
   30% {
     opacity: 1;
-    top: 30%;
+    top: 25.3846%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.7);
   }
   100% {
     opacity: 0;
-    top: 15%;
+    top: 6.9231%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.3);
   }
@@ -1664,7 +1919,7 @@ code, .counter {
 /* Contact flash effect at home plate */
 .contact-flash {
   position: absolute;
-  top: 68%;
+  top: 74.6154%;
   left: 50%;
   width: 60px;
   height: 60px;
@@ -1815,11 +2070,11 @@ code, .counter {
 }
 
 @keyframes runToBase {
-  0% { top: 73%; left: 50%; opacity: 1; }
-  25% { top: 60%; left: 60%; }
-  50% { top: 48%; left: 68%; }
-  75% { top: 35%; left: 48%; }
-  100% { top: 25%; left: 50%; opacity: 0; }
+  0% { top: 78.3077%; left: 50%; opacity: 1; }
+  25% { top: 62.3077%; left: 62.3077%; }
+  50% { top: 47.5385%; left: 72.1538%; }
+  75% { top: 31.5385%; left: 47.5385%; }
+  100% { top: 19.2308%; left: 50%; opacity: 0; }
 }
 
 .friendly-match {
@@ -1866,47 +2121,6 @@ code, .counter {
   font-size: 1rem;
   color: var(--text-muted);
   letter-spacing: 0.1em;
-}
-
-.bases-visual {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
-  align-items: center;
-  justify-items: center;
-  margin: 16px 0;
-  width: 260px;
-  position: relative;
-  font-family: var(--font-heading);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 1.2rem;
-  color: var(--text-muted);
-}
-.bases-visual .base {
-  width: 50px;
-  height: 50px;
-  border: 2px solid var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.5;
-  transition: all 0.3s ease;
-}
-.bases-visual .base.occupied {
-  background: var(--accent-gold);
-  border-color: var(--accent-gold);
-  color: var(--bg-parchment);
-  opacity: 1;
-  box-shadow: 0 0 12px rgba(184,134,11,0.5);
-}
-.outs-display {
-  position: absolute;
-  right: -180px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1rem;
-  color: var(--text-muted);
 }
 
 .matchup {
@@ -2028,14 +2242,80 @@ code, .counter {
   color: var(--text-h);
 }
 
+/* ---------- Dual Team Benches (Friendly Match) ---------- */
+.teams-benches {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 700px;
+  margin: 16px 0;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-iron);
+  border-radius: 6px;
+}
+
+.team-bench {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.team-bench h4 {
+  margin: 0 0 8px 0;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.bench-slots {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.bench-slot {
+  aspect-ratio: 1;
+  min-height: 48px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed var(--border-iron);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.bench-slot.empty {
+  opacity: 0.4;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.bench-slot.filled {
+  background: rgba(255, 255, 255, 0.05);
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.bench-slot .player-badge {
+  width: 100%;
+  max-width: 50px;
+  height: auto;
+}
+
 /* ---------- End of App.css ---------- */
 
 /* ---------- Scoreboard ---------- */
 .scoreboard {
   width: 100%;
   max-width: 800px;
-  margin: 16px auto 24px auto;
-  padding: 12px;
+  margin: 4px auto 4px;
+  padding: 8px;
   background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
   border: 2px solid var(--accent-gold);
   border-radius: 6px;

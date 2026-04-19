@@ -1,10 +1,25 @@
 import React from "react";
+import Player from "./Player";
 
-const Field = ({ children }) => {
+const Field = ({ children, myConvent, opponent, half, bases, animationPhase, battingQueue, punishmentPit, onPlayerHover }) => {
+  const getTeamColors = (convent) => {
+    if (!convent) return { primary: '#666', secondary: '#444' };
+    return {
+      primary: convent.colors.primary,
+      secondary: convent.colors.secondary,
+    };
+  };
+
+  const homeColors = getTeamColors(myConvent);
+  const awayColors = getTeamColors(opponent);
+  const isHomeBatting = half === 'bottom';
+  const teamColors = isHomeBatting ? homeColors : awayColors;
+
   return (
     <div className="field-container">
       <svg viewBox="0 0 100 100" width="100%" height="auto" preserveAspectRatio="xMidYMid meet">
-
+        {/* Group transform to zoom and align field drawing, removing top/bottom margins */}
+        <g transform="translate(-11.53846, -11.53846) scale(1.23077)">
         {/* Outfield grass (TRUE wedge from home plate) */}
         <path
           d="M50 70 L10 30 A45 45 0 0 1 90 30 Z"
@@ -38,9 +53,74 @@ const Field = ({ children }) => {
           strokeWidth="1"
           strokeDasharray="3 3"
         />
-
+        </g>
       </svg>
       {children}
+
+      {/* Batting Queue - next batters waiting (left of home plate) */}
+      <div className="batting-queue" id="batting-queue">
+        <div className="queue-label">BATTERS BATTERY</div>
+        <div className="queue-players">
+          {battingQueue && battingQueue.map((item, idx) => {
+            if (item.status === 'batting') {
+              return (
+                <div key={idx} className="queue-player queue-slot-empty">
+                  <span className="slot-number">{idx + 1}</span>
+                </div>
+              );
+            } else if (item.status === 'out') {
+              return (
+                <div key={idx} className="queue-player queue-out">
+                  <span className="out-x">X</span>
+                </div>
+              );
+            } else if (item.status && item.status.startsWith('onbase')) {
+              const baseNum = item.status.slice(-1);
+              return (
+                <div key={idx} className="queue-player queue-onbase">
+                  <span className="base-number">{baseNum}</span>
+                </div>
+              );
+            } else {
+              return (
+                <div
+                  key={idx}
+                  className="queue-player"
+                  onMouseEnter={() => onPlayerHover && onPlayerHover({ player: item.player, type: 'queue' })}
+                  onMouseLeave={() => onPlayerHover && onPlayerHover(null)}
+                >
+                  <Player
+                    player={item.player}
+                    primaryColor={teamColors.primary}
+                    secondaryColor={teamColors.secondary}
+                  />
+                </div>
+              );
+            }
+          })}
+        </div>
+      </div>
+
+      {/* Punishment Pit - out counter (right of home plate) */}
+      <div className="punishment-pit" id="punishment-pit">
+        <div className="pit-label">OUTS</div>
+        <div className="pit-players">
+          {punishmentPit && punishmentPit.map((player, idx) => (
+            <div
+              key={idx}
+              className="pit-player"
+              onMouseEnter={() => onPlayerHover && onPlayerHover({ player, type: 'pit' })}
+              onMouseLeave={() => onPlayerHover && onPlayerHover(null)}
+            >
+              <Player
+                player={player}
+                primaryColor={isHomeBatting ? homeColors.primary : awayColors.primary}
+                secondaryColor={isHomeBatting ? homeColors.secondary : awayColors.secondary}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

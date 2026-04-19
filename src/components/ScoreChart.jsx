@@ -7,6 +7,7 @@ const ScoreChart = ({
   score,
   currentInning,
   half,
+  outs,
   innings,
   inningScores,
   hits,
@@ -30,9 +31,6 @@ const ScoreChart = ({
   // If game ended and home team won, show 'X' for innings they didn't need to bat
   const getCellValue = (team, inning) => {
     if (team === 'home') {
-      // Home team doesn't bat in bottom half if already leading
-      // For simplicity: if inning > currentInning, show empty
-      // If inning === currentInning and half === 'top', home hasn't batted yet
       if (inning > currentInning) return '';
       if (inning === currentInning && half === 'top') return '';
     }
@@ -41,7 +39,7 @@ const ScoreChart = ({
 
   return (
     <div className="scoreboard">
-      {/* Header Row: Inning numbers + RHE labels */}
+      {/* Header Row: Inning numbers + R H E labels */}
       <div className="scoreboard-header">
         <div className="scoreboard-team-label header-empty"></div>
         {inningNumbers.map((inning) => (

@@ -1,25 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Player from './Player';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation, translateRole } from '../translations';
+import { getRoleColorClass } from '../logic/utils';
+import { playerStars } from '../logic/ui_utils';
 
 // Coordinate mapping for defensive positions on the 100x100 SVG field
 const POSITION_COORDS = {
-  PIT: { x: 50, y: 50 },     // pitcher's mound
-  CAT: { x: 50, y: 68 },     // catcher behind home plate
-  'BAS-1': { x: 68, y: 52 }, // first base guard
-  'BAS-2': { x: 32, y: 52 }, // third base guard
-  FIE: { x: 50, y: 25 },     // center fielder
+  PIT: { x: 50, y: 50 },            // pitcher's mound (centered)
+  CAT: { x: 50, y: 82 },            // catcher behind home plate
+  'BAS-1': { x: 62.3077, y: 61.0769 }, // first base guard
+  'BAS-2': { x: 62.3077, y: 37.6923 }, // second base guard
+  FIE: { x: 50, y: 19.2308 },       // center fielder
 };
 
-// Batter positions: spread horizontally behind home plate
-const getBatterPosition = (index, total) => {
-  if (total === 1) return { x: 50, y: 78 };
-  if (total === 2) return { x: index === 0 ? 45 : 55, y: 78 };
-  if (total === 3) return { x: 40 + index * 10, y: 78 };
-  // 4 or 5 batters
-  return { x: 30 + index * 10, y: 78 };
+const BASE_POSITIONS = {
+  home: { x: 50, y: 74.6154 },      // directly on home plate
+  first: { x: 74.6154, y: 50 },     // first base
+  second: { x: 50, y: 25.3846 },    // second base
+  third: { x: 25.3846, y: 50 },     // third base
 };
 
-const FieldPlayers = ({ homeConvent, awayConvent, half, animationPhase }) => {
+
+
+const FieldPlayers = ({ homeConvent, awayConvent, half, bases, animationPhase, onPlayerHover }) => {
+  const { language } = useLanguage();
+
   if (!homeConvent || !awayConvent) return null;
 
   // Determine which convent is fielding (defensive positions) and which is batting
@@ -41,9 +47,6 @@ const FieldPlayers = ({ homeConvent, awayConvent, half, animationPhase }) => {
   const baseGuard1 = getPlayerByPosition('BAS-1');
   const baseGuard2 = getPlayerByPosition('BAS-2');
   const fielder = getPlayerByPosition('FIE');
-
-  // Get all batters from batting team
-  const batters = battingTeam.filter(p => p.role === 'batter' || p.position?.startsWith('BAT'));
 
   const fieldingPrimaryColor = fieldingConvent.colors.primary;
   const fieldingSecondaryColor = fieldingConvent.colors.secondary;
@@ -73,6 +76,15 @@ const FieldPlayers = ({ homeConvent, awayConvent, half, animationPhase }) => {
     const primary = isBatter ? battingPrimaryColor : fieldingPrimaryColor;
     const secondary = isBatter ? battingSecondaryColor : fieldingSecondaryColor;
     const animClass = getAnimationClass(player.role);
+
+    const handleMouseEnter = () => {
+      onPlayerHover && onPlayerHover({ player, pos, isBatter });
+    };
+
+    const handleMouseLeave = () => {
+      onPlayerHover && onPlayerHover(null);
+    };
+
     return (
       <div
         key={player.id}
@@ -81,6 +93,8 @@ const FieldPlayers = ({ homeConvent, awayConvent, half, animationPhase }) => {
           left: `${pos.x}%`,
           top: `${pos.y}%`,
         }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <Player
           player={player}
@@ -90,6 +104,26 @@ const FieldPlayers = ({ homeConvent, awayConvent, half, animationPhase }) => {
       </div>
     );
   };
+
+  // Build list of batting players to show on bases
+  // Ensure bases is an array with 3 boolean entries [first, second, third]
+  const safeBases = Array.isArray(bases) ? bases : [false, false, false];
+  const batters = battingTeam.filter(p => p.role === 'batter' || p.position?.startsWith('BAT'));
+
+  // Batter at home plate (current batter - first in lineup)
+  const currentBatter = batters[0] || null;
+
+  // Runners on bases: assign next batters to occupied bases
+  const baseKeys = ['first', 'second', 'third'];
+  const baseRunners = [];
+  let batterIdx = 1; // start after current batter
+  baseKeys.forEach((baseKey, i) => {
+    if (safeBases[i] && batters[batterIdx]) {
+      baseRunners.push({ player: batters[batterIdx], position: BASE_POSITIONS[baseKey] });
+      batterIdx++;
+    }
+    // If base not occupied or no batter, skip (no runner shown)
+  });
 
   return (
     <div className="field-players">
@@ -110,11 +144,15 @@ const FieldPlayers = ({ homeConvent, awayConvent, half, animationPhase }) => {
       {renderPlayer(fielder, POSITION_COORDS.FIE)}
 
       {/* ========== BATTING TEAM ========== */}
-      {/* Batters at bottom (home plate area) */}
-      {batters.map((batter, idx) => {
-        const pos = getBatterPosition(idx, batters.length);
-        return renderPlayer(batter, pos, true);
-      })}
+      {/* Current batter at home plate */}
+      {currentBatter && renderPlayer(currentBatter, BASE_POSITIONS.home, true)}
+
+      {/* Runners on occupied bases */}
+      {baseRunners.map(({ player, position }) =>
+        renderPlayer(player, position, true)
+      )}
+
+
     </div>
   );
 };
