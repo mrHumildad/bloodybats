@@ -954,6 +954,45 @@ code, .counter {
   border-bottom: none;
 }
 
+/* Column alignment for team table */
+.team-table th:nth-child(3),
+.team-table td.shirt-number,
+.team-table th:nth-child(4),
+.team-table td.player-position {
+  text-align: center;
+  width: 60px;
+}
+
+/* Shirt number badge (Team and PlayerInfo) */
+.player-number {
+  display: inline-block;
+  min-width: 24px;
+  padding: 2px 8px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--accent-gold);
+  border: 1px solid var(--border-copper);
+  background: rgba(184, 134, 11, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Position badge (Team and PlayerInfo) */
+.player-position {
+  display: inline-block;
+  min-width: 36px;
+  padding: 2px 6px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--accent-crimson);
+  border: 1px solid var(--accent-ruby);
+  background: rgba(139, 0, 0, 0.08);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 /* ---------- Attribute Card (PlayerInfo) ---------- */
 .attribute-card {
   background: var(--card-bg);
@@ -995,8 +1034,8 @@ code, .counter {
   background: var(--card-bg);
   border: 2px solid var(--border-iron);
   padding: 20px;
-  margin: 20px auto;
-  max-width: 500px;
+  margin: 20px 0;
+  width: 100%;
   box-shadow: inset 0 0 25px rgba(0,0,0,0.3);
 }
 
@@ -1044,4 +1083,1115 @@ code, .counter {
   letter-spacing: 0.1em;
 }
 
+/* ---------- Player Info Styling ---------- */
+#info-role {
+    display: block;
+    width: fit-content;
+    margin: auto;
+}
+
+/* ---------- Player Visualization (PlayerInfo) ---------- */
+.player-visualization {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 24px 0;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--border-iron);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.player-badge {
+  display: block;
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- Friendly Match UI ---------- */
+/* Ensure the SVG fills its container within friendly match */
+.friendly-match .field-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Field wrapper for positioning player overlays */
+.friendly-match .field-container {
+  position: relative;
+}
+
+.field-players {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.field-player {
+  position: absolute;
+  width: 12%;
+  max-width: 60px;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  transition: transform 0.2s ease;
+}
+
+/* ---------- Game Animations ---------- */
+.game-animations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Ball animation - based on field coordinates (0-100% scale) */
+.ball {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: radial-gradient(circle at 35% 35%, #fff 0%, #e0e0e0 40%, #777 100%);
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.6), inset 0 -2px 3px rgba(0,0,0,0.3), inset 2px 2px 3px rgba(255,255,255,0.8);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  /* Start at pitcher's mound (50, 50) */
+  top: 50%;
+  left: 50%;
+}
+
+.ball.pitch_windup {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+}
+
+.ball.pitch_throw {
+  animation: pitchToPlate 0.35s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+}
+
+.ball.ball_in_flight {
+  animation: pitchToPlate 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+}
+
+.ball.contact {
+  animation: contactFlash 0.3s ease-out forwards;
+}
+
+.ball.hit_flying {
+  animation: hitFlyOut 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes pitchToPlate {
+  0% {
+    opacity: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 1;
+    top: 68%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+}
+
+@keyframes contactFlash {
+  0% {
+    opacity: 1;
+    top: 68%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    background: #fff;
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.8);
+    background: #ffff00;
+    box-shadow: 0 0 30px 15px rgba(255, 255, 0, 0.9);
+  }
+  100% {
+    opacity: 0;
+    top: 68%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.1);
+    background: #ff4500;
+  }
+}
+
+@keyframes hitFlyOut {
+  0% {
+    opacity: 1;
+    top: 68%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  100% {
+    opacity: 0;
+    top: 10%;
+    left: 55%;
+    transform: translate(-50%, -50%) scale(0.15);
+  }
+}
+
+/* Runner highlight/glow animation */
+.runner-highlight {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  border: 3px solid #00ff00;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 60;
+  box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.6);
+}
+
+.runner-highlight[data-phase="runner_advancing"] {
+  animation: runnerAdvance 1.2s ease-out forwards;
+}
+
+@keyframes runnerAdvance {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.3);
+    border-color: #00ff00;
+    box-shadow: 0 0 20px 8px rgba(0, 255, 0, 0.7);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.8);
+    border-color: transparent;
+    box-shadow: none;
+  }
+}
+
+/* Contact flash effect at home plate */
+.contact-flash {
+  position: absolute;
+  top: 68%;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle, rgba(255, 255, 0, 0.95) 0%, rgba(255, 165, 0, 0.7) 40%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: contactPulse 0.5s ease-out forwards;
+  z-index: 55;
+  pointer-events: none;
+}
+
+@keyframes contactPulse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.5);
+  }
+}
+
+/* Outcome popup */
+.outcome-popup {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  padding: 10px 22px;
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.85);
+  border: 2px solid;
+  border-radius: 6px;
+  text-shadow: 0 0 12px currentColor;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  z-index: 70;
+  white-space: nowrap;
+}
+
+.outcome-popup.outcome-home_run {
+  color: #ff4500;
+  border-color: #ff4500;
+  animation: popupBounce 1.6s ease-out forwards;
+}
+.outcome-popup.outcome-triple {
+  color: #ffa500;
+  border-color: #ffa500;
+  animation: popupSlideUp 1.3s ease-out forwards;
+}
+.outcome-popup.outcome-double {
+  color: #ffff00;
+  border-color: #ffff00;
+  animation: popupSlideUp 1.1s ease-out forwards;
+}
+.outcome-popup.outcome-single {
+  color: #32cd32;
+  border-color: #32cd32;
+  animation: popupFadeIn 0.9s ease-out forwards;
+}
+.outcome-popup.outcome-ground_out,
+.outcome-popup.outcome-fly_out,
+.outcome-popup.outcome-strikeout {
+  color: #ff3333;
+  border-color: #ff3333;
+  animation: popupShake 0.9s ease-out forwards;
+}
+
+@keyframes popupBounce {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); }
+  65% { transform: translate(-50%, -50%) scale(0.9); }
+  80% { transform: translate(-50%, -50%) scale(1.05); }
+  100% { opacity: 0; transform: translate(-50%, -80%) scale(1); }
+}
+
+@keyframes popupSlideUp {
+  0% { opacity: 0; transform: translate(-50%, -40%) scale(0.8); }
+  30% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+  70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -70%) scale(1); }
+}
+
+@keyframes popupFadeIn {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  30% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes popupShake {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(-8deg) scale(0.6); }
+  25% { opacity: 1; transform: translate(-50%, -50%) rotate(6deg) scale(1.1); }
+  50% { transform: translate(-50%, -50%) rotate(-4deg) scale(1); }
+  75% { transform: translate(-50%, -50%) rotate(2deg) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+}
+
+/* Score pulse */
+.score-pulse {
+  position: absolute;
+  top: 6%;
+  right: 12%;
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #00ff88;
+  text-shadow: 0 0 25px #00ff88, 0 0 40px #00ff88;
+  animation: scorePopup 1s ease-out forwards;
+  z-index: 70;
+  pointer-events: none;
+}
+
+@keyframes scorePopup {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(20px);
+    text-shadow: 0 0 5px #00ff88;
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.4) translateY(-10px);
+    text-shadow: 0 0 40px #00ff88, 0 0 60px #00ff88;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1) translateY(-30px);
+  }
+}
+
+/* Runner movement along base path runner-advancing element) */
+.runner-advancing {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  transform: translate(-50%, -50%);
+  z-index: 60;
+  pointer-events: none;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+}
+.runner-advancing.animating {
+  animation: runToBase 1.1s ease-in-out forwards;
+}
+
+@keyframes runToBase {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Batter-ready idle animation */
+.field-player.batter {
+  animation: batterIdle 2s ease-in-out infinite;
+}
+
+@keyframes batterIdle {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.03); }
+}
+
+/* Pitcher windup animation */
+.field-player.animating-pitch {
+  animation: pitcherWindup 0.35s ease-out;
+}
+
+@keyframes pitcherWindup {
+  0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  25% { transform: translate(-50%, -45%) rotate(-5deg) scale(1.05); }
+  50% { transform: translate(-50%, -55%) rotate(5deg) scale(0.95); }
+  75% { transform: translate(-50%, -52%) rotate(-2deg) scale(1.02); }
+  100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+}
+
+/* Batter swing animation */
+.field-player.animating-swing {
+  animation: batterSwing 0.3s ease-out;
+}
+
+@keyframes batterSwing {
+  0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  30% { transform: translate(-50%, -50%) rotate(-30deg) scale(0.9); }
+  60% { transform: translate(-50%, -50%) rotate(20deg) scale(1.1); }
+  100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+}
+
+/* Fielder reaction animation (catch/field) */
+.field-player.animating-react {
+  animation: fielderReact 0.5s ease-out;
+}
+
+@keyframes fielderReact {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  20% { transform: translate(-50%, -40%) scale(1.2); }
+  40% { transform: translate(-50%, -55%) scale(0.9); }
+  70% { transform: translate(-50%, -48%) scale(1.05); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Fielder moving to ball/running */
+.field-player.animating-move {
+  animation: fielderMove 1s ease-in-out;
+}
+
+@keyframes fielderMove {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  25% { transform: translate(-40%, -40%) scale(1.1); }
+  50% { transform: translate(-50%, -30%) scale(1.05); }
+  75% { transform: translate(-60%, -45%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.friendly-match {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ---------- Game Animations ---------- */
+.game-animations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Ball animation */
+.ball {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle at 30% 30%, #fff 0%, #dcdcdc 50%, #888 100%);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 -2px 4px rgba(0,0,0,0.3);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  top: 50%;
+  left: 50%;
+}
+
+.ball.pitch_windup {
+  animation: none;
+}
+
+.ball.pitch_throw {
+  animation: pitchToPlate 0.4s ease-out forwards;
+}
+
+.ball.ball_in_flight {
+  animation: pitchToPlate 0.6s ease-out forwards;
+}
+
+.ball.contact {
+  animation: contactFlash 0.2s ease-out forwards;
+}
+
+.ball.hit_flying {
+  animation: hitFlyOut 1.2s ease-in forwards;
+}
+
+@keyframes pitchToPlate {
+  0% {
+    opacity: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    opacity: 1;
+    top: 68%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes contactFlash {
+  0% {
+    opacity: 1;
+    top: 68%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    background: #fff;
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.5);
+    background: yellow;
+    box-shadow: 0 0 20px 10px rgba(255, 255, 0, 0.8);
+  }
+  100% {
+    opacity: 0;
+    top: 68%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    background: #ff4500;
+  }
+}
+
+@keyframes hitFlyOut {
+  0% {
+    opacity: 1;
+    top: 68%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  30% {
+    opacity: 1;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+  100% {
+    opacity: 0;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+}
+
+/* Runner highlight animation */
+.runner-highlight {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 3px solid #00ff00;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 60;
+}
+
+.runner-highlight[data-phase="runner_advancing"] {
+  animation: runnerAdvance 1.5s ease-out forwards;
+}
+
+@keyframes runnerAdvance {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+    border-color: #00ff00;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+    border-color: rgba(0, 255, 0, 0);
+  }
+}
+
+/* Contact flash effect at home plate */
+.contact-flash {
+  position: absolute;
+  top: 68%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(255, 255, 0, 0.9) 0%, rgba(255, 165, 0, 0.5) 50%, transparent 100%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: contactPulse 0.4s ease-out forwards;
+  z-index: 55;
+}
+
+@keyframes contactPulse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2);
+  }
+}
+
+/* Outcome popup */
+.outcome-popup {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 12px 24px;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--accent-gold);
+  border-radius: 8px;
+  text-shadow: 0 0 10px currentColor;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  z-index: 70;
+}
+
+.outcome-popup.outcome-home_run {
+  color: #ff4500;
+  border-color: #ff4500;
+  animation: popupBounce 1.5s ease-out forwards;
+}
+.outcome-popup.outcome-triple {
+  color: #ffa500;
+  border-color: #ffa500;
+  animation: popupSlide 1.2s ease-out forwards;
+}
+.outcome-popup.outcome-double {
+  color: #ffff00;
+  border-color: #ffff00;
+  animation: popupSlide 1s ease-out forwards;
+}
+.outcome-popup.outcome-single {
+  color: #32cd32;
+  border-color: #32cd32;
+  animation: popupFade 0.8s ease-out forwards;
+}
+.outcome-popup.outcome-ground_out,
+.outcome-popup.outcome-fly_out,
+.outcome-popup.outcome-strikeout {
+  color: #ff0000;
+  border-color: #ff0000;
+  animation: popupShake 0.8s ease-out forwards;
+}
+
+@keyframes popupBounce {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+  70% { transform: translate(-50%, -50%) scale(0.9); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+@keyframes popupSlide {
+  0% { opacity: 0; transform: translate(-50%, -80%); }
+  30% { opacity: 1; transform: translate(-50%, -50%); }
+  70% { opacity: 1; transform: translate(-50%, -50%); }
+  100% { opacity: 0; transform: translate(-50%, -20%); }
+}
+
+@keyframes popupFade {
+  0% { opacity: 0; }
+  30% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes popupShake {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(-5deg); }
+  30% { opacity: 1; transform: translate(-50%, -50%) rotate(5deg); }
+  60% { opacity: 1; transform: translate(-50%, -50%) rotate(-3deg); }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(0deg); }
+}
+
+/* Score pulse */
+.score-pulse {
+  position: absolute;
+  top: 5%;
+  right: 10%;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 900;
+  color: #00ff00;
+  text-shadow: 0 0 20px #00ff00;
+  animation: scorePopup 1s ease-out forwards;
+  z-index: 70;
+}
+
+@keyframes scorePopup {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* Runner movement along base path */
+.runner-advancing {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  transform: translate(-50%, -50%);
+  z-index: 60;
+  pointer-events: none;
+}
+
+.runner-advancing.animating {
+  animation: runToBase 1s ease-in-out forwards;
+}
+
+@keyframes runToBase {
+  0% { top: 73%; left: 50%; opacity: 1; }
+  25% { top: 60%; left: 60%; }
+  50% { top: 48%; left: 68%; }
+  75% { top: 35%; left: 48%; }
+  100% { top: 25%; left: 50%; opacity: 0; }
+}
+
+.friendly-match {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.match-header {
+  width: 100%;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.team-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 20px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border-iron);
+}
+
+.team-name {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  color: var(--text-h);
+}
+
+.team-line .score {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  text-shadow: 0 0 10px rgba(184,134,11,0.4);
+}
+
+.inning-info {
+  margin-top: 10px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+.bases-visual {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  align-items: center;
+  justify-items: center;
+  margin: 16px 0;
+  width: 260px;
+  position: relative;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+}
+.bases-visual .base {
+  width: 50px;
+  height: 50px;
+  border: 2px solid var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+.bases-visual .base.occupied {
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  color: var(--bg-parchment);
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(184,134,11,0.5);
+}
+.outs-display {
+  position: absolute;
+  right: -180px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.matchup {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  margin: 20px 0;
+  width: 100%;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  color: var(--text);
+}
+.matchup-player {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.matchup .label {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+}
+
+.matchup-stats {
+  color: var(--accent-gold);
+  font-size: 0.85rem;
+}
+
+.pitch-button {
+  margin: 24px 0;
+  padding: 14px 48px;
+  background: var(--bg-leather);
+  color: var(--text-parchment);
+  border: 3px solid var(--accent-crimson);
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background-image: 
+    repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 8px,
+      rgba(139,0,0,0.08) 8px,
+      rgba(139,0,0,0.08) 10px
+    );
+  box-shadow: 
+    inset 0 0 20px rgba(0,0,0,0.4),
+    0 4px 12px rgba(0,0,0,0.5);
+  transition: all 0.35s ease;
+}
+.pitch-button:hover {
+  background: var(--accent-crimson);
+  transform: translateY(-2px);
+  box-shadow: 
+    inset 0 0 30px rgba(139,0,0,0.4),
+    0 8px 20px rgba(0,0,0,0.6),
+    0 0 20px rgba(184,134,11,0.15);
+}
+
+.game-over {
+  text-align: center;
+  margin: 24px 0;
+  padding: 20px 40px;
+  border: 2px solid var(--accent-gold);
+  background: rgba(184,134,11,0.06);
+  box-shadow: inset 0 0 25px rgba(0,0,0,0.3);
+}
+.game-over h3 {
+  color: var(--accent-gold);
+  font-size: 1.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.game-over p {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: var(--text);
+}
+
+.event-log {
+  width: 100%;
+  max-width: 600px;
+  margin: 24px 0 12px 0;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid var(--border-iron);
+  padding: 12px;
+  font-family: var(--font-heading);
+}
+.event-log h4 {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center;
+}
+.event-log ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.event-log li {
+  padding: 6px 10px;
+  border-bottom: 1px dotted var(--border-iron);
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  color: var(--text);
+}
+.event-log li:last-child {
+  border-bottom: none;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
 /* ---------- End of App.css ---------- */
+
+/* ---------- Scoreboard ---------- */
+.scoreboard {
+  width: 100%;
+  max-width: 800px;
+  margin: 16px auto 24px auto;
+  padding: 12px;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+  border: 2px solid var(--accent-gold);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+  font-family: 'Oswald', 'Roboto Condensed', var(--font-heading);
+  overflow-x: auto;
+  color: #e0e0e0;
+}
+
+/* Header row: inning numbers */
+.scoreboard-header {
+  display: grid;
+  grid-template-columns: 100px repeat(9, 1fr) 45px 45px 45px;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.scoreboard-team-label.header-empty {
+  visibility: hidden;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+  line-height: 24px;
+  color: var(--text-muted);
+}
+
+.inning-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 6px 0;
+  background: #252525;
+  border-radius: 2px;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.inning-header.current {
+  background: var(--accent-crimson);
+  color: #fff;
+  box-shadow: 0 0 8px rgba(139,0,0,0.6);
+  transform: scale(1.05);
+}
+
+.scoreboard-stat-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  padding: 6px 0;
+  background: #333;
+  border-radius: 2px;
+  color: var(--accent-gold);
+}
+
+/* Team rows (away/home) */
+.scoreboard-row {
+  display: grid;
+  grid-template-columns: 100px repeat(9, 1fr) 45px 45px 45px;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.scoreboard-row:last-child {
+  margin-bottom: 0;
+}
+
+.scoreboard-team-name {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.scoreboard-team-name.away {
+  background: #1e3a1e;
+  color: #a8d5a8;
+  justify-content: center;
+}
+
+.scoreboard-team-name.home {
+  background: #3a2020;
+  color: #d5a8a8;
+  justify-content: center;
+}
+
+.scoreboard-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 900;
+  padding: 6px 2px;
+  background: #151515;
+  border-radius: 2px;
+  color: #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.scoreboard-cell.current {
+  background: var(--accent-crimson);
+  color: #fff;
+  box-shadow: 0 0 6px rgba(139,0,0,0.5);
+}
+
+.scoreboard-cell.total {
+  background: #252525;
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+}
+
+/* Active row highlighting (the half-inning currently at-bat) */
+.scoreboard-row.active .scoreboard-team-name {
+  background: #2a2a2a;
+  box-shadow: 0 0 8px rgba(255,255,255,0.15) inset;
+}
+
+.scoreboard-row.active .scoreboard-cell:not(.current) {
+  background: #1a1a1a;
+  opacity: 0.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .scoreboard {
+    padding: 8px;
+  }
+  .scoreboard-header,
+  .scoreboard-row {
+    grid-template-columns: 70px repeat(9, 1fr) 35px 35px 35px;
+  }
+  .inning-header,
+  .scoreboard-cell {
+    font-size: 0.75rem;
+    padding: 4px 1px;
+  }
+  .scoreboard-team-name {
+    font-size: 0.7rem;
+    padding: 4px 2px;
+  }
+  .scoreboard-stat-label {
+    font-size: 0.65rem;
+  }
+}

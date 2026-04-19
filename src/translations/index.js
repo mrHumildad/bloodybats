@@ -35,6 +35,8 @@ export const translations = {
     // Team Tab
     name: 'Name',
     role: 'Role',
+    number: 'No.',
+    position: 'Pos',
     age: 'Age',
     stars: 'Stars',
     noTeamData: 'No team data available',
@@ -61,9 +63,14 @@ export const translations = {
     jardinero: 'Fielder',
     reserva: 'Reserve',
 
-    // Friendly Tab
-    friendlyOpponent: 'Friendly Opponent',
-    none: 'None',
+     // Friendly Tab
+     friendlyOpponent: 'Friendly Opponent',
+     none: 'None',
+     inning: 'Inning',
+     gameOver: 'Game Over',
+     tie: 'Draw (Tie)',
+     homeTeam: 'HOME',
+     awayTeam: 'AWAY',
 
     // Header
     selectConvent: 'Select a convent to view overview.'
@@ -104,6 +111,8 @@ export const translations = {
     // Team Tab
     name: 'Nombre',
     role: 'Posición',
+    number: 'No.',
+    position: 'Pos',
     age: 'Edad',
     stars: 'Estrellas',
     noTeamData: 'No hay datos de equipo disponibles',
@@ -130,9 +139,14 @@ export const translations = {
     jardinero: 'Jardinero',
     reserva: 'Reserva',
 
-    // Friendly Tab
-    friendlyOpponent: 'Oponente Amistoso',
-    none: 'Ninguno',
+     // Friendly Tab
+     friendlyOpponent: 'Oponente Amistoso',
+     none: 'Ninguno',
+     inning: 'Entrada',
+     gameOver: 'Fin del Juego',
+     tie: 'Empate',
+     homeTeam: 'LOCAL',
+     awayTeam: 'VISITANTE',
 
     // Header
     selectConvent: 'Selecciona un convento para ver la vista general.'

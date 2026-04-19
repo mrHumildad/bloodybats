@@ -1,9 +1,9 @@
 import React from "react";
 
-const Field = () => {
+const Field = ({ children }) => {
   return (
     <div className="field-container">
-      <svg viewBox="0 0 100 100" className="w-full max-w-md h-auto">
+      <svg viewBox="0 0 100 100" width="100%" height="auto" preserveAspectRatio="xMidYMid meet">
 
         {/* Outfield grass (TRUE wedge from home plate) */}
         <path
@@ -40,6 +40,7 @@ const Field = () => {
         />
 
       </svg>
+      {children}
     </div>
   );
 };

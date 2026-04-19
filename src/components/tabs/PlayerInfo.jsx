@@ -4,6 +4,7 @@ import { getRoleColorClass } from '../../logic/utils';
 import { charTranslator } from '../../logic/dice_utils';
 import { useLanguage } from '../../context/LanguageContext';
 import { getTranslation, translateRole, translateAttribute } from '../../translations';
+import Player from '../Player';
 
 const Die = ({ faces, value = faces, attribute, style = 'fill' }) => {
   console.log(`Rendering Die: faces=${faces}, value=${value}, attribute=${attribute}, style=${style}`);
@@ -27,16 +28,35 @@ const AttributeCard = ({ attribute, value }) => {
   );
 };
 
-const PlayerInfo = ({ selectedPlayer }) => {
+const PlayerInfo = ({ selectedPlayer, setActiveTab, myConvent }) => {
   const { language } = useLanguage();
   console.log(selectedPlayer);
+
+  // Extract team colors from the convent
+  const primaryColor = myConvent?.colors?.primary || '#660000';
+  const secondaryColor = myConvent?.colors?.secondary || '#1a0000';
 
   return (
     <div>
       {selectedPlayer ? (
         <div>
+          <button className="back-button" onClick={() => setActiveTab('team')}>
+            {getTranslation('back', language)}
+          </button>
           <h2>{selectedPlayer.name}</h2>
-          <p className={getRoleColorClass(selectedPlayer.role)}>{translateRole(selectedPlayer.role, language)}</p>
+
+          {/* Player SVG Visualization */}
+          <div className="player-visualization">
+            <Player
+              player={selectedPlayer}
+              primaryColor={primaryColor}
+              secondaryColor={secondaryColor}
+            />
+          </div>
+
+          <p id="info-role" className={getRoleColorClass(selectedPlayer.role)}>{translateRole(selectedPlayer.role, language)}</p>
+          <p>{getTranslation('position', language)}: <span className="player-position">{selectedPlayer.position}</span></p>
+          <p>{getTranslation('number', language)}: <span className="player-number">{selectedPlayer.shirtNumber}</span></p>
           <p>{getTranslation('age', language)}: {selectedPlayer.age}</p>
           <p>{playerStars(selectedPlayer)}</p>
           <div className="attributes-container">
