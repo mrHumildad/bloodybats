@@ -108,8 +108,8 @@ export const endInning = (state) => {
 // Create a new match state from two teams and optional config
 export const createMatch = (homeTeam, awayTeam, config = {}) => {
   const innings = config.innings || matchConfig.innings;
-  const awayBattingOrder = awayTeam.filter((p) => p.role === 'batter');
-  const homeBattingOrder = homeTeam.filter((p) => p.role === 'batter');
+  const awayBattingOrder = awayTeam.filter((p) => p.pos.slice(0, 3) === 'BAT');
+  const homeBattingOrder = homeTeam.filter((p) => p.pos.slice(0, 3) === 'BAT');
 
   // Extract convent IDs from the first player id (format: "playerId_conventId")
   const homeConventId = Number(homeTeam[0]?.id?.split('_')[1]) || null;

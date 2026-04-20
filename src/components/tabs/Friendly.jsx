@@ -40,7 +40,7 @@ const Friendly = ({ myConvent, opponent, matchState: propMatchState, onPitch }) 
   const currentInning = currentMatchState?.currentInning || 1;
   const half = currentMatchState?.half || 'top';
   const bases = currentMatchState?.bases || [false, false, false];
-  const outs = currentMatchState?.outs || 0;
+  //const outs = currentMatchState?.outs || 0;
   const events = currentMatchState?.events || [];
   const inningScores = currentMatchState?.inningScores || { home: [], away: [] };
   const hits = currentMatchState?.hits || { home: 0, away: 0 };
@@ -104,11 +104,7 @@ const Friendly = ({ myConvent, opponent, matchState: propMatchState, onPitch }) 
 
     const battingQueue = getBattingQueueWithSlot();
 
-    // Punishment Pit: players who made outs in current half-inning
-    const punishmentPit = outPlayersThisHalf.map(pid => {
-      const battingTeam = half === 'bottom' ? myConvent : opponent;
-      return battingTeam?.team?.find(p => p.id === pid);
-    }).filter(Boolean);
+
 
     // Animation state
   const [animPhase, setAnimPhase] = useState(PHASES.IDLE);
@@ -186,7 +182,6 @@ const Friendly = ({ myConvent, opponent, matchState: propMatchState, onPitch }) 
           bases={bases}
           animationPhase={animPhase}
           battingQueue={battingQueue}
-          punishmentPit={punishmentPit}
           onPlayerHover={setHoveredPlayer}
         >
          {currentMatchState && myConvent && opponent && (
@@ -210,34 +205,31 @@ const Friendly = ({ myConvent, opponent, matchState: propMatchState, onPitch }) 
          )}
         </Field>
 
-        {/* Player hover tooltip */}
-        {hoveredPlayer && hoveredPlayer.player && (
-          <div
-            className="player-hover-tooltip"
-            style={
-              hoveredPlayer.pos ? {
-                left: `${hoveredPlayer.pos.x}%`,
-                top: `${hoveredPlayer.pos.y}%`,
-              } : hoveredPlayer.type === 'queue' ? {
-                left: '5%',
-                top: '80%',
-              } : hoveredPlayer.type === 'pit' ? {
-                left: '85%',
-                top: '80%',
-              } : {}
-            }
-          >
-            <h4>{hoveredPlayer.player.name}</h4>
-            <p className={`role-info ${getRoleColorClass(hoveredPlayer.player.role)}`}>
-              {translateRole(hoveredPlayer.player.role, language)}
-            </p>
-            <div className="meta">
-              <span>{getTranslation('position', language)}: {hoveredPlayer.player.position || '-'}</span>
-              <span>{getTranslation('number', language)}: {hoveredPlayer.player.shirtNumber || '-'}</span>
-            </div>
-            <p className="stars">{playerStars(hoveredPlayer.player)}</p>
-          </div>
-        )}
+         {/* Player hover tooltip */}
+         {hoveredPlayer && hoveredPlayer.player && (
+           <div
+             className="player-hover-tooltip"
+             style={
+               hoveredPlayer.pos ? {
+                 left: `${hoveredPlayer.pos.x}%`,
+                 top: `${hoveredPlayer.pos.y}%`,
+               } : hoveredPlayer.type === 'queue' ? {
+                 left: '5%',
+                 top: '80%',
+               } : {}
+             }
+           >
+             <h4>{hoveredPlayer.player.name}</h4>
+             <p className={`role-info ${getRoleColorClass(hoveredPlayer.player.role)}`}>
+               {translateRole(hoveredPlayer.player.role, language)}
+             </p>
+             <div className="meta">
+               <span>{getTranslation('position', language)}: {hoveredPlayer.player.position || '-'}</span>
+               <span>{getTranslation('number', language)}: {hoveredPlayer.player.shirtNumber || '-'}</span>
+             </div>
+             <p className="stars">{playerStars(hoveredPlayer.player)}</p>
+           </div>
+         )}
 
        {currentMatchState && (
         <>
