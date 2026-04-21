@@ -28,16 +28,17 @@ export const GameProvider = ({ children }) => {
     });
   }, []);
 
-   const value = useMemo(() => ({
-     gameState,
-     setGameState,
-     matchState,
-     startMatch,
-     executeAtBat: doExecuteAtBat,
-     endInning: doEndInning,
-     checkGameOver: () => isGameOver(matchState),
-     checkWinner: () => getWinner(matchState),
-   }), [gameState, matchState, startMatch, doExecuteAtBat, doEndInning]);
+  const value = useMemo(() => ({
+    gameState,
+    setGameState,
+    matchState,
+    setMatchState,
+    startMatch,
+    executeAtBat: doExecuteAtBat,
+    endInning: doEndInning,
+    checkGameOver: () => isGameOver(matchState),
+    checkWinner: () => getWinner(matchState),
+  }), [gameState, matchState, startMatch, doExecuteAtBat, doEndInning]);
 
   return (
     <GameContext.Provider value={value}>

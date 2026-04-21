@@ -19,6 +19,7 @@ export const convents = [
       "quantity_liters": 666,
       "quality": "Sabor a hierro y arrepentimiento"
     },
+    'stats': {},
     "hooligan_die": "d12",
     "fanaticism": {
       "level": 11,
@@ -346,6 +347,7 @@ export const convents = [
       "quantity_liters": 2500,
       "quality": "Ciega a los débiles"
     },
+    'stats': {},
     "hooligan_die": "d8",
     "fanaticism": {
       "level": 5,
@@ -673,6 +675,7 @@ export const convents = [
       "quantity_liters": 450,
       "quality": "Sabe a bota vieja y victoria"
     },
+    'stats': {},
     "hooligan_die": "d10",
     "fanaticism": {
       "level": 8,
@@ -1000,6 +1003,7 @@ export const convents = [
       "quantity_liters": 150,
       "quality": "Suave como un funeral"
     },
+    'stats': {},
     "hooligan_die": "d4",
     "fanaticism": {
       "level": 10,
@@ -1327,6 +1331,7 @@ export const convents = [
       "quantity_liters": 1800,
       "quality": "Inflamable"
     },
+    'stats': {},
     "hooligan_die": "d10",
     "fanaticism": {
       "level": 9,
@@ -1654,6 +1659,7 @@ export const convents = [
       "quantity_liters": 900,
       "quality": "Burbujas de puro ego"
     },
+    'stats': {},
     "hooligan_die": "d6",
     "fanaticism": {
       "level": 4,
@@ -1981,6 +1987,7 @@ export const convents = [
       "quantity_liters": 3000,
       "quality": "Probablemente ilegal"
     },
+    'stats': {},
     "hooligan_die": "d12",
     "fanaticism": {
       "level": 12,
@@ -2308,6 +2315,7 @@ export const convents = [
       "quantity_liters": 100,
       "quality": "Oro líquido"
     },
+    'stats': {},
     "hooligan_die": "d8",
     "fanaticism": {
       "level": 7,

@@ -13,10 +13,31 @@ export const translations = {
     // Game Screen
     back: 'Back',
 
-    // Tabs
-    overview: 'Overview',
-    team: 'Team',
-    friendly: 'Friendly',
+     // Tabs
+     overview: 'Overview',
+     team: 'Team',
+     match: 'Match',
+     fixtures: 'Fixtures',
+     leaderboard: 'Leaderboard',
+
+     // General
+     week: 'Week',
+     results: 'Results',
+
+     // Fixtures Tab
+     round: 'Round',
+
+    // Leaderboard Tab
+    pos: 'Pos',
+    gp: 'GP',
+    wins: 'W',
+    losses: 'L',
+    runs: 'Runs',
+    hits: 'Hits',
+    errors: 'Errors',
+    runDiff: 'RDiff',
+    winPct: 'PCT',
+    noStats: 'No matches played yet',
 
     // Overview Tab
     statFocus: 'Stat Focus',
@@ -63,14 +84,23 @@ export const translations = {
     jardinero: 'Fielder',
     reserva: 'Reserve',
 
-     // Friendly Tab
-     friendlyOpponent: 'Friendly Opponent',
+     // Match Tab
+     seasonComplete: 'Season Complete',
+     allFixturesPlayed: 'All fixtures have been played. The season is over.',
      none: 'None',
      inning: 'Inning',
      gameOver: 'Game Over',
      tie: 'Draw (Tie)',
      homeTeam: 'HOME',
      awayTeam: 'AWAY',
+     viewResults: 'View Results',
+     weekResults: 'Week Results',
+
+     // NextWeek Tab
+     homeWins: 'HOME WINS',
+     awayWins: 'AWAY WINS',
+     continue: 'Continue',
+     noResults: 'No results available',
 
     // Header
     selectConvent: 'Select a convent to view overview.'
@@ -89,10 +119,31 @@ export const translations = {
     // Game Screen
     back: 'Atrás',
 
-    // Tabs
-    overview: 'Visión General',
-    team: 'Equipo',
-    friendly: 'Amistoso',
+     // Tabs
+     overview: 'Visión General',
+     team: 'Equipo',
+     match: 'Partido',
+     fixtures: 'Calendario',
+     leaderboard: 'Clasificación',
+
+     // General
+     week: 'Semana',
+     results: 'Resultados',
+
+     // Fixtures Tab
+     round: 'Jornada',
+
+     // Leaderboard Tab
+    pos: 'Pos',
+    gp: 'JJ',
+    wins: 'V',
+    losses: 'D',
+    runs: 'Carreras',
+    hits: 'Hits',
+    errors: 'Errores',
+    runDiff: 'Diff',
+    winPct: 'PCT',
+    noStats: 'Sin partidos jugados',
 
     // Overview Tab
     statFocus: 'Enfoque de Estadística',
@@ -139,17 +190,24 @@ export const translations = {
     jardinero: 'Jardinero',
     reserva: 'Reserva',
 
-     // Friendly Tab
-     friendlyOpponent: 'Oponente Amistoso',
-     none: 'Ninguno',
-     inning: 'Entrada',
-     gameOver: 'Fin del Juego',
-     tie: 'Empate',
-     homeTeam: 'LOCAL',
-     awayTeam: 'VISITANTE',
+      // Match Tab
+      seasonComplete: 'Temporada Completa',
+      allFixturesPlayed: 'Se han jugado todos los partidos. La temporada ha terminado.',
+      none: 'Ninguno',
+      inning: 'Entrada',
+       gameOver: 'Fin del Juego',
+       tie: 'Empate',
+       homeTeam: 'LOCAL',
+       awayTeam: 'VISITANTE',
+       viewResults: 'Ver Resultados',
+       weekResults: 'Resultados de la Semana',
+       homeWins: 'GANAN LOCALES',
+       awayWins: 'GANAN VISITANTES',
+       continue: 'Continuar',
+       noResults: 'No hay resultados disponibles',
 
-    // Header
-    selectConvent: 'Selecciona un convento para ver la vista general.'
+     // Header
+     selectConvent: 'Selecciona un convento para ver la vista general.'
   }
 };
 

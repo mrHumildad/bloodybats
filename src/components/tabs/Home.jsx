@@ -5,7 +5,9 @@ import { getTranslation } from '../../translations';
 const tabs = [
   { id: 'overview', labelKey: 'overview' },
   { id: 'team', labelKey: 'team' },
-  { id: 'friendly', labelKey: 'friendly' },
+  { id: 'match', labelKey: 'match' },
+  { id: 'fixtures', labelKey: 'fixtures' },
+  { id: 'leaderboard', labelKey: 'leaderboard' },
 ];
 
 const Home = ({ setActiveTab }) => {

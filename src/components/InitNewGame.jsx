@@ -2,14 +2,22 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ConventCard from './ConventCard';
 import { convents } from '../world/convents';
-import { useGame } from '../context/GameContext';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../translations';
+import { getFixtures } from '../logic/getFixtures';
+import { getDefaultStats } from '../logic/stats';
 
-const ConventSelector = () => {
+const data = {
+  myId : null,
+  week: 1,
+  year: 1,
+  convents: convents.map(c => ({ ...c, stats: getDefaultStats() })),
+  fixtures: getFixtures(convents.map(c => c.id)),
+}
+
+const InitNewGame = ({ setData }) => {
   const [currentConventIndex, setCurrentConventIndex] = useState(0);
   const navigate = useNavigate();
-  const { setGameState } = useGame();
   const { language } = useLanguage();
 
   const handlePrev = () => {
@@ -26,7 +34,9 @@ const ConventSelector = () => {
 
   const handleConfirm = () => {
     const selectedConvent = convents[currentConventIndex].id;
-    setGameState({ selectedConvent });
+    const newData = { ...data, myId: selectedConvent };
+    setData(newData);
+    //setGameState({ selectedConvent });
     navigate(`/game`);
   };
 
@@ -72,4 +82,4 @@ const ConventSelector = () => {
   );
 };
 
-export default ConventSelector;
+export default InitNewGame;
