@@ -175,35 +175,103 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
   const awayBatterIndex = currentMatchState?.awayBatterIndex ?? 0;
   const homeBatterIndex = currentMatchState?.homeBatterIndex ?? 0;
 
-  const outPlayersThisHalf = (currentMatchState?.events || []).filter(ev => {
-    return ev.inning === currentInning && ev.half === half && (
-      ev.outcome === 'strikeout' || ev.outcome === 'ground_out' || ev.outcome === 'fly_out'
-    );
-  }).map(ev => ev.batterId);
+    const outPlayersThisHalf = (currentMatchState?.events || []).filter(ev => {
+      return ev.inning === currentInning && ev.half === half && (
+        ev.outcome === 'strikeout' || ev.outcome === 'ground_out' || ev.outcome === 'fly_out'
+      );
+    }).map(ev => ev.batterId);
 
-  const getBattingQueueWithSlot = () => {
-    if (!allBatters.length) return [];
-    const currentIdx = half === 'bottom' ? homeBatterIndex : awayBatterIndex;
-    const queue = [];
-    for (let i = 0; i < 5 && i < allBatters.length; i++) {
-      const player = allBatters[i];
-      let status = null;
-      if (i === currentIdx) {
-        status = 'batting';
-      } else if (outPlayersThisHalf.includes(player.id)) {
-        status = 'out';
-      } else {
-        const baseIdx = bases.findIndex(base => base && base.id === player.id);
-        if (baseIdx !== -1) {
-          status = 'onbase' + (baseIdx + 1);
-        }
-      }
-      queue.push({ player, status });
-    }
-    return queue;
-  };
+    // Compute base assignments and visible queue from events
+   const computeBattingInfo = () => {
+     if (!allBatters.length) return { visibleQueue: [], baseRunners: [] };
 
-  const battingQueue = getBattingQueueWithSlot();
+     const currentIdx = half === 'bottom' ? homeBatterIndex : awayBatterIndex;
+
+     const halfInningEvents = (currentMatchState?.events || []).filter(
+       ev => ev.inning === currentInning && ev.half === half
+     );
+
+     const playersById = {};
+     allBatters.forEach(p => { playersById[p.id] = p; });
+
+     // Simulate base assignments from events: [first, second, third] = player or null
+     let baseAssignments = [null, null, null];
+
+     for (const ev of halfInningEvents) {
+       const batter = playersById[ev.batterId];
+       if (!batter) continue;
+       const outcome = ev.outcome;
+
+       if (outcome === 'home_run') {
+         baseAssignments = [null, null, null];
+       } else if (['single', 'double', 'triple'].includes(outcome)) {
+         const steps = outcome === 'single' ? 1 : outcome === 'double' ? 2 : 3;
+         const newBases = [null, null, null];
+
+         // Advance existing runners
+         for (let i = 0; i < 3; i++) {
+           if (baseAssignments[i] !== null) {
+             const newIdx = i + steps;
+             if (newIdx < 3) {
+               newBases[newIdx] = baseAssignments[i];
+             }
+           }
+         }
+
+         // Place batter on the correct base
+         if (outcome === 'single') newBases[0] = batter;
+         else if (outcome === 'double') newBases[1] = batter;
+         else if (outcome === 'triple') newBases[2] = batter;
+
+         baseAssignments = newBases;
+       }
+       // outs: no change to baseAssignments
+     }
+
+     // Build visible queue: fixed 5-slot bench (BAT-1 through BAT-5)
+     const visibleQueue = [];
+     const slotToPosition = ['BAT-1', 'BAT-2', 'BAT-3', 'BAT-4', 'BAT-5'];
+     for (let slot = 0; slot < 5; slot++) {
+       const positionCode = slotToPosition[slot];
+       const player = allBatters.find(p => p.position === positionCode);
+       if (!player) {
+         // Empty slot if no player assigned to this batting position
+         visibleQueue.push({ player: null, status: null, isHomeRun: false });
+         continue;
+       }
+
+       let slotStatus = null;
+       if (slot === currentIdx) {
+         slotStatus = 'batting';
+       } else if (outPlayersThisHalf.includes(player.id)) {
+         slotStatus = 'out';
+       } else {
+         const baseIdx = baseAssignments.findIndex(p => p && p.id === player.id);
+         if (baseIdx !== -1) {
+           slotStatus = 'onbase' + (baseIdx + 1);
+         }
+       }
+       const isHomeRun = halfInningEvents.some(
+         ev => ev.batterId === player.id && ev.outcome === 'home_run'
+       );
+       visibleQueue.push({ player, status: slotStatus, isHomeRun });
+     }
+
+     // Build base runners list from baseAssignments
+     const baseRunners = [];
+     for (let i = 0; i < 3; i++) {
+       if (baseAssignments[i]) {
+         baseRunners.push({
+           player: baseAssignments[i],
+           baseNum: i + 1
+         });
+       }
+     }
+
+     return { visibleQueue, baseRunners };
+   };
+
+   const { visibleQueue: battingQueue, baseRunners } = computeBattingInfo();
 
   const getTeamLabel = (convent) => {
     if (!convent) return '???';
@@ -240,14 +308,15 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
        >
         {currentMatchState && myConvent && opponent && (
           <>
-             <FieldPlayers
-               homeConvent={myConvent}
-               awayConvent={opponent}
-               half={half}
-               bases={bases}
-               animationPhase={animPhase}
-               onPlayerHover={setHoveredPlayer}
-             />
+               <FieldPlayers
+                 homeConvent={myConvent}
+                 awayConvent={opponent}
+                 half={half}
+                 animationPhase={animPhase}
+                 battingQueue={battingQueue}
+                 baseRunners={baseRunners}
+                 onPlayerHover={setHoveredPlayer}
+               />
             <GameAnimations
               phase={animPhase}
               outcome={animOutcome}

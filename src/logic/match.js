@@ -102,6 +102,9 @@ export const endInning = (state) => {
     half: newHalf,
     bases: [false, false, false],
     outs: 0,
+    // Reset batting index for the team that will bat next
+    homeBatterIndex: newHalf === 'bottom' ? 0 : state.homeBatterIndex,
+    awayBatterIndex: newHalf === 'top' ? 0 : state.awayBatterIndex,
   };
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import Player from "./Player";
 
-const Field = ({ children, myConvent, opponent, half, bases, animationPhase, battingQueue, punishmentPit, onPlayerHover }) => {
+const Field = ({ children, myConvent, opponent, half, punishmentPit, onPlayerHover }) => {
   const getTeamColors = (convent) => {
     if (!convent) return { primary: '#666', secondary: '#444' };
     return {
@@ -13,7 +13,6 @@ const Field = ({ children, myConvent, opponent, half, bases, animationPhase, bat
   const homeColors = getTeamColors(myConvent);
   const awayColors = getTeamColors(opponent);
   const isHomeBatting = half === 'bottom';
-  const teamColors = isHomeBatting ? homeColors : awayColors;
 
   return (
     <div className="field-container">
@@ -56,50 +55,6 @@ const Field = ({ children, myConvent, opponent, half, bases, animationPhase, bat
         </g>
       </svg>
       {children}
-
-      {/* Batting Queue - next batters waiting (left of home plate) */}
-      <div className="batting-queue" id="batting-queue">
-        <div className="queue-label">BATTERS BATTERY</div>
-        <div className="queue-players">
-          {battingQueue && battingQueue.map((item, idx) => {
-            if (item.status === 'batting') {
-              return (
-                <div key={idx} className="queue-player queue-slot-empty">
-                  <span className="slot-number">{idx + 1}</span>
-                </div>
-              );
-            } else if (item.status === 'out') {
-              return (
-                <div key={idx} className="queue-player queue-out">
-                  <span className="out-x">X</span>
-                </div>
-              );
-            } else if (item.status && item.status.startsWith('onbase')) {
-              const baseNum = item.status.slice(-1);
-              return (
-                <div key={idx} className="queue-player queue-onbase">
-                  <span className="base-number">{baseNum}</span>
-                </div>
-              );
-            } else {
-              return (
-                <div
-                  key={idx}
-                  className="queue-player"
-                  onMouseEnter={() => onPlayerHover && onPlayerHover({ player: item.player, type: 'queue' })}
-                  onMouseLeave={() => onPlayerHover && onPlayerHover(null)}
-                >
-                  <Player
-                    player={item.player}
-                    primaryColor={teamColors.primary}
-                    secondaryColor={teamColors.secondary}
-                  />
-                </div>
-              );
-            }
-          })}
-        </div>
-      </div>
 
       {/* Punishment Pit - out counter (right of home plate) */}
       <div className="punishment-pit" id="punishment-pit">
