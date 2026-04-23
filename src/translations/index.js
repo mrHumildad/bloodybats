@@ -69,9 +69,7 @@ export const translations = {
     cuerpo: 'Body',
     mente: 'Mind',
     corazon: 'Heart',
-    emanacion: 'Emanation',
-    percepcion: 'Perception',
-    esencia: 'Essence',
+
     astucia: 'Cunning',
     potencia: 'Power',
     fortaleza: 'Fortitude',
@@ -236,9 +234,7 @@ export const attributeTranslations = {
     body: 'Body',
     mind: 'Mind',
     heart: 'Heart',
-    emanation: 'Emanation',
-    perception: 'Perception',
-    essence: 'Essence',
+
     cunning: 'Cunning',
     power: 'Power',
     fortitude: 'Fortitude'
@@ -247,9 +243,7 @@ export const attributeTranslations = {
     body: 'Cuerpo',
     mind: 'Mente',
     heart: 'Corazón',
-    emanation: 'Emanación',
-    perception: 'Percepción',
-    essence: 'Esencia',
+
     cunning: 'Astucia',
     power: 'Potencia',
     fortitude: 'Fortaleza'

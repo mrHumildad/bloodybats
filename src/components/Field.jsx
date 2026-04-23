@@ -1,19 +1,8 @@
 import React from "react";
 import Player from "./Player";
 
-const Field = ({ children, myConvent, opponent, half, punishmentPit, onPlayerHover }) => {
-  const getTeamColors = (convent) => {
-    if (!convent) return { primary: '#666', secondary: '#444' };
-    return {
-      primary: convent.colors.primary,
-      secondary: convent.colors.secondary,
-    };
-  };
-
-  const homeColors = getTeamColors(myConvent);
-  const awayColors = getTeamColors(opponent);
-  const isHomeBatting = half === 'bottom';
-
+const Field = ({ children }) => {
+  
   return (
     <div className="field-container">
       <svg viewBox="0 0 100 100" width="100%" height="auto" preserveAspectRatio="xMidYMid meet">
@@ -54,28 +43,7 @@ const Field = ({ children, myConvent, opponent, half, punishmentPit, onPlayerHov
         />
         </g>
       </svg>
-      {children}
-
-      {/* Punishment Pit - out counter (right of home plate) */}
-      <div className="punishment-pit" id="punishment-pit">
-        <div className="pit-label">OUTS</div>
-        <div className="pit-players">
-          {punishmentPit && punishmentPit.map((player, idx) => (
-            <div
-              key={idx}
-              className="pit-player"
-              onMouseEnter={() => onPlayerHover && onPlayerHover({ player, type: 'pit' })}
-              onMouseLeave={() => onPlayerHover && onPlayerHover(null)}
-            >
-              <Player
-                player={player}
-                primaryColor={isHomeBatting ? homeColors.primary : awayColors.primary}
-                secondaryColor={isHomeBatting ? homeColors.secondary : awayColors.secondary}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+      {children}      
     </div>
   );
 };

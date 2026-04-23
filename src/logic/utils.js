@@ -18,9 +18,7 @@ const createPlayer = (id, conventId, role, isReserve = false) => {
       body: randomDie(),
       mind: randomDie(),
       heart: randomDie(),
-      emanation: randomDie(),
-      perception: randomDie(),
-      essence: randomDie(),
+
       cunning: randomDie(),
       power: randomDie(),
       fortitude: randomDie()

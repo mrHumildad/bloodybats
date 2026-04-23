@@ -49,9 +49,7 @@
   --body: #ba7118;
   --mind: #251dc2;
   --heart: #b82e0b;
-  --emanation: #379689;
-  --perception: #5d22af;
-  --essence: #0a5d0a;
+
   --cunning: #b716b7;
   --power: #4a150c;
   --fortitude: #181963;
@@ -284,9 +282,7 @@ code {
 .body { color: var(--body); }
 .mind { color: var(--mind); }
 .heart { color: var(--heart); }
-.emanation { color: var(--emanation); }
-.perception { color: var(--perception); }
-.essence { color: var(--essence); }
+
 .cunning { color: var(--cunning); }
 .power { color: var(--power); }
 .fortitude { color: var(--fortitude); }
@@ -368,8 +364,6 @@ code {
 
 .role-catcher {
   background-color: rgba(55, 150, 137, 0.15);
-  color: var(--emanation);
-  border: 1px solid var(--emanation);
   padding: 2px 6px;
   font-size: 0.9em;
 }

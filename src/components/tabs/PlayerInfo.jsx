@@ -65,11 +65,7 @@ const PlayerInfo = ({ selectedPlayer, setActiveTab, myConvent }) => {
               <AttributeCard attribute="mind" value={selectedPlayer.attributes.mind} />
               <AttributeCard attribute="heart" value={selectedPlayer.attributes.heart} />
             </div>
-            <div className="attribute-row">
-              <AttributeCard attribute="emanation" value={selectedPlayer.attributes.emanation} />
-              <AttributeCard attribute="perception" value={selectedPlayer.attributes.perception} />
-              <AttributeCard attribute="essence" value={selectedPlayer.attributes.essence} />
-            </div>
+
             <div className="attribute-row">
               <AttributeCard attribute="cunning" value={selectedPlayer.attributes.cunning} />
               <AttributeCard attribute="power" value={selectedPlayer.attributes.power} />

@@ -697,9 +697,7 @@ code, .counter {
 .attribute-row .body { border-left-color: var(--body); }
 .attribute-row .mind { border-left-color: var(--mind); }
 .attribute-row .heart { border-left-color: var(--heart); }
-.attribute-row .emanation { border-left-color: var(--emanation); }
-.attribute-row .perception { border-left-color: var(--perception); }
-.attribute-row .essence { border-left-color: var(--essence); }
+
 .attribute-row .cunning { border-left-color: var(--cunning); }
 .attribute-row .power { border-left-color: var(--power); }
 .attribute-row .fortitude { border-left-color: var(--fortitude); }

@@ -45,7 +45,6 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
   const score = currentMatchState?.score || { home: 0, away: 0 };
   const currentInning = currentMatchState?.currentInning || 1;
   const half = currentMatchState?.half || 'top';
-  const bases = currentMatchState?.bases || [false, false, false];
   const events = currentMatchState?.events || [];
   const inningScores = currentMatchState?.inningScores || { home: [], away: [] };
   const hits = currentMatchState?.hits || { home: 0, away: 0 };
@@ -297,15 +296,7 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
           />
        )}
 
-       <Field
-         myConvent={myConvent}
-         opponent={opponent}
-         half={half}
-         bases={bases}
-         animationPhase={animPhase}
-         battingQueue={battingQueue}
-         onPlayerHover={setHoveredPlayer}
-       >
+       <Field>
         {currentMatchState && myConvent && opponent && (
           <>
                <FieldPlayers
