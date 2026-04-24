@@ -7,7 +7,6 @@ const ScoreChart = ({
   score,
   currentInning,
   half,
-  outs,
   innings,
   inningScores,
   hits,

@@ -6,11 +6,14 @@ import Player from '../Player';
 import { useLanguage } from '../../context/LanguageContext';
 import { useGame } from '../../context/GameContext';
 import { getTranslation, translateRole } from '../../translations';
-import { getCurrentBatter, getCurrentPitcher } from '../../logic/match';
+import { getCurrentBatter, getCurrentPitcher, getCurrentCatcher } from '../../logic/match';
+import { charTranslator } from '../../logic/dice_utils';
+import Die from '../Die';
 import { getRoleColorClass } from '../../logic/utils';
 import { playerStars } from '../../logic/ui_utils';
 import ScoreChart from '../ScoreChart';
 import { updateStatsFromMatch, getDefaultStats } from '../../logic/stats';
+import { actions } from '../../logic/actions';
 
 const PHASES = {
   IDLE: 'idle',
@@ -30,18 +33,14 @@ const OUTCOME_TIMING = {
   double: [300, 200, 600, 400],
   triple: [300, 200, 600, 400],
   home_run: [300, 200, 600, 400],
+  ball: [200, 200, 300],
+  strike: [200, 200, 300],
 };
 
 const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPitch, onMatchEnd, setActiveTab }) => {
   const { language } = useLanguage();
   const { matchState: contextMatchState } = useGame();
-
   const currentMatchState = propMatchState || contextMatchState;
-
-  // Compute opponent from fixtures for current week
- 
-
-  // Derive match state values (independent of opponent)
   const score = currentMatchState?.score || { home: 0, away: 0 };
   const currentInning = currentMatchState?.currentInning || 1;
   const half = currentMatchState?.half || 'top';
@@ -49,6 +48,8 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
   const inningScores = currentMatchState?.inningScores || { home: [], away: [] };
   const hits = currentMatchState?.hits || { home: 0, away: 0 };
   const errors = currentMatchState?.errors || { home: 0, away: 0 };
+  const balls = currentMatchState?.balls || 0;
+  const strikes = currentMatchState?.strikes || 0;
   const gameOver = currentMatchState ? (currentInning > 3 && half === 'top') : false;
   const winner = currentMatchState
     ? score.home > score.away
@@ -59,16 +60,73 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
     : null;
   const batter = currentMatchState ? getCurrentBatter(currentMatchState) : null;
   const pitcher = currentMatchState ? getCurrentPitcher(currentMatchState) : null;
+  const catcher = currentMatchState ? getCurrentCatcher(currentMatchState) : null;
+
+  const attributeMap = {
+    'Body': 'body',
+    'Mind': 'mind',
+    'Heart': 'heart',
+    'Cunning': 'cunning',
+    'Power': 'power',
+    'Fortitude': 'fortitude'
+  };
 
   // Animation state hooks
   const [animPhase, setAnimPhase] = useState(PHASES.IDLE);
   const [animOutcome, setAnimOutcome] = useState(null);
   const [hoveredPlayer, setHoveredPlayer] = useState(null);
   const [animKey, setAnimKey] = useState(0);
+  const [commentatorLog, setCommentatorLog] = useState([]);
+  const [catcherActionIndex, setCatcherActionIndex] = useState(0);
+  const [actionPhase, setActionPhase] = useState('initial'); // 'initial', 'catcher_action', 'done'
 
   // Ref hooks
   const matchEndCalledRef = useRef(false);
   const prevEventsLengthRef = useRef(0);
+
+  // Initialize commentator log with batter and pitcher at start
+  useEffect(() => {
+    if (batter && pitcher && commentatorLog.length === 0) {
+      setCommentatorLog([
+        `Batter: ${batter.name} (${translateRole(batter.role, language)})`,
+        `Pitcher: ${pitcher.name} (${translateRole(pitcher.role, language)})`
+      ]);
+    }
+  }, [batter, pitcher, language, commentatorLog.length]);
+
+  // Keep only the latest message - clear previous when new one comes
+  const addToCommentatorLog = (message) => {
+    setCommentatorLog([message]);
+  };
+
+  const handleContinue = () => {
+    if (actionPhase === 'initial') {
+      // Determine if player is pitching (fielding team)
+      // top half: away bats, home pitches -> player pitches if myConvent is home
+      // bottom half: home bats, away pitches -> player pitches if myConvent is away
+      const isPlayerPitching = half === 'top'
+        ? myConvent?.id === currentMatchState?.homeConventId
+        : myConvent?.id === currentMatchState?.awayConventId;
+      
+      if (isPlayerPitching) {
+        setActionPhase('catcher_action');
+        setCatcherActionIndex(0);
+      } else {
+        // Player is batting, CPU catcher selects random action
+        const catcherActions = actions['Catcher'];
+        const randomAction = catcherActions[Math.floor(Math.random() * catcherActions.length)];
+        addToCommentatorLog(`CPU Catcher selected: ${randomAction.name}`);
+        setActionPhase('done');
+      }
+    } else {
+      // Random CPU action for testing
+      const roles = ['Pitcher', 'Batter', 'Catcher'];
+      const role = roles[Math.floor(Math.random() * roles.length)];
+      const roleActions = actions[role];
+      const randomAction = roleActions[Math.floor(Math.random() * roleActions.length)];
+      addToCommentatorLog(`CPU ${role} selected: ${randomAction.name}`);
+    }
+  };
 
   // Effect: when match ends, update stats and increment week via onMatchEnd
   useEffect(() => {
@@ -135,19 +193,26 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
 
         const timings = OUTCOME_TIMING[outcome] || [300, 200, 600];
         const isOut = outcome === 'strikeout' || outcome === 'ground_out' || outcome === 'fly_out';
+        const isHit = ['single', 'double', 'triple', 'home_run'].includes(outcome);
+        const isCount = outcome === 'ball' || outcome === 'strike';
 
         if (isOut) {
           setAnimPhase(PHASES.PITCH_THROW);
           setTimeout(() => setAnimPhase(PHASES.CONTACT), 0);
           setTimeout(() => setAnimPhase(PHASES.OUT), timings[0]);
           setTimeout(() => setAnimPhase(PHASES.IDLE), timings[0] + timings[1] + 200);
-        } else {
+        } else if (isHit) {
           setAnimPhase(PHASES.PITCH_THROW);
           setTimeout(() => setAnimPhase(PHASES.CONTACT), 0);
           setTimeout(() => setAnimPhase(PHASES.HIT_FLYING), timings[0] + timings[1]);
           setTimeout(() => setAnimPhase(PHASES.RUNNER_ADVANCING), timings[0] + timings[1] + timings[2]);
           setTimeout(() => setAnimPhase(PHASES.SCORE), timings[0] + timings[1] + timings[2] + 400);
           setTimeout(() => setAnimPhase(PHASES.IDLE), timings[0] + timings[1] + timings[2] + 1200);
+        } else if (isCount) {
+          // For balls and strikes, just show pitch throw and contact
+          setAnimPhase(PHASES.PITCH_THROW);
+          setTimeout(() => setAnimPhase(PHASES.CONTACT), timings[0]);
+          setTimeout(() => setAnimPhase(PHASES.IDLE), timings[0] + timings[1] + timings[2]);
         }
       }, 0);
     }
@@ -270,7 +335,11 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
      return { visibleQueue, baseRunners };
    };
 
-   const { visibleQueue: battingQueue, baseRunners } = computeBattingInfo();
+    const { visibleQueue: battingQueue, baseRunners } = computeBattingInfo();
+
+  // Compute selected catcher action details for display
+  const catcherActions = actions['Catcher'] || [];
+  const currentCatcherAction = catcherActions[catcherActionIndex] || null;
 
   const getTeamLabel = (convent) => {
     if (!convent) return '???';
@@ -346,22 +415,7 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
 
        {currentMatchState && (
         <>
-            {batter && pitcher && (
-              <div className="matchup">
-              <div className="matchup-player">
-                <span className="label">Batter:</span> {batter.name} ({translateRole(batter.role, language)})
-              </div>
-              <div className="matchup-stats">
-                Cunning: {batter.attributes.cunning}
-              </div>
-              <div className="matchup-player">
-                <span className="label">Pitcher:</span> {pitcher.name} ({translateRole(pitcher.role, language)})
-              </div>
-              <div className="matchup-stats">
-                Power: {pitcher.attributes.power}
-              </div>
-            </div>
-          )}
+            
 
             {gameOver && winner && (
               <button
@@ -372,14 +426,72 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
               </button>
             )}
 
-           {onPitch && !gameOver && (
-             <button className="pitch-button" onClick={onPitch}>
-               PITCH
-             </button>
-           )}
 
+
+            <div className="commentator-log">
+              <h4>Commentator Log</h4>
+              <ul>
+                {commentatorLog.slice().reverse().map((entry, idx) => (
+                  <li key={commentatorLog.length - 1 - idx}>{entry}</li>
+                ))}
+                {commentatorLog.length === 0 && <li>No actions logged yet.</li>}
+              </ul>
+              {actionPhase === 'initial' && (
+                <button className="continue-button" onClick={handleContinue}>
+                  Continue
+                </button>
+              )}
+            </div>
+            {actionPhase === 'catcher_action' && currentCatcherAction && catcher && (
+              <div className="player-action-selector">
+                <h4>Select Catcher Action for {catcher.name}</h4>
+                <div className="action-display">
+                  <button
+                    className="nav-button"
+                    onClick={() => setCatcherActionIndex(prev => (prev - 1 + catcherActions.length) % catcherActions.length)}
+                    >
+                    ◀
+                  </button>
+                  <div className="action-info">
+                    <span className="action-name">{currentCatcherAction.name}</span>
+                    <div className="action-dice">
+                      {currentCatcherAction.combo.map(attr => (
+                        <span key={attr} className="combo-attribute">
+                          <Die
+                            faces={catcher.attributes[attributeMap[attr]]}
+                            value={catcher.attributes[attributeMap[attr]]}
+                            attribute={attributeMap[attr]}
+                            />
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <button
+                    className="nav-button"
+                    onClick={() => setCatcherActionIndex(prev => (prev + 1) % catcherActions.length)}
+                    >
+                    ▶
+                  </button>
+                </div>
+                <button className="log-player-action-button" onClick={() => {
+                  addToCommentatorLog(`Player Catcher selected: ${currentCatcherAction.name}`);
+                  setActionPhase('done');
+                }}>Confirm Catcher Action</button>
+              </div>
+            )}
+            {actionPhase === 'done' && (
+              <button className="continue-button" onClick={handleContinue}>
+                Log Random CPU Action
+              </button>
+            )}
+        </>
+      )}
+      {onPitch && !gameOver && (
+        <button className="pitch-button" onClick={onPitch}>
+          PITCH
+        </button>
+      )}
            <div className="event-log">
-             <h4>Play-by-Play</h4>
              <ul>
                {events.slice().reverse().map((ev, idx) => (
                  <li key={events.length - 1 - idx}>
@@ -389,10 +501,6 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
                {events.length === 0 && <li>No plays yet.</li>}
              </ul>
             </div>
-
-            {null}
-        </>
-      )}
     </div>
   );
 };

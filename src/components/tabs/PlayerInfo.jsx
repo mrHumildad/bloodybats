@@ -1,21 +1,10 @@
 import React from 'react';
 import { playerStars } from '../../logic/ui_utils';
 import { getRoleColorClass } from '../../logic/utils';
-import { charTranslator } from '../../logic/dice_utils';
 import { useLanguage } from '../../context/LanguageContext';
 import { getTranslation, translateRole, translateAttribute } from '../../translations';
 import Player from '../Player';
-
-const Die = ({ faces, value = faces, attribute, style = 'fill' }) => {
-  console.log(`Rendering Die: faces=${faces}, value=${value}, attribute=${attribute}, style=${style}`);
-  const char = charTranslator(faces, value, style === 'fill');
-  return (
-    <div className={`die ${attribute.toLowerCase()}`}>
-      <span className={`d${faces} die-char `}>{char}</span>
-      <span className={`d${faces} die-char back`}>/</span>
-    </div>
-  );
-};
+import Die from '../Die';
 
 const AttributeCard = ({ attribute, value }) => {
   const { language } = useLanguage();

@@ -53,6 +53,7 @@ const advanceRunners = (bases, steps) => {
 };
 
 // Determine outcome string from die roll difference (batterRoll - pitcherRoll)
+// Now includes ball and strike outcomes for more realistic gameplay
 const getOutcome = (diff) => {
   if (diff >= 4) return 'home_run';
   if (diff === 3) return 'triple';
@@ -60,6 +61,8 @@ const getOutcome = (diff) => {
   if (diff === 1) return 'single';
   if (diff === 0) return 'ground_out';
   if (diff === -1) return 'fly_out';
+  if (diff === -2) return 'strike';
+  if (diff === -3) return 'ball';
   return 'strikeout';
 };
 
@@ -102,6 +105,8 @@ export const endInning = (state) => {
     half: newHalf,
     bases: [false, false, false],
     outs: 0,
+    balls: 0,
+    strikes: 0,
     // Reset batting index for the team that will bat next
     homeBatterIndex: newHalf === 'bottom' ? 0 : state.homeBatterIndex,
     awayBatterIndex: newHalf === 'top' ? 0 : state.awayBatterIndex,
@@ -142,6 +147,8 @@ export const createMatch = (homeTeam, awayTeam, config = {}) => {
     events: [],
     awayBatterIndex: 0,
     homeBatterIndex: 0,
+    balls: 0,
+    strikes: 0,
     config: { innings },
   };
 };
@@ -169,12 +176,45 @@ export const executeAtBat = (state) => {
   let newOuts = state.outs;
   let runsScored = 0;
   let description = '';
+  let newBalls = state.balls || 0;
+  let newStrikes = state.strikes || 0;
 
   switch (outcome) {
+    case 'ball': {
+      newBalls += 1;
+      if (newBalls >= 3) {
+        // Ball 4: Walk (counts as single)
+        const adv = advanceRunners(state.bases, 1);
+        runsScored = adv.runs;
+        newBases = adv.newBases;
+        newBases[0] = true; // batter on first
+        description = `${batter.name} walks!`;
+        newBalls = 0;
+        newStrikes = 0;
+      } else {
+        description = `Ball ${newBalls}`;
+      }
+      break;
+    }
+    case 'strike': {
+      newStrikes += 1;
+      if (newStrikes >= 3) {
+        // Strike 3: Strikeout
+        description = `${batter.name} strikes out!`;
+        newOuts = state.outs + 1;
+        newBalls = 0;
+        newStrikes = 0;
+      } else {
+        description = `Strike ${newStrikes}`;
+      }
+      break;
+    }
     case 'home_run': {
       runsScored = state.bases.reduce((acc, occupied) => acc + (occupied ? 1 : 0), 0) + 1;
       newBases = [false, false, false];
       description = `${batter.name} hits a HOME RUN! ${runsScored} run${runsScored !== 1 ? 's' : ''} scored.`;
+      newBalls = 0;
+      newStrikes = 0;
       break;
     }
     case 'triple': {
@@ -183,6 +223,8 @@ export const executeAtBat = (state) => {
       newBases = adv.newBases;
       newBases[2] = true; // batter on third
       description = `${batter.name} hits a TRIPLE! ${runsScored} run${runsScored !== 1 ? 's' : ''} scored.`;
+      newBalls = 0;
+      newStrikes = 0;
       break;
     }
     case 'double': {
@@ -191,6 +233,8 @@ export const executeAtBat = (state) => {
       newBases = adv.newBases;
       newBases[1] = true; // batter on second
       description = `${batter.name} hits a DOUBLE! ${runsScored} run${runsScored !== 1 ? 's' : ''} scored.`;
+      newBalls = 0;
+      newStrikes = 0;
       break;
     }
     case 'single': {
@@ -199,26 +243,36 @@ export const executeAtBat = (state) => {
       newBases = adv.newBases;
       newBases[0] = true; // batter on first
       description = `${batter.name} hits a SINGLE! ${runsScored} run${runsScored !== 1 ? 's' : ''} scored.`;
+      newBalls = 0;
+      newStrikes = 0;
       break;
     }
     case 'ground_out': {
       description = `${batter.name} hits a ground out.`;
       newOuts = state.outs + 1;
+      newBalls = 0;
+      newStrikes = 0;
       break;
     }
     case 'fly_out': {
       description = `${batter.name} hits a fly out.`;
       newOuts = state.outs + 1;
+      newBalls = 0;
+      newStrikes = 0;
       break;
     }
     case 'strikeout': {
       description = `${batter.name} strikes out!`;
       newOuts = state.outs + 1;
+      newBalls = 0;
+      newStrikes = 0;
       break;
     }
     default: {
       description = `${batter.name} is out.`;
       newOuts = state.outs + 1;
+      newBalls = 0;
+      newStrikes = 0;
     }
   }
 
@@ -278,6 +332,8 @@ export const executeAtBat = (state) => {
   newState.events = newEvents;
   newState.hits = newHits;
   newState.inningScores = newInningScores;
+  newState.balls = newBalls;
+  newState.strikes = newStrikes;
   // Errors remain zero for now (no error logic implemented)
   newState.errors = state.errors || { home: 0, away: 0 };
 
@@ -312,4 +368,10 @@ export const getCurrentBatter = (state) => {
 export const getCurrentPitcher = (state) => {
   const pitchingTeam = state.half === 'top' ? state.homeTeam : state.awayTeam;
   return pitchingTeam.find((p) => p.role === 'pitcher');
+};
+
+// Get current catcher for UI
+export const getCurrentCatcher = (state) => {
+  const pitchingTeam = state.half === 'top' ? state.homeTeam : state.awayTeam;
+  return pitchingTeam.find((p) => p.role === 'catcher');
 };
