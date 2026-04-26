@@ -115,7 +115,7 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
         // Player is batting, CPU catcher selects random action
         const catcherActions = actions['Catcher'];
         const randomAction = catcherActions[Math.floor(Math.random() * catcherActions.length)];
-        addToCommentatorLog(`CPU Catcher selected: ${randomAction.name}`);
+        addToCommentatorLog(`CPU Catcher ${catcher?.name} selected: ${randomAction.name}`);
         setActionPhase('done');
       }
     } else {
@@ -228,8 +228,21 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
     );
   }
 
+  const getTeamLabel = (convent) => {
+    if (!convent) return '???';
+    return convent.short ? convent.short.toUpperCase() : convent.name.substring(0, 3).toUpperCase();
+  };
+
+  // Resolve labels from matchState using convents lookup (home/away are fixed in state)
+  const homeConvent = convents?.find(c => c.id === currentMatchState?.homeConventId);
+  const awayConvent = convents?.find(c => c.id === currentMatchState?.awayConventId);
+  const homeLabel = homeConvent ? getTeamLabel(homeConvent) : 'HOME';
+  const awayLabel = awayConvent ? getTeamLabel(awayConvent) : 'AWAY';
+  const homeColor = homeConvent?.colors?.primary || '#ffffff';
+  const awayColor = awayConvent?.colors?.primary || '#ffffff';
+
   // Opponent-dependent calculations
-  const getBattingTeam = () => (half === 'bottom' ? myConvent : opponent);
+  const getBattingTeam = () => (half === 'bottom' ? homeConvent : awayConvent);
   const battingConvent = getBattingTeam();
 
   const allBatters = battingConvent?.team?.filter(
@@ -341,42 +354,38 @@ const Match = ({ myConvent, opponent, convents, matchState: propMatchState, onPi
   const catcherActions = actions['Catcher'] || [];
   const currentCatcherAction = catcherActions[catcherActionIndex] || null;
 
-  const getTeamLabel = (convent) => {
-    if (!convent) return '???';
-    return convent.short ? convent.short.toUpperCase() : convent.name.substring(0, 3).toUpperCase();
-  };
-
-  const homeLabel = getTeamLabel(myConvent);
-  const awayLabel = getTeamLabel(opponent);
-
   return (
     <div className="match">
        {currentMatchState && (
-          <ScoreChart
-            score={score}
-            currentInning={currentInning}
-            half={half}
-            innings={currentMatchState.config.innings}
-            inningScores={inningScores}
-            hits={hits}
-            errors={errors}
-            homeTeamName={homeLabel}
-            awayTeamName={awayLabel}
-          />
-       )}
+           <ScoreChart
+             score={score}
+             currentInning={currentInning}
+             half={half}
+             innings={currentMatchState.config.innings}
+             inningScores={inningScores}
+             hits={hits}
+             errors={errors}
+             homeTeamName={homeLabel}
+             awayTeamName={awayLabel}
+             homeColor={homeColor}
+             awayColor={awayColor}
+           />
+        )}
 
        <Field>
         {currentMatchState && myConvent && opponent && (
           <>
-               <FieldPlayers
-                 homeConvent={myConvent}
-                 awayConvent={opponent}
-                 half={half}
-                 animationPhase={animPhase}
-                 battingQueue={battingQueue}
-                 baseRunners={baseRunners}
-                 onPlayerHover={setHoveredPlayer}
-               />
+                <FieldPlayers
+                  homeConvent={homeConvent}
+                  awayConvent={awayConvent}
+                  half={half}
+                  animationPhase={animPhase}
+                  battingQueue={battingQueue}
+                  baseRunners={baseRunners}
+                  onPlayerHover={setHoveredPlayer}
+                  pitcher={pitcher}
+                  catcher={catcher}
+                />
             <GameAnimations
               phase={animPhase}
               outcome={animOutcome}

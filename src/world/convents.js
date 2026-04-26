@@ -4,9 +4,12 @@ export const convents = [
     "id": 1,
     "name": "Orden del Impacto Traumático",
     "short": "OIT",
+    "city_name": "Bolapolis",
+    "city_description": "La capital del Imperio, construida sobre un cráter gigante, donde cada juego es una batalla por la supervivencia.",
     "colors": {
       "primary": "#660000",
-      "secondary": "#1a0000"
+      "secondary": "#1a0000",
+      "tertiary": "#ffffff"
     },
     "description": "Creen que el cráneo del rival es el único receptáculo digno para la bola sagrada. Sus misas terminan en conmociones cerebrales.",
     "stat_focus": "body",
@@ -302,9 +305,12 @@ export const convents = [
     "id": 2,
     "name": "Sínodo de la Parábola Ebria",
     "short": "SPE",
+    "city_name": "Vineport",
+    "city_description": "Ciudad costera conocida por sus viñas y bodegas.",
     "colors": {
-      "primary": "#4b0082",
-      "secondary": "#ffd700"
+      "primary": "#b92323",
+      "secondary": "#ffd700",
+      "tertiary": "#050c30"
     },
     "description": "Calculan trayectorias mediante visiones producidas por alcohol destilado en bates viejos. Si ves tres bolas, batea la del medio.",
     "stat_focus": "mind",
@@ -600,9 +606,12 @@ export const convents = [
     "id": 3,
     "name": "Búnker del Home Perpetuo",
     "short": "BHP",
+    "city_name": "Stonehaven",
+    "city_description": "Una ciudad de piedra y acero, donde los defensores del Home Perpetuo se han atrincherado.",
     "colors": {
-      "primary": "#2f4f4f",
-      "secondary": "#708090"
+      "primary": "#000000",
+      "secondary": "#114880",
+      "tertiary": "#a9a9a9"
     },
     "description": "Fanáticos de la defensa que se han cosido el guante a la mano. Consideran que dejar pasar a alguien es pecado capital.",
     "stat_focus": "body",
@@ -898,9 +907,12 @@ export const convents = [
     "id": 4,
     "name": "Hijas de la Costura Muda",
     "short": "HCM",
+    "city_name": "Silencium",
+    "city_description": "Una ciudad envuelta en niebla, donde el silencio es sagrado y las palabras son susurradas.",
     "colors": {
-      "primary": "#f5f5dc",
-      "secondary": "#8b4513"
+      "primary": "#780c80",
+      "secondary": "#138b2d",
+      "tertiary": "#000000"
     },
     "description": "Monjas que se cosen los labios para no distraer a la Diosa. Su estadio es tan silencioso que oyes crujir los huesos del bateador.",
     "stat_focus": "heart",
@@ -1196,9 +1208,12 @@ export const convents = [
     "id": 5,
     "name": "Gremio del Carbono y Astillas",
     "short": "GCA",
+    "city_name": "Ashenport",
+    "city_description": "Un puerto industrial donde el humo y el hollín son parte del paisaje diario.",
     "colors": {
       "primary": "#000000",
-      "secondary": "#ff4500"
+      "secondary": "#ff4500",
+      "tertiary": "#ffffff"
     },
     "description": "Extraen madera de árboles regados con orina de perdedor. Sus bates arden al contacto con el aire.",
     "stat_focus": "body",
@@ -1495,8 +1510,9 @@ export const convents = [
     "name": "Cónclave del Vuelo Alcohólico",
     "short": "CVA",
     "colors": {
-      "primary": "#87ceeb",
-      "secondary": "#ffffff"
+      "primary": "#931414",
+      "secondary": "#ffffff",
+      "tertiary": "#000000"
     },
     "description": "Creen que el cielo es el estadio de la Diosa. Si la bola no sale del estadio, es que no tienes suficiente fe (o vodka).",
     "stat_focus": "heart",
@@ -1793,8 +1809,9 @@ export const convents = [
     "name": "Círculo del Despojo y la Rabia",
     "short": "CDR",
     "colors": {
-      "primary": "#556b2f",
-      "secondary": "#000000"
+      "primary": "#dfc517",
+      "secondary": "#392ce4",
+      "tertiary": "#000000"
     },
     "description": "Viven en las alcantarillas del estadio principal. Juegan con bates hechos de fémures y pelotas envueltas en piel de rata.",
     "stat_focus": "heart",
@@ -2090,9 +2107,12 @@ export const convents = [
     "id": 8,
     "name": "Ministerio del Marfil y Oro",
     "short": "MMO",
+    "city_name": "Ivoryspire",
+    "city_description": "Una ciudad de palacios y torres de marfil, donde la opulencia es la norma y la pobreza es un crimen.",
     "colors": {
       "primary": "#fff5ee",
-      "secondary": "#daa520"
+      "secondary": "#daa520",
+      "tertiary": "#000000"
     },
     "description": "La nobleza del diamante. Sus bates son obras de arte y sus pelotas están hechas con el cuero de los mejores jugadores muertos.",
     "stat_focus": "mind",

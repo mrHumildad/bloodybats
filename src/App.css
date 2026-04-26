@@ -2834,19 +2834,44 @@ code, .counter {
   border-radius: 2px;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  gap: 8px;
 }
 
-.scoreboard-team-name.away {
-  background: #1e3a1e;
-  color: #a8d5a8;
+.scoreboard-team-name .team-indicator {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  width: 22px;
+  height: 22px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 4px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border-iron);
+  color: var(--text-muted);
+  flex-shrink: 0;
 }
 
-.scoreboard-team-name.home {
-  background: #3a2020;
-  color: #d5a8a8;
-  justify-content: center;
+.scoreboard-team-name .team-color-swatch {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  border: 2px solid rgba(255,255,255,0.3);
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.5);
+  flex-shrink: 0;
+}
+
+.scoreboard-team-name.away .team-indicator {
+  color: #6ab5ff;
+  border-color: rgba(106, 181, 255, 0.4);
+  background: rgba(106, 181, 255, 0.15);
+}
+
+.scoreboard-team-name.home .team-indicator {
+  color: var(--accent-gold);
+  border-color: rgba(184, 134, 11, 0.4);
+  background: rgba(184, 134, 11, 0.15);
 }
 
 .scoreboard-cell {

@@ -366,12 +366,12 @@ export const getCurrentBatter = (state) => {
 
 // Get current pitcher for UI
 export const getCurrentPitcher = (state) => {
-  const pitchingTeam = state.half === 'top' ? state.homeTeam : state.awayTeam;
+  const { pitchingTeam } = getTeams(state);
   return pitchingTeam.find((p) => p.role === 'pitcher');
 };
 
 // Get current catcher for UI
 export const getCurrentCatcher = (state) => {
-  const pitchingTeam = state.half === 'top' ? state.homeTeam : state.awayTeam;
+  const { pitchingTeam } = getTeams(state);
   return pitchingTeam.find((p) => p.role === 'catcher');
 };

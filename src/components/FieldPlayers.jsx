@@ -23,7 +23,9 @@ const FieldPlayers = ({
   animationPhase,
   battingQueue,
   baseRunners = [],
-  onPlayerHover
+  onPlayerHover,
+  pitcher,
+  catcher
 }) => {
   if (!homeConvent || !awayConvent) return null;
 
@@ -36,8 +38,6 @@ const FieldPlayers = ({
     return fieldingTeam.find(p => p.position === positionCode);
   };
 
-  const pitcher = getPlayerByPosition('PIT');
-  const catcher = getPlayerByPosition('CAT');
   const baseGuard1 = getPlayerByPosition('BAS-1');
   const baseGuard2 = getPlayerByPosition('BAS-2');
   const fielder = getPlayerByPosition('FIE');

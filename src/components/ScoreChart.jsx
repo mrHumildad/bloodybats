@@ -12,7 +12,9 @@ const ScoreChart = ({
   hits,
   errors,
   homeTeamName,
-  awayTeamName
+  awayTeamName,
+  homeColor,
+  awayColor
 }) => {
   const { language } = useLanguage();
   const homeLabel = homeTeamName || getTranslation('homeTeam', language);
@@ -56,7 +58,11 @@ const ScoreChart = ({
 
       {/* Away Team Row */}
       <div className={`scoreboard-row ${half === 'top' && isInningActive(currentInning) ? 'active' : ''}`}>
-        <div className="scoreboard-team-name away">{awayLabel}</div>
+        <div className="scoreboard-team-name away">
+          <span className="team-indicator">A</span>
+          <span className="team-color-swatch" style={{ backgroundColor: awayColor }}></span>
+          {awayLabel}
+        </div>
         {inningNumbers.map((inning) => {
           const val = getCellValue('away', inning);
           return (
@@ -75,7 +81,11 @@ const ScoreChart = ({
 
       {/* Home Team Row */}
       <div className={`scoreboard-row ${half === 'bottom' && isInningActive(currentInning) ? 'active' : ''}`}>
-        <div className="scoreboard-team-name home">{homeLabel}</div>
+        <div className="scoreboard-team-name home">
+          <span className="team-indicator">H</span>
+          <span className="team-color-swatch" style={{ backgroundColor: homeColor }}></span>
+          {homeLabel}
+        </div>
         {inningNumbers.map((inning) => {
           const val = getCellValue('home', inning);
           return (
@@ -117,6 +127,8 @@ ScoreChart.propTypes = {
   }).isRequired,
   homeTeamName: PropTypes.string,
   awayTeamName: PropTypes.string,
+  homeColor: PropTypes.string,
+  awayColor: PropTypes.string,
 };
 
 export default ScoreChart;
