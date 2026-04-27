@@ -1,6 +1,8 @@
 // Match logic for Bloody Bats
 // Core state and functions for managing a baseball match with dice-based player attributes.
 
+import { actions } from './actions.js';
+
 export const matchConfig = {
   innings: 3,
 };
@@ -29,8 +31,18 @@ export const match = {
   },
 };
 
+// Attribute map: display name -> player attribute key
+export const ATTRIBUTE_MAP = {
+  Body: 'body',
+  Mind: 'mind',
+  Heart: 'heart',
+  Cunning: 'cunning',
+  Power: 'power',
+  Fortitude: 'fortitude',
+};
+
 // Helper: roll a die with given number of sides (1 to sides)
-const rollDie = (sides) => Math.floor(Math.random() * sides) + 1;
+export const rollDie = (sides) => Math.floor(Math.random() * sides) + 1;
 
 // Helper: advance runners on bases by a number of steps (1-4)
 // bases: boolean array [first, second, third]
@@ -50,6 +62,65 @@ const advanceRunners = (bases, steps) => {
     }
   }
   return { newBases, runs };
+};
+
+// Get total roll for a player action: roll 2 dice for each attribute in the combo
+// Returns { total: number, dice: [d1, d2] } where dice are individual die rolls
+export const getActionTotal = (player, action) => {
+  const comboAttributes = action.combo; // e.g., ['Body', 'Power']
+  const dice = [];
+  for (const attr of comboAttributes) {
+    const attrKey = ATTRIBUTE_MAP[attr];
+    if (!attrKey) {
+      console.error(`Unknown attribute: ${attr}`);
+      dice.push(rollDie(6)); // fallback
+    } else {
+      const sides = player.attributes[attrKey];
+      dice.push(rollDie(sides));
+    }
+  }
+  const total = dice[0] + dice[1];
+  return { total, dice };
+};
+
+// Set a pending action for a role in state
+export const setPendingAction = (state, role, actionId) => {
+  return {
+    ...state,
+    pendingActions: {
+      ...state.pendingActions,
+      [role]: actionId,
+    },
+  };
+};
+
+// Set a roll result for a role (catcher, pitcher, batter)
+export const setRollResult = (state, role, result) => {
+  const fieldMap = {
+    catcher: 'catcherRollResult',
+    pitcher: 'pitcherRollResult',
+    batter: 'batterRollResult',
+  };
+  const field = fieldMap[role];
+  if (!field) {
+    console.error(`Unknown role for roll result: ${role}`);
+    return state;
+  }
+  return {
+    ...state,
+    [field]: result,
+  };
+};
+
+// Clear all turn state (pending actions and roll results)
+export const clearTurnState = (state) => {
+  return {
+    ...state,
+    pendingActions: { pitcher: null, catcher: null, batter: null },
+    catcherRollResult: null,
+    pitcherRollResult: null,
+    batterRollResult: null,
+  };
 };
 
 // Determine outcome string from die roll difference (batterRoll - pitcherRoll)
@@ -126,34 +197,40 @@ export const createMatch = (homeTeam, awayTeam, config = {}) => {
   // Initialize inning scores arrays (1-indexed, so index 0 is inning 1)
   const emptyInningArray = Array(innings).fill(0);
 
-  return {
-    homeTeam,
-    awayTeam,
-    homeConventId,
-    awayConventId,
-    homeBattingOrder,
-    awayBattingOrder,
-    currentInning: 1,
-    half: 'top',
-    score: { home: 0, away: 0 },
-    inningScores: {
-      home: [...emptyInningArray],
-      away: [...emptyInningArray],
-    },
-    hits: { home: 0, away: 0 },
-    errors: { home: 0, away: 0 },
-    bases: [false, false, false],
-    outs: 0,
-    events: [],
-    awayBatterIndex: 0,
-    homeBatterIndex: 0,
-    balls: 0,
-    strikes: 0,
-    config: { innings },
-  };
+   return {
+     homeTeam,
+     awayTeam,
+     homeConventId,
+     awayConventId,
+     homeBattingOrder,
+     awayBattingOrder,
+     currentInning: 1,
+     half: 'top',
+     score: { home: 0, away: 0 },
+     inningScores: {
+       home: [...emptyInningArray],
+       away: [...emptyInningArray],
+     },
+     hits: { home: 0, away: 0 },
+     errors: { home: 0, away: 0 },
+     bases: [false, false, false],
+     outs: 0,
+     events: [],
+     awayBatterIndex: 0,
+     homeBatterIndex: 0,
+     balls: 0,
+     strikes: 0,
+     config: { innings },
+     // Turn-based action system
+     pendingActions: { pitcher: null, catcher: null, batter: null },
+     catcherRollResult: null,
+     pitcherRollResult: null,
+     batterRollResult: null,
+   };
 };
 
 // Execute one at-bat (pitch) and return the updated state
+// Uses pendingActions and pre-rolled dice results from state
 export const executeAtBat = (state) => {
   const { pitchingTeam, battingOrder, batterIndex, teamKey } = getTeams(state);
   const batter = battingOrder[batterIndex];
@@ -164,12 +241,33 @@ export const executeAtBat = (state) => {
     return state;
   }
 
-  // Roll dice: pitcher uses 'power', batter uses 'cunning'
-  const pitcherDie = pitcher.attributes.power;
-  const batterDie = batter.attributes.cunning;
-  const pitcherRoll = rollDie(pitcherDie);
-  const batterRoll = rollDie(batterDie);
-  const diff = batterRoll - pitcherRoll;
+  // Retrieve selected action IDs from pendingActions (fallback to random if missing)
+  const { pendingActions } = state;
+  const pitcherActionId = pendingActions?.pitcher || actions.Pitcher[Math.floor(Math.random() * actions.Pitcher.length)].id;
+  const batterActionId = pendingActions?.batter || actions.Batter[Math.floor(Math.random() * actions.Batter.length)].id;
+
+  // Look up action objects
+  const pitcherAction = actions.Pitcher.find(a => a.id === pitcherActionId) || actions.Pitcher[0];
+  const batterAction = actions.Batter.find(a => a.id === batterActionId) || actions.Batter[0];
+
+  // Get roll results from state (must exist; fallback to random if somehow missing)
+  let pitcherTotal = state.pitcherRollResult?.total;
+  let batterTotal = state.batterRollResult?.total;
+
+  if (pitcherTotal === undefined) {
+    const pr = getActionTotal(pitcher, pitcherAction);
+    pitcherTotal = pr.total;
+  }
+  if (batterTotal === undefined) {
+    const br = getActionTotal(batter, batterAction);
+    batterTotal = br.total;
+  }
+
+  // Catcher roll result is stored but not used in outcome calculation yet
+  // (catcherRollResult preserved in state for future mechanics)
+
+  // Calculate outcome from difference
+  const diff = batterTotal - pitcherTotal;
   const outcome = getOutcome(diff);
 
   let newBases = [...state.bases];
@@ -183,11 +281,10 @@ export const executeAtBat = (state) => {
     case 'ball': {
       newBalls += 1;
       if (newBalls >= 3) {
-        // Ball 4: Walk (counts as single)
         const adv = advanceRunners(state.bases, 1);
         runsScored = adv.runs;
         newBases = adv.newBases;
-        newBases[0] = true; // batter on first
+        newBases[0] = true;
         description = `${batter.name} walks!`;
         newBalls = 0;
         newStrikes = 0;
@@ -199,7 +296,6 @@ export const executeAtBat = (state) => {
     case 'strike': {
       newStrikes += 1;
       if (newStrikes >= 3) {
-        // Strike 3: Strikeout
         description = `${batter.name} strikes out!`;
         newOuts = state.outs + 1;
         newBalls = 0;
@@ -221,7 +317,7 @@ export const executeAtBat = (state) => {
       const adv = advanceRunners(state.bases, 3);
       runsScored = adv.runs;
       newBases = adv.newBases;
-      newBases[2] = true; // batter on third
+      newBases[2] = true;
       description = `${batter.name} hits a TRIPLE! ${runsScored} run${runsScored !== 1 ? 's' : ''} scored.`;
       newBalls = 0;
       newStrikes = 0;
@@ -231,7 +327,7 @@ export const executeAtBat = (state) => {
       const adv = advanceRunners(state.bases, 2);
       runsScored = adv.runs;
       newBases = adv.newBases;
-      newBases[1] = true; // batter on second
+      newBases[1] = true;
       description = `${batter.name} hits a DOUBLE! ${runsScored} run${runsScored !== 1 ? 's' : ''} scored.`;
       newBalls = 0;
       newStrikes = 0;
@@ -241,7 +337,7 @@ export const executeAtBat = (state) => {
       const adv = advanceRunners(state.bases, 1);
       runsScored = adv.runs;
       newBases = adv.newBases;
-      newBases[0] = true; // batter on first
+      newBases[0] = true;
       description = `${batter.name} hits a SINGLE! ${runsScored} run${runsScored !== 1 ? 's' : ''} scored.`;
       newBalls = 0;
       newStrikes = 0;
@@ -276,7 +372,6 @@ export const executeAtBat = (state) => {
     }
   }
 
-  // Update score
   const newScore = { ...state.score };
   if (teamKey === 'away') {
     newScore.away += runsScored;
@@ -284,7 +379,6 @@ export const executeAtBat = (state) => {
     newScore.home += runsScored;
   }
 
-  // Update hits (on any hit: single, double, triple, home_run)
   const newHits = { ...state.hits };
   if (['single', 'double', 'triple', 'home_run'].includes(outcome)) {
     if (teamKey === 'away') {
@@ -294,7 +388,6 @@ export const executeAtBat = (state) => {
     }
   }
 
-  // Update inningScores (record runs scored in current inning)
   const inningIndex = state.currentInning - 1;
   const newInningScores = {
     home: [...state.inningScores.home],
@@ -306,7 +399,6 @@ export const executeAtBat = (state) => {
     newInningScores.home[inningIndex] += runsScored;
   }
 
-  // Record event
   const newEvent = {
     inning: state.currentInning,
     half: state.half,
@@ -314,18 +406,19 @@ export const executeAtBat = (state) => {
     runsScored,
     batterId: batter.id,
     pitcherId: pitcher.id,
-    batterRoll,
-    pitcherRoll,
+    batterRoll: batterTotal,
+    pitcherRoll: pitcherTotal,
     outcome,
+    // Include action info for debugging
+    pitcherAction: pitcherAction.id,
+    batterAction: batterAction.id,
   };
 
   const newEvents = [...state.events, newEvent];
 
-  // Advance batter index for the current team
   const nextBatterIndex = (batterIndex + 1) % battingOrder.length;
   const newState = setBatterIndex(state, teamKey, nextBatterIndex);
 
-  // Apply other updates
   newState.score = newScore;
   newState.bases = newBases;
   newState.outs = newOuts;
@@ -334,15 +427,13 @@ export const executeAtBat = (state) => {
   newState.inningScores = newInningScores;
   newState.balls = newBalls;
   newState.strikes = newStrikes;
-  // Errors remain zero for now (no error logic implemented)
   newState.errors = state.errors || { home: 0, away: 0 };
 
-  // If inning ended (3 outs), advance to next inning/half
   if (newOuts >= 3) {
-    return endInning(newState);
+    return clearTurnState(endInning(newState));
   }
 
-  return newState;
+  return clearTurnState(newState);
 };
 
 // Check if the match is over (all configured innings completed)

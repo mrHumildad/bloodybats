@@ -9,7 +9,7 @@ const ROLE_COLORS = {
   reserve: '#696969',
 };
 
-const Player = ({ player, primaryColor, secondaryColor }) => {
+const Player = ({ player, primaryColor, secondaryColor, tertiaryColor }) => {
   if (!player) return null;
 
   const getInitials = (name) => {
@@ -210,7 +210,7 @@ const Player = ({ player, primaryColor, secondaryColor }) => {
         fontFamily="Cinzel, var(--font-heading), serif"
         fontSize="44"
         fontWeight="700"
-        fill="#f5f5dc"
+        fill={tertiaryColor}
         stroke="rgba(0,0,0,0.6)"
         strokeWidth="2"
       >
@@ -225,9 +225,9 @@ const Player = ({ player, primaryColor, secondaryColor }) => {
         fontFamily="Oswald, var(--font-heading), sans-serif"
         fontSize="46"
         fontWeight="900"
-        fill="#f5f5dc"
+        fill={tertiaryColor}
         stroke="rgba(0,0,0,0.6)"
-        strokeWidth="2.5"
+        strokeWidth="0.5"
       >
         {jerseyNumber}
       </text>

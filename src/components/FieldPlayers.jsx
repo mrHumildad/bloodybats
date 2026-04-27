@@ -25,7 +25,8 @@ const FieldPlayers = ({
   baseRunners = [],
   onPlayerHover,
   pitcher,
-  catcher
+  catcher,
+  highlightRole = null // 'pitcher', 'catcher', or 'batter'
 }) => {
   if (!homeConvent || !awayConvent) return null;
 
@@ -44,8 +45,10 @@ const FieldPlayers = ({
 
   const fieldingPrimaryColor = fieldingConvent.colors.primary;
   const fieldingSecondaryColor = fieldingConvent.colors.secondary;
+  const fieldingTertiaryColor = fieldingConvent.colors.tertiary;
   const battingPrimaryColor = battingConvent.colors.primary;
   const battingSecondaryColor = battingConvent.colors.secondary;
+  const battingTertiaryColor = battingConvent.colors.tertiary;
 
   const getAnimationClass = (role) => {
     if (!animationPhase || animationPhase === 'idle') return '';
@@ -68,11 +71,13 @@ const FieldPlayers = ({
     if (!player) return null;
     const primary = isBatter ? battingPrimaryColor : fieldingPrimaryColor;
     const secondary = isBatter ? battingSecondaryColor : fieldingSecondaryColor;
+    const tertiary = isBatter ? battingTertiaryColor : fieldingTertiaryColor;
     const animClass = getAnimationClass(player.role);
+    const isHighlighted = highlightRole === player.role;
 
     return (
       <div
-        className={`field-player${animClass ? ` ${animClass}` : ''}`}
+        className={`field-player${animClass ? ` ${animClass}` : ''}${isHighlighted ? ' highlighted' : ''}`}
         style={{
           left: `${pos.x}%`,
           top: `${pos.y}%`,
@@ -84,6 +89,7 @@ const FieldPlayers = ({
           player={player}
           primaryColor={primary}
           secondaryColor={secondary}
+          tertiaryColor={tertiary}
         />
       </div>
     );
@@ -172,6 +178,7 @@ const FieldPlayers = ({
                     player={item.player}
                     primaryColor={battingPrimaryColor}
                     secondaryColor={battingSecondaryColor}
+                    tertiaryColor={battingTertiaryColor}
                   />
                 </div>
               );
