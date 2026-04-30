@@ -9,6 +9,7 @@ import { getTranslation, translateRole } from '../../translations';
 import { getCurrentBatter, getCurrentPitcher, getCurrentCatcher } from '../../logic/match';
 import { actions } from '../../logic/actions';
 import { getRoleColorClass } from '../../logic/utils';
+import { getPositionForPlayer, getRoleFromPosition } from '../../logic/positionUtils';
 import { playerStars } from '../../logic/ui_utils';
 import { updateStatsFromMatch, getDefaultStats } from '../../logic/stats';
 import ActionSelector from '../ActionSelector';
@@ -90,6 +91,21 @@ const Match = ({
     return convent.short ? convent.short.toUpperCase() : convent.name.substring(0, 3).toUpperCase();
   };
 
+  // Helper: derive display role and position for a player based on their convent
+  const getPlayerDisplayInfo = (player) => {
+    if (!player) return { role: 'reserve', position: '-' };
+    // Find which convent contains this player
+    const convent = homeConvent?.team?.includes(player) ? homeConvent
+                 : awayConvent?.team?.includes(player) ? awayConvent
+                 : null;
+    if (!convent) return { role: 'reserve', position: '-' };
+    const pos = getPositionForPlayer(player, convent);
+    return {
+      role: pos ? getRoleFromPosition(pos) : 'reserve',
+      position: pos || '-'
+    };
+  };
+
   // Convent lookups
   const homeConvent = convents?.find(c => c.id === currentMatchState?.homeConventId);
   const awayConvent = convents?.find(c => c.id === currentMatchState?.awayConventId);
@@ -98,111 +114,98 @@ const Match = ({
   const homeColor = homeConvent?.colors?.primary || '#ffffff';
   const awayColor = awayConvent?.colors?.primary || '#ffffff';
 
-  // Batting team and colors
-  const getBattingTeam = () => (half === 'bottom' ? homeConvent : awayConvent);
-  const battingConvent = getBattingTeam();
-  const pitchingTeamKey = half === 'top' ? 'home' : 'away';
-  const battingTeamKey = half === 'bottom' ? 'home' : 'away';
-  const pitchingColor = pitchingTeamKey === 'home' ? homeColor : awayColor;
-  const battingColor = battingTeamKey === 'home' ? homeColor : awayColor;
+   // Batting team and colors
+   const pitchingTeamKey = half === 'top' ? 'home' : 'away';
+   const battingTeamKey = half === 'bottom' ? 'home' : 'away';
+   const pitchingColor = pitchingTeamKey === 'home' ? homeColor : awayColor;
+   const battingColor = battingTeamKey === 'home' ? homeColor : awayColor;
 
-  // Batters and indices
-  const allBatters = battingConvent?.team?.filter(
-    (p) => p.role === 'batter' || p.position?.startsWith('BAT')
-  ) || [];
-  const awayBatterIndex = currentMatchState?.awayBatterIndex ?? 0;
-  const homeBatterIndex = currentMatchState?.homeBatterIndex ?? 0;
+   // Determine batting order (from match state) and current batter index
+   const isHomeBatting = half === 'bottom';
+   const currentBattingOrder = isHomeBatting
+     ? (currentMatchState?.homeBattingOrder || [])
+     : (currentMatchState?.awayBattingOrder || []);
+   const currentBattingIdx = isHomeBatting
+     ? (currentMatchState?.homeBatterIndex ?? 0)
+     : (currentMatchState?.awayBatterIndex ?? 0);
 
-  // Compute batting queue and base runners
-  const computeBattingInfo = () => {
-    if (!allBatters.length) return { visibleQueue: [], baseRunners: [] };
+   // Players who are out this half inning (from events)
+   const outPlayersThisHalf = (currentMatchState?.events || []).filter(ev => {
+     return ev.inning === currentInning && ev.half === half && (
+       ev.outcome === 'strikeout' || ev.outcome === 'ground_out' || ev.outcome === 'fly_out'
+     );
+   }).map(ev => ev.batterId);
 
-    const currentIdx = half === 'bottom' ? homeBatterIndex : awayBatterIndex;
+   // Events this half inning for base advancement and HR tracking
+   const halfInningEvents = (currentMatchState?.events || []).filter(
+     ev => ev.inning === currentInning && ev.half === half
+   );
 
-    const halfInningEvents = (currentMatchState?.events || []).filter(
-      ev => ev.inning === currentInning && ev.half === half
-    );
+   // Map playerId -> player for quick lookup from batting order
+   const battersById = new Map(currentBattingOrder.map(p => [p.id, p]));
 
-    const playersById = {};
-    allBatters.forEach(p => { playersById[p.id] = p; });
+   // Track runners on bases
+   let baseAssignments = [null, null, null];
 
-    let baseAssignments = [null, null, null];
+   for (const ev of halfInningEvents) {
+     const batter = battersById.get(ev.batterId);
+     if (!batter) continue;
+     const outcome = ev.outcome;
 
-    for (const ev of halfInningEvents) {
-      const batter = playersById[ev.batterId];
-      if (!batter) continue;
-      const outcome = ev.outcome;
+     if (outcome === 'home_run') {
+       baseAssignments = [null, null, null];
+     } else if (['single', 'double', 'triple'].includes(outcome)) {
+       const steps = outcome === 'single' ? 1 : outcome === 'double' ? 2 : 3;
+       const newBases = [null, null, null];
+       for (let i = 0; i < 3; i++) {
+         if (baseAssignments[i] !== null) {
+           const newIdx = i + steps;
+           if (newIdx < 3) newBases[newIdx] = baseAssignments[i];
+         }
+       }
+       if (outcome === 'single') newBases[0] = batter;
+       else if (outcome === 'double') newBases[1] = batter;
+       else if (outcome === 'triple') newBases[2] = batter;
+       baseAssignments = newBases;
+     }
+   }
 
-      if (outcome === 'home_run') {
-        baseAssignments = [null, null, null];
-      } else if (['single', 'double', 'triple'].includes(outcome)) {
-        const steps = outcome === 'single' ? 1 : outcome === 'double' ? 2 : 3;
-        const newBases = [null, null, null];
+   // Build batting queue (all slots)
+   const battingQueue = [];
+   const totalSlots = currentBattingOrder.length;
+   for (let slot = 0; slot < totalSlots; slot++) {
+     const player = currentBattingOrder[slot];
+     if (!player) {
+       battingQueue.push({ player: null, status: null, isHomeRun: false });
+       continue;
+     }
+     let slotStatus = null;
+     if (slot === currentBattingIdx) {
+       slotStatus = 'batting';
+     } else if (outPlayersThisHalf.includes(player.id)) {
+       slotStatus = 'out';
+     } else {
+       const baseIdx = baseAssignments.findIndex(p => p && p.id === player.id);
+       if (baseIdx !== -1) {
+         slotStatus = 'onbase' + (baseIdx + 1);
+       }
+     }
+     const isHomeRun = halfInningEvents.some(
+       ev => ev.batterId === player.id && ev.outcome === 'home_run'
+     );
+     battingQueue.push({ player, status: slotStatus, isHomeRun });
+   }
 
-        for (let i = 0; i < 3; i++) {
-          if (baseAssignments[i] !== null) {
-            const newIdx = i + steps;
-            if (newIdx < 3) {
-              newBases[newIdx] = baseAssignments[i];
-            }
-          }
-        }
-
-        if (outcome === 'single') newBases[0] = batter;
-        else if (outcome === 'double') newBases[1] = batter;
-        else if (outcome === 'triple') newBases[2] = batter;
-
-        baseAssignments = newBases;
-      }
-    }
-
-    const visibleQueue = [];
-    const slotToPosition = ['BAT-1', 'BAT-2', 'BAT-3', 'BAT-4', 'BAT-5'];
-    for (let slot = 0; slot < 5; slot++) {
-      const positionCode = slotToPosition[slot];
-      const player = allBatters.find(p => p.position === positionCode);
-      if (!player) {
-        visibleQueue.push({ player: null, status: null, isHomeRun: false });
-        continue;
-      }
-
-      let slotStatus = null;
-      if (slot === currentIdx) {
-        slotStatus = 'batting';
-      } else if (outPlayersThisHalf.includes(player.id)) {
-        slotStatus = 'out';
-      } else {
-        const baseIdx = baseAssignments.findIndex(p => p && p.id === player.id);
-        if (baseIdx !== -1) {
-          slotStatus = 'onbase' + (baseIdx + 1);
-        }
-      }
-      const isHomeRun = halfInningEvents.some(
-        ev => ev.batterId === player.id && ev.outcome === 'home_run'
-      );
-      visibleQueue.push({ player, status: slotStatus, isHomeRun });
-    }
-
-    const baseRunners = [];
-    for (let i = 0; i < 3; i++) {
-      if (baseAssignments[i]) {
-        baseRunners.push({
-          player: baseAssignments[i],
-          baseNum: i + 1
-        });
-      }
-    }
-
-    return { visibleQueue, baseRunners };
-  };
-
-  const outPlayersThisHalf = (currentMatchState?.events || []).filter(ev => {
-    return ev.inning === currentInning && ev.half === half && (
-      ev.outcome === 'strikeout' || ev.outcome === 'ground_out' || ev.outcome === 'fly_out'
-    );
-  }).map(ev => ev.batterId);
-
-  const { visibleQueue: battingQueue, baseRunners } = computeBattingInfo();
+   // Build base runners list for field display
+   const baseRunners = [];
+   for (let i = 0; i < 3; i++) {
+     if (baseAssignments[i]) {
+       baseRunners.push({
+         player: baseAssignments[i],
+         baseNum: i + 1
+       });
+     }
+   }
 
   // Animation state
   const [animPhase, setAnimPhase] = useState(PHASES.IDLE);
@@ -546,13 +549,20 @@ const Match = ({
           }
         >
           <h4>{hoveredPlayer.player.name}</h4>
-          <p className={`role-info ${getRoleColorClass(hoveredPlayer.player.role)}`}>
-            {translateRole(hoveredPlayer.player.role, language)}
-          </p>
-          <div className="meta">
-            <span>{getTranslation('position', language)}: {hoveredPlayer.player.position || '-'}</span>
-            <span>{getTranslation('number', language)}: {hoveredPlayer.player.shirtNumber || '-'}</span>
-          </div>
+          {(() => {
+            const info = getPlayerDisplayInfo(hoveredPlayer.player);
+            return (
+              <>
+                <p className={`role-info ${getRoleColorClass(info.role)}`}>
+                  {translateRole(info.role, language)}
+                </p>
+                <div className="meta">
+                  <span>{getTranslation('position', language)}: {info.position}</span>
+                  <span>{getTranslation('number', language)}: {hoveredPlayer.player.shirtNumber || '-'}</span>
+                </div>
+              </>
+            );
+          })}
           <p className="stars">{playerStars(hoveredPlayer.player)}</p>
         </div>
       )}

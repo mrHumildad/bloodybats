@@ -332,27 +332,49 @@ code {
   display: inline-block;
 }
 
-.role-fielder {
-  border: 1px solid #b8860b;
-  color: #b8860b;
-  background: rgba(184, 134, 11, 0.12);
-  padding: 4px 10px;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: inline-block;
-}
+ .role-fielder {
+   border: 1px solid #b8860b;
+   color: #b8860b;
+   background: rgba(184, 134, 11, 0.12);
+   padding: 4px 10px;
+   font-size: 0.85rem;
+   text-transform: uppercase;
+   letter-spacing: 0.05em;
+   display: inline-block;
+ }
 
-.role-reserve {
-  border: 1px solid #696969;
-  color: #bdc3c7;
-  background: rgba(105, 105, 105, 0.15);
-  padding: 4px 10px;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: inline-block;
-}
+ .role-dh {
+   border: 1px solid #4169e1;
+   color: #4169e1;
+   background: rgba(65, 105, 225, 0.12);
+   padding: 4px 10px;
+   font-size: 0.85rem;
+   text-transform: uppercase;
+   letter-spacing: 0.05em;
+   display: inline-block;
+ }
+
+ .role-reserve {
+   border: 1px solid #696969;
+   color: #bdc3c7;
+   background: rgba(105, 105, 105, 0.15);
+   padding: 4px 10px;
+   font-size: 0.85rem;
+   text-transform: uppercase;
+   letter-spacing: 0.05em;
+   display: inline-block;
+ }
+
+ .role-backup {
+   border: 1px solid #6b7e8a;
+   color: #6b7e8a;
+   background: rgba(107, 126, 138, 0.12);
+   padding: 4px 10px;
+   font-size: 0.85rem;
+   text-transform: uppercase;
+   letter-spacing: 0.05em;
+   display: inline-block;
+ }
 
 .role-batter {
   background-color: rgba(184, 46, 11, 0.15);
@@ -376,21 +398,37 @@ code {
   font-size: 0.9em;
 }
 
-.role-fielder {
-  background-color: rgba(10, 93, 10, 0.15);
-  color: var(--essence);
-  border: 1px solid var(--essence);
-  padding: 2px 6px;
-  font-size: 0.9em;
-}
+ .role-fielder {
+   background-color: rgba(10, 93, 10, 0.15);
+   color: var(--essence);
+   border: 1px solid var(--essence);
+   padding: 2px 6px;
+   font-size: 0.9em;
+ }
 
-.role-reserve {
-  background-color: rgba(183, 23, 183, 0.15);
-  color: var(--cunning);
-  border: 1px solid var(--cunning);
-  padding: 2px 6px;
-  font-size: 0.9em;
-}
+ .role-dh {
+   background-color: rgba(65, 105, 225, 0.15);
+   color: #4169e1;
+   border: 1px solid #4169e1;
+   padding: 2px 6px;
+   font-size: 0.9em;
+ }
+
+ .role-reserve {
+   background-color: rgba(183, 23, 183, 0.15);
+   color: var(--cunning);
+   border: 1px solid var(--cunning);
+   padding: 2px 6px;
+   font-size: 0.9em;
+ }
+
+ .role-backup {
+   background-color: rgba(107, 126, 138, 0.15);
+   color: #6b7e8a;
+   border: 1px solid #6b7e8a;
+   padding: 2px 6px;
+   font-size: 0.9em;
+ }
 
 /* Scrollbar — parchment scroll style */
 ::-webkit-scrollbar {

@@ -13,12 +13,13 @@ export const translations = {
     // Game Screen
     back: 'Back',
 
-     // Tabs
-     overview: 'Overview',
-     team: 'Team',
-     match: 'Match',
-     fixtures: 'Fixtures',
-     leaderboard: 'Leaderboard',
+      // Tabs
+      overview: 'Overview',
+      team: 'Team',
+      match: 'Match',
+      fixtures: 'Fixtures',
+      leaderboard: 'Leaderboard',
+      lineup: 'Lineup',
 
      // General
      week: 'Week',
@@ -61,6 +62,13 @@ export const translations = {
     age: 'Age',
     stars: 'Stars',
     noTeamData: 'No team data available',
+
+     // Lineup Tab
+     reserves: 'Reserves',
+     backups: 'Backups',
+     firstSelected: 'First Selected',
+     secondSelected: 'Second Selected',
+     swap: 'SWAP',
 
     // Player Info
     noPlayerSelected: 'No player selected',
@@ -117,12 +125,13 @@ export const translations = {
     // Game Screen
     back: 'Atrás',
 
-     // Tabs
-     overview: 'Visión General',
-     team: 'Equipo',
-     match: 'Partido',
-     fixtures: 'Calendario',
-     leaderboard: 'Clasificación',
+      // Tabs
+      overview: 'Visión General',
+      team: 'Equipo',
+      match: 'Partido',
+      fixtures: 'Calendario',
+      leaderboard: 'Clasificación',
+      lineup: 'Alineación',
 
      // General
      week: 'Semana',
@@ -157,14 +166,21 @@ export const translations = {
     quality: 'Calidad',
     liters: 'litros',
 
-    // Team Tab
-    name: 'Nombre',
-    role: 'Posición',
-    number: 'No.',
-    position: 'Pos',
-    age: 'Edad',
-    stars: 'Estrellas',
-    noTeamData: 'No hay datos de equipo disponibles',
+     // Team Tab
+     name: 'Nombre',
+     role: 'Posición',
+     number: 'No.',
+     position: 'Pos',
+     age: 'Edad',
+     stars: 'Estrellas',
+     noTeamData: 'No hay datos de equipo disponibles',
+
+      // Lineup Tab
+      reserves: 'Reservas',
+      backups: 'Suplentes',
+      firstSelected: 'Primer Selección',
+      secondSelected: 'Segunda Selección',
+      swap: 'INTERCAMBIAR',
 
     // Player Info
     noPlayerSelected: 'No hay jugador seleccionado',
@@ -217,7 +233,9 @@ export const roleTranslations = {
     catcher: 'Catcher',
     baseGuard: 'Base Guard',
     fielder: 'Fielder',
-    reserve: 'Reserve'
+    reserve: 'Reserve',
+    backup: 'Backup',
+    dh: 'DH'
   },
   es: {
     pitcher: 'Lanzador',
@@ -225,7 +243,9 @@ export const roleTranslations = {
     catcher: 'Receptor',
     baseGuard: 'Guardia de Base',
     fielder: 'Jardinero',
-    reserve: 'Reserva'
+    reserve: 'Reserva',
+    backup: 'Suplente',
+    dh: 'BD'
   }
 };
 

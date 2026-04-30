@@ -184,57 +184,81 @@ export const endInning = (state) => {
   };
 };
 
-// Create a new match state from two teams and optional config
-export const createMatch = (homeTeam, awayTeam, config = {}) => {
+// Helper: build field position map from a convent
+// Returns object mapping position code (PIT, CAT, etc.) to player object
+const buildField = (convent) => {
+  const fieldMap = {};
+  Object.entries(convent.field).forEach(([pos, playerId]) => {
+    const player = convent.team.find(p => p.id === playerId);
+    if (player) fieldMap[pos] = player;
+  });
+  return fieldMap;
+};
+
+// Create a new match state from two convents and optional config
+export const createMatch = (homeConvent, awayConvent, config = {}) => {
   const innings = config.innings || matchConfig.innings;
-  const awayBattingOrder = awayTeam.filter((p) => p.position.slice(0, 3) === 'BAT');
-  const homeBattingOrder = homeTeam.filter((p) => p.position.slice(0, 3) === 'BAT');
+  const awayBattingOrder = awayConvent.battingOrder.map(id =>
+    awayConvent.team.find(p => p.id === id)
+  ).filter(Boolean);
+  const homeBattingOrder = homeConvent.battingOrder.map(id =>
+    homeConvent.team.find(p => p.id === id)
+  ).filter(Boolean);
 
-  // Extract convent IDs from the first player id (format: "playerId_conventId")
-  const homeConventId = Number(homeTeam[0]?.id?.split('_')[1]) || null;
-  const awayConventId = Number(awayTeam[0]?.id?.split('_')[1]) || null;
+  // Build field maps (position → player)
+  const homeField = buildField(homeConvent);
+  const awayField = buildField(awayConvent);
 
-  // Initialize inning scores arrays (1-indexed, so index 0 is inning 1)
+  // Extract convent IDs
+  const homeConventId = homeConvent.id ?? null;
+  const awayConventId = awayConvent.id ?? null;
+
   const emptyInningArray = Array(innings).fill(0);
 
-   return {
-     homeTeam,
-     awayTeam,
-     homeConventId,
-     awayConventId,
-     homeBattingOrder,
-     awayBattingOrder,
-     currentInning: 1,
-     half: 'top',
-     score: { home: 0, away: 0 },
-     inningScores: {
-       home: [...emptyInningArray],
-       away: [...emptyInningArray],
-     },
-     hits: { home: 0, away: 0 },
-     errors: { home: 0, away: 0 },
-     bases: [false, false, false],
-     outs: 0,
-     events: [],
-     awayBatterIndex: 0,
-     homeBatterIndex: 0,
-     balls: 0,
-     strikes: 0,
-     config: { innings },
-     // Turn-based action system
-     pendingActions: { pitcher: null, catcher: null, batter: null },
-     catcherRollResult: null,
-     pitcherRollResult: null,
-     batterRollResult: null,
-   };
+  return {
+    homeConvent: homeConvent,
+    awayConvent: awayConvent,
+    homeConventId,
+    awayConventId,
+    homeTeam: homeConvent.team,
+    awayTeam: awayConvent.team,
+    homeBattingOrder,
+    awayBattingOrder,
+    homeField,
+    awayField,
+    currentInning: 1,
+    half: 'top',
+    score: { home: 0, away: 0 },
+    inningScores: {
+      home: [...emptyInningArray],
+      away: [...emptyInningArray],
+    },
+    hits: { home: 0, away: 0 },
+    errors: { home: 0, away: 0 },
+    bases: [false, false, false],
+    outs: 0,
+    events: [],
+    awayBatterIndex: 0,
+    homeBatterIndex: 0,
+    balls: 0,
+    strikes: 0,
+    config: { innings },
+    pendingActions: { pitcher: null, catcher: null, batter: null },
+    catcherRollResult: null,
+    pitcherRollResult: null,
+    batterRollResult: null,
+  };
 };
 
 // Execute one at-bat (pitch) and return the updated state
 // Uses pendingActions and pre-rolled dice results from state
 export const executeAtBat = (state) => {
-  const { pitchingTeam, battingOrder, batterIndex, teamKey } = getTeams(state);
+  const { battingOrder, batterIndex, teamKey } = getTeams(state);
   const batter = battingOrder[batterIndex];
-  const pitcher = pitchingTeam.find((p) => p.role === 'pitcher');
+
+  // Pitcher comes from the field map of the pitching team
+  const pitchingFieldKey = teamKey === 'away' ? 'homeField' : 'awayField';
+  const pitcher = state[pitchingFieldKey]?.PIT;
 
   if (!batter || !pitcher) {
     console.error('Missing batter or pitcher – cannot execute at-bat');
@@ -457,12 +481,10 @@ export const getCurrentBatter = (state) => {
 
 // Get current pitcher for UI
 export const getCurrentPitcher = (state) => {
-  const { pitchingTeam } = getTeams(state);
-  return pitchingTeam.find((p) => p.role === 'pitcher');
+  return state.half === 'top' ? state.homeField.PIT : state.awayField.PIT;
 };
 
 // Get current catcher for UI
 export const getCurrentCatcher = (state) => {
-  const { pitchingTeam } = getTeams(state);
-  return pitchingTeam.find((p) => p.role === 'catcher');
+  return state.half === 'top' ? state.homeField.CAT : state.awayField.CAT;
 };

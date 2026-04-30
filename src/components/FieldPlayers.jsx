@@ -1,13 +1,18 @@
 import React from 'react';
 import Player from './Player';
+import { POSITION_TO_ROLE } from '../logic/positionUtils';
 
 const POSITION_COORDS = {
   PIT: { x: 50, y: 50 },
   CAT: { x: 50, y: 82 },
-  'BAS-1': { x: 62.3077, y: 61.0769 },
-  'BAS-2': { x: 62.3077, y: 37.6923 },
-  FIE: { x: 50, y: 19.2308 },
+  'BAS-1': { x: 62.3, y: 61.1 },
+  'BAS-2': { x: 62.3, y: 37.7 },
+  'BAS-3': { x: 37.7, y: 61.1 },
+  'FIE-1': { x: 50, y: 19.2 },
+  'FIE-2': { x: 30, y: 25 },
 };
+
+const FIELD_POSITIONS = ['PIT', 'CAT', 'BAS-1', 'BAS-2', 'BAS-3', 'FIE-1', 'FIE-2'];
 
 const BASE_POSITIONS = {
   home: { x: 50, y: 74.6154 },
@@ -20,28 +25,26 @@ const FieldPlayers = ({
   homeConvent,
   awayConvent,
   half,
-  animationPhase,
   battingQueue,
   baseRunners = [],
   onPlayerHover,
-  pitcher,
-  catcher,
-  highlightRole = null // 'pitcher', 'catcher', or 'batter'
+  highlightRole = null,
+  animationPhase,
 }) => {
   if (!homeConvent || !awayConvent) return null;
 
   const isHomeFielding = half === 'top';
   const fieldingConvent = isHomeFielding ? homeConvent : awayConvent;
   const battingConvent = isHomeFielding ? awayConvent : homeConvent;
-  const fieldingTeam = fieldingConvent.team;
 
-  const getPlayerByPosition = (positionCode) => {
-    return fieldingTeam.find(p => p.position === positionCode);
+  const fieldMap = fieldingConvent.field;
+  const battingFieldMap = battingConvent.field;
+
+  const getPlayerByFieldPosition = (posCode) => {
+    const playerId = fieldMap[posCode];
+    if (!playerId) return null;
+    return fieldingConvent.team.find(p => p.id === playerId) || null;
   };
-
-  const baseGuard1 = getPlayerByPosition('BAS-1');
-  const baseGuard2 = getPlayerByPosition('BAS-2');
-  const fielder = getPlayerByPosition('FIE');
 
   const fieldingPrimaryColor = fieldingConvent.colors.primary;
   const fieldingSecondaryColor = fieldingConvent.colors.secondary;
@@ -67,26 +70,36 @@ const FieldPlayers = ({
     return '';
   };
 
-  const renderPlayer = (player, pos, isBatter = false) => {
+  const renderPlayer = (player, posCode, placement, isBatter = false) => {
     if (!player) return null;
     const primary = isBatter ? battingPrimaryColor : fieldingPrimaryColor;
     const secondary = isBatter ? battingSecondaryColor : fieldingSecondaryColor;
     const tertiary = isBatter ? battingTertiaryColor : fieldingTertiaryColor;
-    const animClass = getAnimationClass(player.role);
-    const isHighlighted = highlightRole === player.role;
+
+    let role;
+    if (isBatter) {
+      const fieldPos = Object.keys(battingFieldMap).find(key => battingFieldMap[key] === player.id);
+      role = fieldPos ? POSITION_TO_ROLE[fieldPos] : 'fielder';
+    } else {
+      role = POSITION_TO_ROLE[posCode];
+    }
+
+    const animClass = getAnimationClass(role);
+    const isHighlighted = highlightRole === role;
 
     return (
       <div
         className={`field-player${animClass ? ` ${animClass}` : ''}${isHighlighted ? ' highlighted' : ''}`}
         style={{
-          left: `${pos.x}%`,
-          top: `${pos.y}%`,
+          left: `${placement.x}%`,
+          top: `${placement.y}%`,
         }}
-        onMouseEnter={() => onPlayerHover && onPlayerHover({ player, pos, isBatter })}
+        onMouseEnter={() => onPlayerHover && onPlayerHover({ player, pos: placement, isBatter })}
         onMouseLeave={() => onPlayerHover && onPlayerHover(null)}
       >
         <Player
           player={player}
+          role={role}
           primaryColor={primary}
           secondaryColor={secondary}
           tertiaryColor={tertiary}
@@ -95,29 +108,40 @@ const FieldPlayers = ({
     );
   };
 
-  // Current batter is the slot with 'batting' status
+  // Fielding team players
+  const pitcher = getPlayerByFieldPosition('PIT');
+  const catcher = getPlayerByFieldPosition('CAT');
+  const baseGuard1 = getPlayerByFieldPosition('BAS-1');
+  const baseGuard2 = getPlayerByFieldPosition('BAS-2');
+  const baseGuard3 = getPlayerByFieldPosition('BAS-3');
+  const fielder1 = getPlayerByFieldPosition('FIE-1');
+  const fielder2 = getPlayerByFieldPosition('FIE-2');
+
+  // Current batter and base runners
   const currentBatterItem = battingQueue && battingQueue.find(item => item.status === 'batting');
   const currentBatter = currentBatterItem ? currentBatterItem.player : null;
 
   return (
     <div className="field-players">
-      {/* Fielding team */}
-      {renderPlayer(pitcher, POSITION_COORDS.PIT)}
-      {renderPlayer(catcher, POSITION_COORDS.CAT)}
-      {renderPlayer(baseGuard1, POSITION_COORDS['BAS-1'])}
-      {renderPlayer(baseGuard2, POSITION_COORDS['BAS-2'])}
-      {renderPlayer(fielder, POSITION_COORDS.FIE)}
+      {/* Fielding defensive players */}
+      {renderPlayer(pitcher, 'PIT', POSITION_COORDS.PIT, false)}
+      {renderPlayer(catcher, 'CAT', POSITION_COORDS.CAT, false)}
+      {renderPlayer(baseGuard1, 'BAS-1', POSITION_COORDS['BAS-1'], false)}
+      {renderPlayer(baseGuard2, 'BAS-2', POSITION_COORDS['BAS-2'], false)}
+      {renderPlayer(baseGuard3, 'BAS-3', POSITION_COORDS['BAS-3'], false)}
+      {renderPlayer(fielder1, 'FIE-1', POSITION_COORDS['FIE-1'], false)}
+      {renderPlayer(fielder2, 'FIE-2', POSITION_COORDS['FIE-2'], false)}
 
-      {/* Batting team */}
-      {currentBatter && renderPlayer(currentBatter, BASE_POSITIONS.home, true)}
+      {/* Batting team: current batter */}
+      {currentBatter && renderPlayer(currentBatter, null, BASE_POSITIONS.home, true)}
 
       {/* Runners on bases */}
       {baseRunners && baseRunners.map(({ player, baseNum }) => {
         const baseKey = ['first', 'second', 'third'][baseNum - 1];
-        return renderPlayer(player, BASE_POSITIONS[baseKey], true);
+        return renderPlayer(player, null, BASE_POSITIONS[baseKey], true);
       })}
 
-      {/* Batting Queue - fixed 5-slot bench */}
+      {/* Batting Queue */}
       <div className="batting-queue" id="batting-queue">
         <div className="queue-players">
           {battingQueue && battingQueue.map((item, idx) => {
@@ -167,6 +191,8 @@ const FieldPlayers = ({
                 </div>
               );
             } else if (item.player) {
+              const fieldPos = Object.keys(battingFieldMap).find(key => battingFieldMap[key] === item.player.id);
+              const playerRole = fieldPos ? POSITION_TO_ROLE[fieldPos] : 'fielder';
               return (
                 <div
                   key={idx}
@@ -176,6 +202,7 @@ const FieldPlayers = ({
                 >
                   <Player
                     player={item.player}
+                    role={playerRole}
                     primaryColor={battingPrimaryColor}
                     secondaryColor={battingSecondaryColor}
                     tertiaryColor={battingTertiaryColor}
@@ -183,9 +210,7 @@ const FieldPlayers = ({
                 </div>
               );
             } else {
-              return (
-                <div key={idx} className="queue-player queue-empty" />
-              );
+              return <div key={idx} className="queue-player queue-empty" />;
             }
           })}
         </div>

@@ -13,6 +13,7 @@ import Fixtures from './tabs/Fixtures';
 import LeaderBoard from './tabs/LeaderBoard.jsx';
 import PlayerInfo from './tabs/PlayerInfo.jsx';
 import NextWeek from './tabs/NextWeek.jsx';
+import Lineup from './tabs/Lineup.jsx';
 
 const GameScreen = ({ data, setData }) => {
   const { startMatch, executeAtBat, checkGameOver, matchState, setMatchState } = useGame();
@@ -21,6 +22,13 @@ const GameScreen = ({ data, setData }) => {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
 
   const myConvent = data.convents.find(convent => convent.id === data.myId);
+
+  const handleConventUpdate = (updatedConvent) => {
+    setData(prev => ({
+      ...prev,
+      convents: prev.convents.map(c => c.id === updatedConvent.id ? updatedConvent : c)
+    }));
+  };
 
   const conventName = myConvent ? getConventField(myConvent, 'name', language) : '';
   const roundIdx = data.week - 1;
@@ -113,11 +121,11 @@ const GameScreen = ({ data, setData }) => {
    // Initialize match when entering match tab if no match exists
    useEffect(() => {
      if (activeTab === 'match' && !matchState && myConvent && opponentConvent) {
-       if (isHome) {
-         startMatch(myConvent.team, opponentConvent.team, { innings: 3 });
-       } else {
-         startMatch(opponentConvent.team, myConvent.team, { innings: 3 });
-       }
+        if (isHome) {
+          startMatch(myConvent, opponentConvent, { innings: 3 });
+        } else {
+          startMatch(opponentConvent, myConvent, { innings: 3 });
+        }
      }
    }, [activeTab, matchState, myConvent, opponentConvent, isHome, startMatch]);
 
@@ -128,6 +136,12 @@ const GameScreen = ({ data, setData }) => {
       {activeTab === 'home' && <Home setActiveTab={setActiveTab} />}
       {activeTab === 'overview' && <Overview convent={myConvent} />}
       {activeTab === 'team' && <Team convent={myConvent} setActiveTab={setActiveTab} setSelectedPlayer={setSelectedPlayer} />}
+      {activeTab === 'lineup' && (
+        <Lineup
+          myConvent={myConvent}
+          onConventUpdate={handleConventUpdate}
+        />
+      )}
       {activeTab === 'fixtures' && (
         <Fixtures
           fixtures={data.fixtures}

@@ -5,6 +5,7 @@ import { getTranslation } from '../../translations';
 const tabs = [
   { id: 'overview', labelKey: 'overview' },
   { id: 'team', labelKey: 'team' },
+  { id: 'lineup', labelKey: 'lineup' },
   { id: 'match', labelKey: 'match' },
   { id: 'fixtures', labelKey: 'fixtures' },
   { id: 'leaderboard', labelKey: 'leaderboard' },

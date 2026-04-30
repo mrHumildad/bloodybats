@@ -7,9 +7,11 @@ const ROLE_COLORS = {
   baseGuard: '#556b2f',
   fielder: '#b8860b',
   reserve: '#696969',
+  backup: '#6b7e8a',
+  dh: '#4169e1',
 };
 
-const Player = ({ player, primaryColor, secondaryColor, tertiaryColor }) => {
+const Player = ({ player, role, primaryColor, secondaryColor, tertiaryColor }) => {
   if (!player) return null;
 
   const getInitials = (name) => {
@@ -22,11 +24,11 @@ const Player = ({ player, primaryColor, secondaryColor, tertiaryColor }) => {
       .slice(0, 2);
   };
 
-  const initials = getInitials(player.name);
-  const jerseyNumber = player.shirtNumber;
-  const roleColor = ROLE_COLORS[player.role] || ROLE_COLORS.reserve;
-  const isReserve = player.role === 'reserve';
-  const strokeDash = isReserve ? '4 2' : undefined;
+   const initials = getInitials(player.name);
+   const jerseyNumber = player.shirtNumber;
+   const roleColor = ROLE_COLORS[role] || ROLE_COLORS.reserve;
+   const isNonActive = role === 'reserve' || role === 'backup';
+   const strokeDash = isNonActive ? '4 2' : undefined;
 
   return (
     <svg
@@ -147,10 +149,10 @@ const Player = ({ player, primaryColor, secondaryColor, tertiaryColor }) => {
          opacity="0.5"
        />
 
-       {/* Heraldic emblem - left chest */}
-       {!isReserve && (
-         <g transform="translate(70, 85)">
-            {player.role === 'pitcher' && (
+        {/* Heraldic emblem - left chest */}
+        {!isNonActive && (
+          <g transform="translate(70, 85)">
+             {role === 'pitcher' && (
               /* Crossed swords */
               <path
                d="M 0 -10 L 4 0 L 0 10 M -4 0 L 4 -10 M -4 0 L 4 10"
@@ -160,7 +162,7 @@ const Player = ({ player, primaryColor, secondaryColor, tertiaryColor }) => {
                strokeLinecap="round"
              />
            )}
-            {player.role === 'batter' && (
+             {role === 'batter' && (
               /* Upward lightning bolt */
               <path
                d="M -4 8 L 0 -8 L 4 8"
@@ -171,7 +173,7 @@ const Player = ({ player, primaryColor, secondaryColor, tertiaryColor }) => {
                strokeLinecap="round"
              />
            )}
-            {player.role === 'catcher' && (
+             {role === 'catcher' && (
               /* Rounded shield */
               <path
                d="M 0 -9 C 5 -9 7 -6 7 -3 L 7 4 Q 7 9 0 9 Q -7 9 -7 4 L -7 -3 C -7 -6 -5 -9 0 -9 Z"
@@ -180,7 +182,7 @@ const Player = ({ player, primaryColor, secondaryColor, tertiaryColor }) => {
                strokeWidth="1.5"
              />
            )}
-            {player.role === 'baseGuard' && (
+             {role === 'baseGuard' && (
               /* Arch/gate shape */
               <path
                d="M -6 6 L -6 -3 Q -6 -9 0 -9 Q 6 -9 6 -3 L 6 6"
@@ -190,7 +192,7 @@ const Player = ({ player, primaryColor, secondaryColor, tertiaryColor }) => {
                strokeLinecap="round"
              />
            )}
-            {player.role === 'fielder' && (
+             {role === 'fielder' && (
               /* Triangle pointing down */
               <polygon
                points="0,-10 8,8 -8,8"
