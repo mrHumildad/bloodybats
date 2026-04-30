@@ -45,7 +45,7 @@ const Lineup = ({ myConvent, onConventUpdate }) => {
       role = 'backup';
     } else if (fieldPos) {
       role = fieldPos === 'DH' ? 'dh' : getRoleFromPosition(fieldPos);
-    } else {
+    } else  if (reserves.includes(player.id)) {
       role = 'reserve';
     }
     const battingNum = battingOrder.length ? getBattingOrderPosition(player.id, battingOrder) : null;
@@ -68,20 +68,13 @@ const Lineup = ({ myConvent, onConventUpdate }) => {
   const isSecondSelected = (player) => secondSelected && secondSelected.id === player.id;
 
   const handlePlayerClick = (player) => {
-    const info = getPlayerInfo(player);
-    const isReserve = info.role === 'reserve';
-    const isBackup = info.role === 'backup';
-    const isField = info.fieldPos && info.fieldPos !== 'DH';
-    const isDH = info.fieldPos === 'DH';
-
     if (isFirstSelected(player)) {
       setFirstSelected(null);
     } else if (isSecondSelected(player)) {
       setSecondSelected(null);
-    } else if (isReserve || isBackup) {
+    } else if (firstSelected === null) {
       setFirstSelected(player);
-      setSecondSelected(null);
-    } else if (isField || isDH) {
+    } else {
       setSecondSelected(player);
     }
   };
@@ -96,29 +89,71 @@ const Lineup = ({ myConvent, onConventUpdate }) => {
     const firstInfo = getPlayerInfo(firstSelected);
     const secondInfo = getPlayerInfo(secondSelected);
 
-    const firstInBatting = battingOrder.includes(firstSelected.id);
-    const secondInBatting = battingOrder.includes(secondSelected.id);
+    const firstType = firstInfo.role;
+    const secondType = secondInfo.role;
 
-    if (secondInfo.fieldPos === 'DH') {
-      updatedField['DH'] = firstSelected.id;
-    } else if (secondInfo.fieldPos) {
-      updatedField[secondInfo.fieldPos] = firstSelected.id;
-    } else {
-      if (!updatedReserves.includes(firstSelected.id)) {
-        updatedReserves.push(firstSelected.id);
+    const isFieldRole = (r) => ['pitcher','catcher','baseGuard','fielder','dh'].includes(r);
+    const isBatterRole = (r) => r === 'batter';
+
+    // Both are reserves → swap indices in reserves array
+    if (firstType === 'reserve' && secondType === 'reserve') {
+      const i1 = updatedReserves.indexOf(firstSelected.id);
+      const i2 = updatedReserves.indexOf(secondSelected.id);
+      if (i1 !== -1 && i2 !== -1) {
+        updatedReserves[i1] = secondSelected.id;
+        updatedReserves[i2] = firstSelected.id;
       }
     }
-
-    if (firstInfo.fieldPos === 'DH') {
-      updatedField['DH'] = secondSelected.id;
-    } else if (firstInfo.fieldPos) {
-      updatedField[firstInfo.fieldPos] = secondSelected.id;
-    } else {
+    // Both are backups → do nothing
+    else if (firstType === 'backup' && secondType === 'backup') {
+      // no‑op
+    }
+    // Both are in batting order (batter at home plate is just the first in list)
+    else if (firstInfo.battingNum !== null && secondInfo.battingNum !== null) {
+      const i1 = updatedBattingOrder.indexOf(firstSelected.id);
+      const i2 = updatedBattingOrder.indexOf(secondSelected.id);
+      if (i1 !== -1 && i2 !== -1) {
+        updatedBattingOrder[i1] = secondSelected.id;
+        updatedBattingOrder[i2] = firstSelected.id;
+      }
+    }
+    // Both are in field positions (P, C, 1B, 2B, 3B, LF, CF, DH) → swap their field assignments
+    else if (firstInfo.fieldPos && secondInfo.fieldPos) {
+      const fp1 = firstInfo.fieldPos;
+      const fp2 = secondInfo.fieldPos;
+      updatedField[fp1] = secondSelected.id;
+      updatedField[fp2] = firstSelected.id;
+    }
+    // One is reserve/backup, the other is field/batting
+    else if ((firstType === 'reserve' || firstType === 'backup') && (isFieldRole(secondType) || isBatterRole(secondType))) {
+      // First (bench) takes second's field/batting spot
+      if (secondInfo.fieldPos) {
+        if (secondInfo.fieldPos === 'DH') {
+          updatedField['DH'] = firstSelected.id;
+        } else {
+          updatedField[secondInfo.fieldPos] = firstSelected.id;
+        }
+      }
+      // Second goes to reserves
       if (!updatedReserves.includes(secondSelected.id)) {
         updatedReserves.push(secondSelected.id);
       }
     }
+    else if ((secondType === 'reserve' || secondType === 'backup') && (isFieldRole(firstType) || isBatterRole(firstType))) {
+      if (firstInfo.fieldPos) {
+        if (firstInfo.fieldPos === 'DH') {
+          updatedField['DH'] = secondSelected.id;
+        } else {
+          updatedField[firstInfo.fieldPos] = secondSelected.id;
+        }
+      }
+      if (!updatedReserves.includes(firstSelected.id)) {
+        updatedReserves.push(firstSelected.id);
+      }
+    }
+    // All other combos → deselect only (already will deselect below)
 
+    // Remove from reserves if they moved out
     if (reserves.includes(firstSelected.id)) {
       const idx = updatedReserves.indexOf(firstSelected.id);
       if (idx !== -1) updatedReserves.splice(idx, 1);
@@ -126,19 +161,6 @@ const Lineup = ({ myConvent, onConventUpdate }) => {
     if (reserves.includes(secondSelected.id)) {
       const idx = updatedReserves.indexOf(secondSelected.id);
       if (idx !== -1) updatedReserves.splice(idx, 1);
-    }
-
-    if (firstInBatting && secondInBatting) {
-      const firstIdx = updatedBattingOrder.indexOf(firstSelected.id);
-      const secondIdx = updatedBattingOrder.indexOf(secondSelected.id);
-      updatedBattingOrder[firstIdx] = secondSelected.id;
-      updatedBattingOrder[secondIdx] = firstSelected.id;
-    } else if (firstInBatting && !secondInBatting) {
-      const firstIdx = updatedBattingOrder.indexOf(firstSelected.id);
-      updatedBattingOrder[firstIdx] = secondSelected.id;
-    } else if (!firstInBatting && secondInBatting) {
-      const secondIdx = updatedBattingOrder.indexOf(secondSelected.id);
-      updatedBattingOrder[secondIdx] = firstSelected.id;
     }
 
     const updatedConvent = {
